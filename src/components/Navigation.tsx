@@ -28,13 +28,13 @@ const Navigation = () => {
             <a
               key={item.href}
               href={item.href}
-              className="text-foreground hover:text-primary transition-colors duration-300"
+              className="text-foreground hover:text-primary transition-colors duration-300 font-quicksand font-black"
             >
               {item.label}
             </a>
           ))}
           <Link to="/booking">
-            <Button variant="ocean" size="sm">
+            <Button variant="ocean" size="sm" className="font-quicksand">
               Book Now
             </Button>
           </Link>
@@ -59,14 +59,14 @@ const Navigation = () => {
               <a
                 key={item.href}
                 href={item.href}
-                className="block text-foreground hover:text-primary transition-colors duration-300"
+                className="block text-foreground hover:text-primary transition-colors duration-300 font-quicksand font-black"
                 onClick={() => setIsOpen(false)}
               >
                 {item.label}
               </a>
             ))}
             <Link to="/booking" className="w-full">
-              <Button variant="ocean" className="w-full" onClick={() => setIsOpen(false)}>
+              <Button variant="ocean" className="w-full font-quicksand" onClick={() => setIsOpen(false)}>
                 Book Now
               </Button>
             </Link>

@@ -196,36 +196,32 @@ const Locations = () => {
       {/* Route Visualization Dialog */}
       {selectedLocation !== null && (
         <Dialog open={selectedLocation !== null} onOpenChange={(open) => !open && setSelectedLocation(null)}>
-          <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto bg-card/95 backdrop-blur-md border-0 shadow-2xl">
+          <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-blue-100 via-blue-50 to-white backdrop-blur-md border border-blue-200/50 shadow-2xl">
             {locations[selectedLocation] && (
               <>
-                <DialogHeader className="relative">
-                  <div 
-                    className="absolute inset-0 -z-10 bg-cover bg-center rounded-t-lg opacity-20"
-                    style={{ backgroundImage: `url(${locations[selectedLocation].image})` }}
-                  >
-                    <div className="absolute inset-0 bg-gradient-ocean"></div>
-                  </div>
-                  <div className="flex items-center gap-4 mb-2">
-                    <div className="w-16 h-16 bg-gradient-ocean rounded-full flex items-center justify-center text-white shadow-luxury">
-                      <Compass className="h-8 w-8" />
+                <DialogHeader className="pb-6 border-b border-gray-200">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center text-white flex-shrink-0">
+                      <Compass className="h-6 w-6" />
                     </div>
-                    <div>
-                      <DialogTitle className="text-3xl font-bold text-foreground">
+                    <div className="flex-1">
+                      <DialogTitle className="text-2xl md:text-3xl font-bold text-foreground mb-2 font-quicksand">
                         {locations[selectedLocation].title} Routes
                       </DialogTitle>
-                      <DialogDescription className="text-lg text-muted-foreground mt-1">
+                      <DialogDescription className="text-base text-muted-foreground flex items-center gap-2">
+                        <MapPin className="h-4 w-4" />
                         {locations[selectedLocation].baseLocation}
                       </DialogDescription>
                     </div>
                   </div>
+                  
                   <div className="flex flex-wrap gap-2 mt-4">
-                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
-                      <Clock className="h-3 w-3" />
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 text-primary rounded-md text-sm font-medium">
+                      <Clock className="h-3.5 w-3.5" />
                       {locations[selectedLocation].totalDuration}
                     </span>
-                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-gradient-sunset/20 text-foreground rounded-full text-sm font-medium">
-                      <Sparkles className="h-3 w-3" />
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-muted text-muted-foreground rounded-md text-sm font-medium">
+                      <Sparkles className="h-3.5 w-3.5" />
                       {locations[selectedLocation].bestFor}
                     </span>
                   </div>
