@@ -2,16 +2,17 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Share2, Printer, ChevronLeft, ChevronRight } from "lucide-react";
+import { getBoatById } from "@/utils/boats";
 import bookingImage1 from "@/assets/booking_image1.jpeg";
 import bookingImage2 from "@/assets/booking_image2.jpeg";
 import bookingImage3 from "@/assets/booking_image3 .jpeg";
 import yachtImage from "@/assets/yatch-image.jpg";
 
-// Boat data - in a real app, this would come from an API
+// Boat data - pricing and other details
 const boatDatabase: Record<string, any> = {
-  misbehavior: {
-    id: "misbehavior",
-    name: "MISBEHAVIOR CATAMARAN",
+  "misbehaviour-catamaran": {
+    id: "misbehaviour-catamaran",
+    name: "MISBEHAVIOUR CATAMARAN",
     year: "2020",
     model: "296 Center Console",
     condition: "New",
@@ -25,8 +26,6 @@ const boatDatabase: Record<string, any> = {
     totalPrice: "$44,000",
     description: "20 passengers max, perfect for private cruises. Experience luxury and comfort on the pristine waters of Tanzania.",
     capacity: "20 passengers",
-    mainImage: bookingImage1,
-    galleryImages: [bookingImage1, bookingImage2, bookingImage3, yachtImage, bookingImage1, bookingImage2],
     pricing: {
       dar: [
         { type: "Half Day Charter", price: "$1,100" },
@@ -78,8 +77,6 @@ const boatDatabase: Record<string, any> = {
     totalPrice: "$48,000",
     description: "22-passengers, ideal for group celebrations. Spacious deck and premium amenities for unforgettable experiences.",
     capacity: "22 passengers",
-    mainImage: bookingImage2,
-    galleryImages: [bookingImage2, bookingImage1, bookingImage3, yachtImage, bookingImage2, bookingImage1],
     pricing: {
       dar: [
         { type: "Half Day Charter", price: "$1,100" },
@@ -112,9 +109,9 @@ const boatDatabase: Record<string, any> = {
       "Kayaks and paddle boards",
     ],
   },
-  "umoja-1": {
-    id: "umoja-1",
-    name: "UMOJA CATAMARAN 1",
+  "umoja": {
+    id: "umoja",
+    name: "UMOJA CATAMARAN",
     year: "2019",
     model: "296 Center Console",
     condition: "Used",
@@ -128,8 +125,6 @@ const boatDatabase: Record<string, any> = {
     totalPrice: "$38,000",
     description: "22-passengers, comfortable for full-day trips. Modern design with excellent facilities for your charter needs.",
     capacity: "22 passengers",
-    mainImage: bookingImage3,
-    galleryImages: [bookingImage3, bookingImage1, bookingImage2, yachtImage, bookingImage3, bookingImage1],
     pricing: {
       dar: [
         { type: "Half Day Charter", price: "$1,100" },
@@ -156,24 +151,45 @@ const boatDatabase: Record<string, any> = {
     ],
     additionalServices: [],
   },
-  "ocean-dream": {
-    id: "ocean-dream",
-    name: "OCEAN DREAM",
-    year: "2022",
+  // Add default data for other boats
+  "albion-catamaran": {
+    id: "albion-catamaran",
+    name: "ALBION CATAMARAN",
+    year: "2020",
     model: "296 Center Console",
     condition: "New",
-    length: "31' 2\"",
-    beam: "11' 0\"",
-    poweredBy: "Yamaha Twin F350NCA Four Stroke",
+    location: "DAR ES SALAAM",
+    status: "IN STOCK",
+    color: "White",
+    description: "Premium catamaran with excellent facilities.",
+    capacity: "20 passengers",
+    pricing: {
+      dar: [
+        { type: "Half Day Charter", price: "$1,100" },
+        { type: "Full Day Charter", price: "$1,500" },
+        { type: "Live Onboard (24 Hours)", price: "$2,000" },
+      ],
+      zanzibar: [
+        { type: "Half Day Cruise", price: "$1,400" },
+        { type: "Full Day Cruise", price: "$1,800" },
+        { type: "Live Onboard (24 Hours)", price: "$2,200" },
+      ],
+    },
+    destinations: ["Bongoyo Island", "Mbudya Island", "Stone Town"],
+    services: ["Professional crew", "Snorkeling equipment", "Fresh seafood lunch"],
+    additionalServices: [],
+  },
+  "amani-luxury": {
+    id: "amani-luxury",
+    name: "AMANI LUXURY CATAMARAN",
+    year: "2021",
+    model: "296 Center Console",
+    condition: "New",
     location: "ZANZIBAR",
     status: "IN STOCK",
-    color: "Pearl White",
-    monthlyPrice: "$500",
-    totalPrice: "$52,000",
-    description: "25-passengers luxury catamaran with premium features. Perfect for corporate events and special occasions.",
+    color: "White",
+    description: "Luxury catamaran with premium amenities.",
     capacity: "25 passengers",
-    mainImage: yachtImage,
-    galleryImages: [yachtImage, bookingImage1, bookingImage2, bookingImage3, yachtImage, bookingImage1],
     pricing: {
       dar: [
         { type: "Half Day Charter", price: "$1,500" },
@@ -186,93 +202,102 @@ const boatDatabase: Record<string, any> = {
         { type: "Live Onboard (24 Hours)", price: "$2,800" },
       ],
     },
-    destinations: [
-      "Stone Town",
-      "Prison Island",
-      "Nakupenda Island",
-      "Kendwa Rocks",
-      "Bongoyo Island",
-      "Mbudya Island",
-    ],
-    services: [
-      "Professional crew",
-      "Premium snorkeling equipment",
-      "Full breakfast and lunch service",
-      "Water sports equipment",
-      "Sunset viewing experience",
-      "Complimentary beverages",
-    ],
-    additionalServices: [
-      "Professional DJ service",
-      "Premium champagne",
-      "Professional photography",
-      "Kayaks and paddle boards",
-    ],
+    destinations: ["Stone Town", "Prison Island", "Nakupenda Island"],
+    services: ["Professional crew", "Premium snorkeling equipment", "Full meal service"],
+    additionalServices: ["Professional DJ service", "Premium champagne"],
   },
-  "tropical-breeze": {
-    id: "tropical-breeze",
-    name: "TROPICAL BREEZE",
+  "black-bird-heli": {
+    id: "black-bird-heli",
+    name: "BLACK BIRD HELI",
     year: "2020",
-    model: "296 Center Console",
+    model: "Helicopter",
     condition: "New",
-    length: "29' 7\"",
-    beam: "10' 0\"",
-    poweredBy: "Yamaha Twin F300NCA Four Stroke",
     location: "DAR ES SALAAM",
     status: "IN STOCK",
-    color: "Tropical Blue",
-    monthlyPrice: "$399",
-    totalPrice: "$44,000",
-    description: "20-passengers elegant vessel designed for comfort. Ideal for half-day and full-day charters.",
-    capacity: "20 passengers",
-    mainImage: bookingImage1,
-    galleryImages: [bookingImage1, bookingImage2, bookingImage3, yachtImage, bookingImage1, bookingImage2],
+    color: "Black",
+    description: "Helicopter service for aerial tours and transfers.",
+    capacity: "4 passengers",
     pricing: {
       dar: [
-        { type: "Half Day Charter", price: "$1,100" },
-        { type: "Full Day Charter", price: "$1,500" },
-        { type: "Live Onboard (24 Hours)", price: "$2,000" },
+        { type: "30 Minute Tour", price: "$500" },
+        { type: "1 Hour Tour", price: "$900" },
+        { type: "Transfer Service", price: "$1,200" },
       ],
       zanzibar: [
-        { type: "Half Day Cruise", price: "$1,400" },
-        { type: "Full Day Cruise", price: "$1,800" },
-        { type: "Live Onboard (24 Hours)", price: "$2,200" },
+        { type: "30 Minute Tour", price: "$600" },
+        { type: "1 Hour Tour", price: "$1,000" },
+        { type: "Transfer Service", price: "$1,400" },
       ],
     },
-    destinations: [
-      "Bongoyo Island",
-      "Mbudya Island",
-      "Sinda Island",
-    ],
-    services: [
-      "Professional crew",
-      "Snorkeling equipment",
-      "Fresh seafood lunch",
-      "Complimentary soft drinks",
-      "Safety equipment",
-    ],
-    additionalServices: [
-      "Professional DJ service",
-    ],
+    destinations: ["Aerial Tours", "Island Transfers"],
+    services: ["Professional pilot", "Safety equipment", "Scenic routes"],
+    additionalServices: [],
   },
-  "island-explorer": {
-    id: "island-explorer",
-    name: "ISLAND EXPLORER",
+  "butterfly-catamaran": {
+    id: "butterfly-catamaran",
+    name: "BUTTERFLY CATAMARAN",
     year: "2021",
     model: "296 Center Console",
     condition: "New",
-    length: "30' 0\"",
-    beam: "10' 6\"",
-    poweredBy: "Yamaha Twin F300NCA Four Stroke",
     location: "ZANZIBAR",
     status: "IN STOCK",
-    color: "Island Green",
-    monthlyPrice: "$450",
-    totalPrice: "$48,000",
-    description: "22-passengers adventure catamaran. Explore hidden islands and pristine beaches in style.",
+    color: "White",
+    description: "Elegant catamaran perfect for special occasions.",
     capacity: "22 passengers",
-    mainImage: bookingImage2,
-    galleryImages: [bookingImage2, bookingImage1, bookingImage3, yachtImage, bookingImage2, bookingImage1],
+    pricing: {
+      dar: [
+        { type: "Half Day Charter", price: "$1,200" },
+        { type: "Full Day Charter", price: "$1,600" },
+        { type: "Live Onboard (24 Hours)", price: "$2,200" },
+      ],
+      zanzibar: [
+        { type: "Half Day Cruise", price: "$1,500" },
+        { type: "Full Day Cruise", price: "$1,900" },
+        { type: "Live Onboard (24 Hours)", price: "$2,400" },
+      ],
+    },
+    destinations: ["Stone Town", "Prison Island", "Nakupenda Island"],
+    services: ["Professional crew", "Snorkeling equipment", "Full meal service"],
+    additionalServices: ["Professional DJ service"],
+  },
+  "helia-44-catamaran": {
+    id: "helia-44-catamaran",
+    name: "HELIA 44 CATAMARAN",
+    year: "2020",
+    model: "Helia 44",
+    condition: "New",
+    location: "DAR ES SALAAM",
+    status: "IN STOCK",
+    color: "White",
+    description: "Spacious 44-foot catamaran for comfortable cruising.",
+    capacity: "24 passengers",
+    pricing: {
+      dar: [
+        { type: "Half Day Charter", price: "$1,300" },
+        { type: "Full Day Charter", price: "$1,700" },
+        { type: "Live Onboard (24 Hours)", price: "$2,300" },
+      ],
+      zanzibar: [
+        { type: "Half Day Cruise", price: "$1,600" },
+        { type: "Full Day Cruise", price: "$2,000" },
+        { type: "Live Onboard (24 Hours)", price: "$2,500" },
+      ],
+    },
+    destinations: ["Bongoyo Island", "Mbudya Island", "Stone Town"],
+    services: ["Professional crew", "Snorkeling equipment", "Full meal service"],
+    additionalServices: [],
+  },
+  "knlyps-catamaran": {
+    id: "knlyps-catamaran",
+    name: "KNLYPS CATAMARAN",
+    year: "2020",
+    model: "296 Center Console",
+    condition: "New",
+    location: "DAR ES SALAAM",
+    status: "IN STOCK",
+    color: "White",
+    description: "Modern catamaran with excellent facilities.",
+    capacity: "20 passengers",
     pricing: {
       dar: [
         { type: "Half Day Charter", price: "$1,100" },
@@ -285,25 +310,90 @@ const boatDatabase: Record<string, any> = {
         { type: "Live Onboard (24 Hours)", price: "$2,200" },
       ],
     },
-    destinations: [
-      "Stone Town",
-      "Prison Island",
-      "Nakupenda Island",
-      "Kendwa Rocks",
-      "Bongoyo Island",
-    ],
-    services: [
-      "Professional crew",
-      "Snorkeling equipment",
-      "Full meal service",
-      "Water sports equipment",
-      "Island exploration",
-    ],
-    additionalServices: [
-      "Professional DJ service",
-      "Premium champagne",
-      "Kayaks and paddle boards",
-    ],
+    destinations: ["Bongoyo Island", "Mbudya Island"],
+    services: ["Professional crew", "Snorkeling equipment"],
+    additionalServices: [],
+  },
+  "queen-of-zanzibar": {
+    id: "queen-of-zanzibar",
+    name: "QUEEN OF ZANZIBAR",
+    year: "2021",
+    model: "296 Center Console",
+    condition: "New",
+    location: "ZANZIBAR",
+    status: "IN STOCK",
+    color: "White",
+    description: "Royal catamaran experience in Zanzibar waters.",
+    capacity: "25 passengers",
+    pricing: {
+      dar: [
+        { type: "Half Day Charter", price: "$1,500" },
+        { type: "Full Day Charter", price: "$2,000" },
+        { type: "Live Onboard (24 Hours)", price: "$2,600" },
+      ],
+      zanzibar: [
+        { type: "Half Day Cruise", price: "$1,800" },
+        { type: "Full Day Cruise", price: "$2,400" },
+        { type: "Live Onboard (24 Hours)", price: "$2,800" },
+      ],
+    },
+    destinations: ["Stone Town", "Prison Island", "Nakupenda Island"],
+    services: ["Professional crew", "Premium amenities", "Full meal service"],
+    additionalServices: ["Professional DJ service", "Premium champagne"],
+  },
+  "seamanta-catamaran": {
+    id: "seamanta-catamaran",
+    name: "SEAMANTA CATAMARAN",
+    year: "2020",
+    model: "296 Center Console",
+    condition: "New",
+    location: "DAR ES SALAAM",
+    status: "IN STOCK",
+    color: "White",
+    description: "Comfortable catamaran for day trips.",
+    capacity: "22 passengers",
+    pricing: {
+      dar: [
+        { type: "Half Day Charter", price: "$1,100" },
+        { type: "Full Day Charter", price: "$1,500" },
+        { type: "Live Onboard (24 Hours)", price: "$2,000" },
+      ],
+      zanzibar: [
+        { type: "Half Day Cruise", price: "$1,400" },
+        { type: "Full Day Cruise", price: "$1,800" },
+        { type: "Live Onboard (24 Hours)", price: "$2,200" },
+      ],
+    },
+    destinations: ["Bongoyo Island", "Mbudya Island", "Stone Town"],
+    services: ["Professional crew", "Snorkeling equipment", "Fresh seafood lunch"],
+    additionalServices: [],
+  },
+  "vaatea-catamaran": {
+    id: "vaatea-catamaran",
+    name: "VAATEA CATAMARAN",
+    year: "2021",
+    model: "296 Center Console",
+    condition: "New",
+    location: "ZANZIBAR",
+    status: "IN STOCK",
+    color: "White",
+    description: "Luxury catamaran with premium features.",
+    capacity: "24 passengers",
+    pricing: {
+      dar: [
+        { type: "Half Day Charter", price: "$1,300" },
+        { type: "Full Day Charter", price: "$1,700" },
+        { type: "Live Onboard (24 Hours)", price: "$2,300" },
+      ],
+      zanzibar: [
+        { type: "Half Day Cruise", price: "$1,600" },
+        { type: "Full Day Cruise", price: "$2,000" },
+        { type: "Live Onboard (24 Hours)", price: "$2,500" },
+      ],
+    },
+    destinations: ["Stone Town", "Prison Island", "Nakupenda Island"],
+    services: ["Professional crew", "Premium snorkeling equipment", "Full meal service"],
+    additionalServices: ["Professional DJ service"],
   },
 };
 
@@ -316,8 +406,42 @@ const BoatDetails = () => {
   const [canScroll, setCanScroll] = useState(false);
   const [isAtStart, setIsAtStart] = useState(true);
   const [isAtEnd, setIsAtEnd] = useState(false);
+  
+  // Touch/swipe handlers for mobile
+  const touchStartX = useRef<number>(0);
+  const touchEndX = useRef<number>(0);
 
-  const boat = id ? boatDatabase[id] : null;
+  // Get boat images from folder
+  const boatImages = id ? getBoatById(id) : null;
+  // Get boat details from database
+  const boatDetails = id ? boatDatabase[id] : null;
+
+  // Debug logging
+  if (boatImages && id === 'sunday-kinga') {
+    console.log('Sunday Kinga Debug:', {
+      boatImages: boatImages.boatImages,
+      boatImagesCount: boatImages.boatImages?.length || 0,
+      interiors: boatImages.interiors,
+      interiorsCount: boatImages.interiors?.length || 0,
+      mainImage: boatImages.image
+    });
+  }
+
+  // Combine boat images and details
+  const boat = boatImages && boatDetails ? {
+    ...boatDetails,
+    galleryImages: [
+      ...(boatImages.boatImages && boatImages.boatImages.length > 0 
+        ? boatImages.boatImages 
+        : boatImages.image ? [boatImages.image] : []), // Fallback to main image if boatImages array is empty
+      ...(boatImages.interiors || [])    // Then add interior images
+    ].filter(Boolean), // Remove any undefined/null values
+  } : null;
+
+  // Debug final gallery
+  if (boat && id === 'sunday-kinga') {
+    console.log('Final gallery images:', boat.galleryImages.length, boat.galleryImages);
+  }
 
   if (!boat) {
     return (
@@ -355,6 +479,36 @@ const BoatDetails = () => {
 
   const prevImage = () => {
     setSelectedImageIndex((prev) => (prev - 1 + boat.galleryImages.length) % boat.galleryImages.length);
+  };
+
+  // Touch handlers for swipe navigation on mobile
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    
+    const distance = touchStartX.current - touchEndX.current;
+    const minSwipeDistance = 50; // Minimum distance for a swipe
+    
+    if (Math.abs(distance) > minSwipeDistance) {
+      if (distance > 0) {
+        // Swipe left - next image
+        nextImage();
+      } else {
+        // Swipe right - previous image
+        prevImage();
+      }
+    }
+    
+    // Reset
+    touchStartX.current = 0;
+    touchEndX.current = 0;
   };
 
   // Handle scroll tracking for horizontal scrollable section
@@ -422,7 +576,12 @@ const BoatDetails = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
           {/* Left Side - Main Image */}
           <div className="space-y-3 sm:space-y-4 w-full">
-            <div className="relative aspect-[4/3] bg-gray-100 rounded-lg sm:rounded-xl overflow-hidden w-full">
+            <div 
+              className="relative aspect-[4/3] bg-gray-100 rounded-lg sm:rounded-xl overflow-hidden w-full touch-pan-y"
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+            >
               <img
                 src={boat.galleryImages[selectedImageIndex]}
                 alt={boat.name}
@@ -456,12 +615,12 @@ const BoatDetails = () => {
                   PHOTOS FOUND {boat.galleryImages.length}
                 </h3>
               </div>
-              <div className="flex gap-1.5 sm:gap-2 overflow-x-auto pb-2 scrollbar-hide w-full">
+              <div className="flex gap-1.5 sm:gap-2 overflow-x-auto pb-2 scrollbar-hide w-full snap-x snap-mandatory scroll-smooth">
                 {boat.galleryImages.map((img: string, index: number) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImageIndex(index)}
-                    className={`flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-md overflow-hidden border-2 transition-all ${
+                    className={`flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-md overflow-hidden border-2 transition-all snap-start ${
                       selectedImageIndex === index
                         ? "border-gray-900 ring-2 ring-gray-900 ring-offset-1 sm:ring-offset-2"
                         : "border-gray-200 hover:border-gray-400"
@@ -518,7 +677,7 @@ const BoatDetails = () => {
 
             {/* Boat Title */}
             <div className="w-full">
-              <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900 mb-1 sm:mb-2 break-words leading-tight font-spartan" style={{ fontSize: 'clamp(1.25rem, 5vw, 50px)' }}>
+              <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900 mb-1 sm:mb-2 break-words leading-tight font-quicksand" style={{ fontSize: 'clamp(1.25rem, 5vw, 50px)' }}>
                 {boat.year} {boat.name}
               </h1>
               <p className="text-sm sm:text-base md:text-lg text-gray-600 break-words">{boat.model}</p>

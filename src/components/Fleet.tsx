@@ -1,33 +1,19 @@
-import { Link } from "react-router-dom";
-import yachtCrew from "@/assets/yacht-crew.jpg";
-import yachtViewSea from "@/assets/yacht-view-sea.jpg";
-import yachtOceanView from "@/assets/yacht-ocean-view.jpg";
-import yachtViewIsland from "@/assets/yacht-view-island.jpg";
+import { useNavigate } from "react-router-dom";
 import AnimatedItem from "@/components/ui/animated-item";
+import { getAllBoats } from "@/utils/boats";
+import { Button } from "@/components/ui/button";
 
 const Fleet = () => {
-  const fleet = [
-    {
-      id: "misbehavior",
-      name: "MISBEHAVIOR CATAMARAN",
-      image: yachtCrew
-    },
-    {
-      id: "umoja-1",
-      name: "UMOJA CATAMARAN 1",
-      image: yachtViewSea
-    },
-    {
-      id: "sunday-kinga",
-      name: "SUNDAY KINGA CATAMARAN",
-      image: yachtOceanView
-    },
-    {
-      id: "ocean-dream",
-      name: "OCEAN DREAM",
-      image: yachtViewIsland
-    }
-  ];
+  const navigate = useNavigate();
+  const allBoats = getAllBoats();
+  const displayedBoats = allBoats.slice(0, 4);
+  const hasMoreBoats = allBoats.length > 4;
+
+  const handleReadMore = (boatId: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigate(`/boat/${boatId}`);
+  };
 
   return (
     <section id="fleet" className="py-20 bg-white">
@@ -42,23 +28,25 @@ const Fleet = () => {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 max-w-5xl mx-auto">
-          {fleet.map((yacht, index) => (
-            <AnimatedItem key={index} delay={index * 100} animation="fadeInUp">
+          {displayedBoats.map((yacht, index) => (
+            <AnimatedItem key={yacht.id} delay={index * 100} animation="fadeInUp">
               <div className="overflow-hidden group">
                 {/* Image */}
-                <Link to={`/boat/${yacht.id}`}>
-                  <div 
-                    className="w-full aspect-square bg-cover bg-center mb-2 rounded-lg max-w-[200px] mx-auto relative overflow-hidden cursor-pointer"
-                    style={{ backgroundImage: `url(${yacht.image})` }}
-                  >
-                    {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-end p-3">
-                      <button className="bg-white text-foreground px-4 py-2 rounded-lg font-medium text-sm hover:bg-white/90 transition-colors">
-                        Read More
-                      </button>
-                    </div>
+                <div 
+                  className="w-full aspect-square bg-cover bg-center mb-2 rounded-lg max-w-[200px] mx-auto relative overflow-hidden cursor-pointer"
+                  style={{ backgroundImage: `url(${yacht.image})` }}
+                  onClick={() => navigate(`/boat/${yacht.id}`)}
+                >
+                  {/* Hover Overlay */}
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-end p-3">
+                    <button 
+                      onClick={(e) => handleReadMore(yacht.id, e)}
+                      className="bg-white text-foreground px-4 py-2 rounded-lg font-medium text-sm hover:bg-white/90 transition-colors"
+                    >
+                      Read More
+                    </button>
                   </div>
-                </Link>
+                </div>
                 
                 {/* Title */}
                 <h3 className="text-black text-center text-base md:text-lg font-bold font-quicksand">
@@ -68,6 +56,17 @@ const Fleet = () => {
             </AnimatedItem>
           ))}
         </div>
+
+        {hasMoreBoats && (
+          <div className="text-center mt-8">
+            <Button 
+              onClick={() => navigate('/all-boats')}
+              className="bg-black text-white hover:bg-black/90 px-8 py-6 text-lg font-semibold rounded-lg"
+            >
+              See All
+            </Button>
+          </div>
+        )}
       </div>
     </section>
   );
