@@ -1,7 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Share2, Printer, ChevronLeft, ChevronRight, Link2 } from "lucide-react";
+import { Share2, ChevronLeft, ChevronRight, Link2, Check } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import { getBoatById } from "@/utils/boats";
 import bookingImage1 from "@/assets/booking_image1.jpeg";
 import bookingImage2 from "@/assets/booking_image2.jpeg";
@@ -400,7 +401,9 @@ const boatDatabase: Record<string, any> = {
 const BoatDetails = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [linkCopied, setLinkCopied] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [canScroll, setCanScroll] = useState(false);
@@ -458,23 +461,29 @@ const BoatDetails = () => {
 
   const handleShare = () => {
     const currentUrl = window.location.href;
-    navigator.clipboard.writeText(currentUrl).then(() => {
-      // Show a brief notification
-      alert("Link copied to clipboard!");
-    }).catch(() => {
-      // Fallback for older browsers
-      const textArea = document.createElement("textarea");
-      textArea.value = currentUrl;
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand("copy");
-      document.body.removeChild(textArea);
-      alert("Link copied to clipboard!");
-    });
+    const showCopiedFeedback = () => {
+      setLinkCopied(true);
+      toast({ title: "Link copied", description: "The boat link is in your clipboard." });
+      window.setTimeout(() => setLinkCopied(false), 2000);
+    };
+
+    navigator.clipboard
+      .writeText(currentUrl)
+      .then(showCopiedFeedback)
+      .catch(() => {
+        // Fallback for older browsers
+        const textArea = document.createElement("textarea");
+        textArea.value = currentUrl;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+        showCopiedFeedback();
+      });
   };
 
-  const handlePrint = () => {
-    window.print();
+  const handleBookNow = () => {
+    navigate("/booking", { state: { preselectedCatamaranId: boat.id } });
   };
 
   const nextImage = () => {
@@ -650,11 +659,18 @@ const BoatDetails = () => {
                 variant="outline"
                 size="sm"
                 onClick={handleShare}
-                className="flex items-center justify-center gap-0 md:gap-2 text-xs sm:text-sm px-2.5 sm:px-3 py-1.5 sm:py-2 h-8 sm:h-9 md:h-auto w-8 sm:w-9 md:w-auto aspect-square sm:aspect-auto"
+                className={[
+                  "flex items-center justify-center gap-0 md:gap-2 text-xs sm:text-sm px-2.5 sm:px-3 py-1.5 sm:py-2 h-8 sm:h-9 md:h-auto w-8 sm:w-9 md:w-auto aspect-square sm:aspect-auto transition-all",
+                  linkCopied ? "border-green-300 bg-green-50 text-green-700 animate-pulse" : "",
+                ].join(" ")}
                 aria-label="Copy link"
               >
-                <Link2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                <span className="hidden md:inline">COPY LINK</span>
+                {linkCopied ? (
+                  <Check className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                ) : (
+                  <Link2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                )}
+                <span className="hidden md:inline">{linkCopied ? "COPIED" : "COPY LINK"}</span>
               </Button>
             </div>
 
@@ -664,22 +680,6 @@ const BoatDetails = () => {
                 {boat.year} {boat.name}
               </h1>
               <p className="text-sm sm:text-base md:text-lg text-gray-600 break-words">{boat.model}</p>
-            </div>
-
-            {/* Tags */}
-            <div className="flex flex-wrap gap-1.5 sm:gap-2 w-full">
-              <span className="inline-flex items-center gap-1 px-2 sm:px-2.5 md:px-3 py-0.5 sm:py-1 bg-gray-100 text-gray-900 rounded-full text-xs sm:text-sm font-medium">
-                <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 rounded-full bg-gray-900 flex-shrink-0"></div>
-                <span className="whitespace-nowrap">{boat.color}</span>
-              </span>
-              <span className="inline-flex items-center px-2 sm:px-2.5 md:px-3 py-0.5 sm:py-1 bg-gray-100 text-gray-900 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap">
-                {boat.location}
-              </span>
-              {boat.status === "PENDING" && (
-                <span className="inline-flex items-center px-2 sm:px-2.5 md:px-3 py-0.5 sm:py-1 bg-orange-100 text-orange-800 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap">
-                  {boat.status}
-                </span>
-              )}
             </div>
 
             {/* Sections - Horizontal scroll on desktop, vertical on mobile */}
@@ -801,15 +801,12 @@ const BoatDetails = () => {
             <div className="pt-3 sm:pt-4 border-t border-gray-200 w-full">
               <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 mb-1.5 sm:mb-2">Description</h3>
               <p className="text-xs sm:text-sm md:text-base text-gray-600 leading-relaxed break-words">{boat.description}</p>
-            </div>
-
-            {/* Book Now Button */}
-            <div className="pt-3 sm:pt-4 w-full">
               <Button
-                className="w-full sm:w-auto bg-gray-900 hover:bg-gray-800 text-white rounded-full px-6 py-3 text-sm sm:text-base font-semibold"
-                onClick={() => navigate(`/booking?catamaran=${encodeURIComponent(boat.id)}`)}
+                type="button"
+                onClick={handleBookNow}
+                className="mt-3 w-full bg-gray-900 hover:bg-gray-800 text-white rounded-full py-6 text-lg font-medium"
               >
-                Book now
+                Book Now
               </Button>
             </div>
           </div>

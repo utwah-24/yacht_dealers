@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -163,8 +163,8 @@ const generateCatamaranCatalog = () => {
 };
 
 const BookingPage = () => {
+  const routerLocation = useLocation();
   const { toast } = useToast();
-  const locationRouter = useLocation();
   const [step, setStep] = useState(1);
   const [selectedFood, setSelectedFood] = useState<string[]>([]);
   const [selectedDrinks, setSelectedDrinks] = useState<string[]>([]);
@@ -175,7 +175,10 @@ const BookingPage = () => {
   const [selectedCharterType, setSelectedCharterType] = useState<string>("");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedCatamaranId, setSelectedCatamaranId] = useState<string | null>(null);
-  const catamaranCatalog = generateCatamaranCatalog();
+  const catamaranCatalog = useMemo(() => generateCatamaranCatalog(), []);
+  const preselectedCatamaranId = (routerLocation.state as any)?.preselectedCatamaranId as
+    | string
+    | undefined;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -210,6 +213,17 @@ const BookingPage = () => {
 
   const watched = watch();
 
+  // If a user arrives from Boat Details, preselect that catamaran so Step 2 skips the "choose a catamaran" list.
+  useEffect(() => {
+    if (!preselectedCatamaranId) return;
+    if (selectedCatamaranId) return;
+    const found = catamaranCatalog.find((item) => item.id === preselectedCatamaranId);
+    if (!found) return;
+
+    setSelectedCatamaranId(found.id);
+    setValue("catamaran", found.name);
+  }, [preselectedCatamaranId, selectedCatamaranId, catamaranCatalog, setValue]);
+
   const foodOptions = [
     "Grilled Seafood Platter",
     "Fresh Lobster",
@@ -243,6 +257,9 @@ const BookingPage = () => {
   const destinations = [
     { value: "dar-slipway", label: "Dar es Salaam - Slipway Marina" },
     { value: "zanzibar-stonetown", label: "Zanzibar - Stone Town" },
+    { value: "nungwi", label: "Nungwi Beach" },
+    { value: "bongoyo", label: "Bongoyo Island" },
+    { value: "mbudya", label: "Mbudya Island" },
   ];
 
   // Get prices for selected yacht
@@ -256,19 +273,6 @@ const BookingPage = () => {
   };
 
   const yachtPrices = selectedYacht ? getYachtPrices(selectedYacht) : { dar: [], zanzibar: [] };
-
-  // Preselect catamaran when coming from BoatDetails via query param
-  useEffect(() => {
-    const params = new URLSearchParams(locationRouter.search);
-    const catamaranFromQuery = params.get("catamaran");
-    if (catamaranFromQuery && !selectedCatamaranId) {
-      const found = catamaranCatalog.find((item) => item.id === catamaranFromQuery);
-      if (found) {
-        setSelectedCatamaranId(found.id);
-        setValue("catamaran", found.name);
-      }
-    }
-  }, [locationRouter.search, catamaranCatalog, selectedCatamaranId, setValue]);
 
   const handleYachtSelect = (yacht: string) => {
     setSelectedYacht(yacht);
@@ -539,9 +543,7 @@ Please contact the customer to provide a quote.
                 >
                   <form className="space-y-6">
                     <div className="space-y-1">
-                      <h2 className="text-xl font-semibold text-gray-900 font-spartan">
-                        {selectedCatamaranId === "black-bird-heli" ? "Helicopter Catalog" : "Yacht Catalog"}
-                      </h2>
+                      <h2 className="text-xl font-semibold text-gray-900 font-spartan">Yacht Catalog</h2>
                       <p className="text-sm text-gray-500">
                         Choose a catamaran and configure your experience.
                       </p>
