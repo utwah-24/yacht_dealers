@@ -351,49 +351,73 @@ const BookingPage = () => {
       ?.packages.find((pkg) => pkg.yacht === yacht)
       ?.options.find((opt) => opt.type === charterType);
     
+    // Use unicode escape sequences for emojis to avoid encoding issues (showing as �).
+    const EMOJI = {
+      boatRequest: "\u{1F6E5}\u{FE0F}", // 🛥️
+      customer: "\u{1F464}", // 👤
+      pin: "\u{1F4CD}", // 📍
+      calendar: "\u{1F4C5}", // 📅
+      people: "\u{1F465}", // 👥
+      catamaran: "\u{1F6A4}", // 🚤
+      sailboat: "\u{26F5}", // ⛵
+      food: "\u{1F37D}\u{FE0F}", // 🍽️
+      drink: "\u{1F379}", // 🍹
+      music: "\u{1F3B5}", // 🎵
+      warning: "\u{26A0}\u{FE0F}", // ⚠️
+      party: "\u{1F389}", // 🎉
+      target: "\u{1F3AF}", // 🎯
+      note: "\u{1F4DD}", // 📝
+      check: "\u{2713}", // ✓
+    } as const;
+
     const catamaranLine = data.catamaran
-      ? `\n🚤 *Selected Catamaran:*\n${data.catamaran}\n`
+      ? `\n${EMOJI.catamaran} *Selected Catamaran:*\n${data.catamaran}\n`
       : "";
 
     const activitiesLine =
       data.activities && data.activities.length
-        ? `\n🎯 *Preferred Activities:*\n${data.activities.join(", ")}\n`
+        ? `\n${EMOJI.target} *Preferred Activities:*\n${data.activities.join(", ")}\n`
         : "";
 
     const otherActivityLine = data.otherActivity
-      ? `\n📝 *Other Activity Preferences:*\n${data.otherActivity}\n`
+      ? `\n${EMOJI.note} *Other Activity Preferences:*\n${data.otherActivity}\n`
       : "";
+
+    const allergies = data.allergies?.trim();
+    const specialOccasion = data.specialOccasion?.trim();
+    const showAllergies = !!allergies && allergies.toLowerCase() !== "null";
+    const showSpecialOccasion = !!specialOccasion && specialOccasion.toLowerCase() !== "null";
 
     // Format WhatsApp message
     const message = `
-🛥️ *NEW YACHT BOOKING REQUEST*
+${EMOJI.boatRequest} *NEW YACHT BOOKING REQUEST*
 
-👤 *Customer Details:*
+${EMOJI.customer} *Customer Details:*
 Name: ${data.name}
 Phone: ${data.phone}
 
-📍 *Destination:*
+${EMOJI.pin} *Destination:*
 ${destinations.find((d) => d.value === data.destination)?.label}
 
-📅 *Date:* ${data.date}
-👥 *Passengers:* ${data.passengers}
+${EMOJI.calendar} *Date:* ${data.date}
+${EMOJI.people} *Passengers:* ${data.passengers}
 
 ${catamaranLine}
 
-⛵ *Selected Charter:*
+${EMOJI.sailboat} *Selected Charter:*
 ${location} - ${yacht}
 ${charterType} ${selectedCharterOption ? selectedCharterOption.price : ""}
 
-🍽️ *Food Selection:*
+${EMOJI.food} *Food Selection:*
 ${data.food.join(", ")}
 
-🍹 *Drinks Selection:*
+${EMOJI.drink} *Drinks Selection:*
 ${data.drinks.join(", ")}
 
-🎵 *DJ Service:* ${data.dj ? "Yes ✓" : "No"}
+${EMOJI.music} *DJ Service:* ${data.dj ? `Yes ${EMOJI.check}` : "No"}
 
-${data.allergies ? `⚠️ *Allergies:*\n${data.allergies}\n` : ""}
-${data.specialOccasion ? `🎉 *Special Occasion:*\n${data.specialOccasion}\n` : ""}
+${showAllergies ? `${EMOJI.warning} *Allergies:*\n${allergies}\n` : ""}
+${showSpecialOccasion ? `${EMOJI.party} *Special Occasion:*\n${specialOccasion}\n` : ""}
 ${activitiesLine}
 ${otherActivityLine}
 
