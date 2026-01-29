@@ -380,7 +380,22 @@ const BookingPage = () => {
   };
 
   const handleBack = () => {
-    setStep((prev) => Math.max(1, prev - 1));
+    setStep((prev) => {
+      // If on step 2 and a catamaran is selected, stay on step 2 but show the list again.
+      if (prev === 2 && selectedCatamaranId) {
+        setSelectedCatamaranId(null);
+        return 2;
+      }
+
+      // If on step 3 or beyond, go back to step 2 (catamaran list) and clear selection
+      if (prev >= 3) {
+        setSelectedCatamaranId(null);
+        return 2;
+      }
+
+      // Otherwise, go back one step
+      return Math.max(1, prev - 1);
+    });
   };
 
   const handleSelectCatamaran = (id: string) => {
@@ -512,13 +527,13 @@ Please contact the customer to provide a quote.
         <div className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center">
           <div className="max-w-2xl mx-auto w-full">
             {/* Title */}
-            <div className="mb-8">
+            <div className="mb-6 sm:mb-8">
               <h1 className="text-4xl font-bold mb-2 font-spartan" style={{ fontSize: 'clamp(2rem, 7vw, 70px)' }}>
                 <span className="text-gray-900">Booking</span>{" "}
                 <span className="text-gray-500">without stress</span>
               </h1>
               {/* Step Indicator */}
-              <div className="flex gap-2 mt-4">
+              <div className="flex gap-2 mt-3 sm:mt-4">
                 <div className={`h-2 flex-1 rounded-full transition-all ${step >= 1 ? "bg-gray-900" : "bg-gray-300"}`}></div>
                 <div className={`h-2 flex-1 rounded-full transition-all ${step >= 2 ? "bg-gray-900" : "bg-gray-300"}`}></div>
                 <div className={`h-2 flex-1 rounded-full transition-all ${step >= 3 ? "bg-gray-900" : "bg-gray-300"}`}></div>
@@ -527,7 +542,7 @@ Please contact the customer to provide a quote.
             </div>
 
             {/* Form Card */}
-            <div className="bg-gray-50 rounded-3xl p-8 shadow-xl relative overflow-hidden">
+            <div className="bg-gray-50 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-xl relative overflow-hidden">
               {/* Form Container with Slide Animation */}
               <div className="relative">
                 {/* Step 1: Basic Information */}
@@ -633,12 +648,12 @@ Please contact the customer to provide a quote.
                       : "opacity-0 translate-x-full absolute inset-0 pointer-events-none"
                   }`}
                 >
-                  <form className="space-y-6">
+                  <form className="space-y-4 sm:space-y-6">
                     <div className="space-y-1">
-                      <h2 className="text-xl font-semibold text-gray-900 font-spartan">
+                      <h2 className="text-lg sm:text-xl font-semibold text-gray-900 font-spartan">
                         {selectedCatamaranId === "black-bird-heli" ? "Helicopter" : "Yacht Catalog"}
                       </h2>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-xs sm:text-sm text-gray-500">
                         {selectedCatamaranId === "black-bird-heli" 
                           ? "Choose a helicopter service and configure your experience."
                           : "Choose a catamaran and configure your experience."}
@@ -647,27 +662,27 @@ Please contact the customer to provide a quote.
 
                     {/* Catalog List */}
                     {!selectedCatamaranId && (
-                      <div className="space-y-4">
+                      <div className="space-y-3 sm:space-y-4">
                         {catamaranCatalog.map((item) => (
                           <button
                             key={item.id}
                             type="button"
                             onClick={() => handleSelectCatamaran(item.id)}
-                            className="w-full flex items-center justify-between rounded-2xl bg-white px-3 py-3 shadow-sm hover:shadow-md transition-shadow"
+                            className="w-full flex items-center justify-between rounded-xl sm:rounded-2xl bg-white px-2 py-2 sm:px-3 sm:py-3 shadow-sm hover:shadow-md transition-shadow"
                           >
-                            <div className="flex items-center gap-3">
-                              <div className="w-16 h-16 rounded-2xl overflow-hidden">
+                            <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl overflow-hidden flex-shrink-0">
                                 <img
                                   src={item.image}
                                   alt={item.name}
                                   className="w-full h-full object-cover"
                                 />
                               </div>
-                              <div className="text-left">
-                                <h3 className="text-sm font-semibold text-gray-900">
+                              <div className="text-left flex-1 min-w-0">
+                                <h3 className="text-xs sm:text-sm font-semibold text-gray-900 truncate">
                                   {item.name}
                                 </h3>
-                                <p className="text-xs text-gray-500 truncate">
+                                <p className="text-[10px] sm:text-xs text-gray-500 truncate">
                                   {item.description}
                                 </p>
                               </div>
