@@ -8,7 +8,7 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 210 70% 90%;
     --foreground: 210 25% 15%;
 
     --card: 0 0% 100%;
@@ -59,7 +59,7 @@ All colors MUST be HSL.
     --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
-    --sidebar-background: 0 0% 98%;
+    --sidebar-background: 210 65% 88%;
 
     --sidebar-foreground: 240 5.3% 26.1%;
 

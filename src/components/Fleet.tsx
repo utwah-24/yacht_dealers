@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import AnimatedItem from "@/components/ui/animated-item";
 import { getAllBoats } from "@/utils/boats";
 import { Button } from "@/components/ui/button";
+import backgroundImage from "@/assets/background.jpg";
 
 const Fleet = () => {
   const navigate = useNavigate();
@@ -16,13 +17,14 @@ const Fleet = () => {
   };
 
   return (
-    <section id="fleet" className="py-20 bg-white">
-      <div className="container mx-auto px-4">
+    <section id="fleet" className="relative py-20 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${backgroundImage})` }}>
+      <div className="absolute inset-0 bg-black/40" aria-hidden />
+      <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-black mb-6 text-black font-quicksand" style={{ fontSize: 'clamp(2rem, 7vw, 70px)' }}>
-            Our <span className="text-black font-quicksand">Fleet</span>
+          <h2 className="text-4xl md:text-5xl font-black mb-6 text-white font-quicksand drop-shadow-md" style={{ fontSize: 'clamp(2rem, 7vw, 70px)' }}>
+            Our <span className="text-white font-quicksand">Fleet</span>
           </h2>
-          <p className="text-black max-w-3xl mx-auto leading-relaxed">
+          <p className="text-white/95 max-w-3xl mx-auto leading-relaxed drop-shadow">
             Discover our premium catamaran fleet, each vessel designed to provide you with an unforgettable yacht experience.
           </p>
         </div>
@@ -49,7 +51,7 @@ const Fleet = () => {
                 </div>
                 
                 {/* Title */}
-                <h3 className="text-black text-center text-base md:text-lg font-bold font-quicksand">
+                <h3 className="text-black text-center text-base md:text-lg font-bold font-quicksand bg-white px-3 py-1.5 rounded-md inline-block">
                   {yacht.name}
                 </h3>
               </div>

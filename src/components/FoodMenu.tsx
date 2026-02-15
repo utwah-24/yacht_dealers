@@ -2,23 +2,25 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
 import foodImage from "@/assets/food.jpeg";
+import backgroundImage from "@/assets/background.jpg";
 
 const FoodMenu = () => {
   return (
-    <section className="py-20 bg-white">
-      <div className="container mx-auto px-4">
+    <section className="relative py-20 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${backgroundImage})` }}>
+      <div className="absolute inset-0 bg-black/40" aria-hidden />
+      <div className="container mx-auto px-4 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
           {/* Left Section - Text Content */}
           <div className="space-y-6">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-black font-quicksand" style={{ fontSize: 'clamp(2rem, 6vw, 60px)' }}>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white font-quicksand drop-shadow-md" style={{ fontSize: 'clamp(2rem, 6vw, 60px)' }}>
               Our Food Menu
             </h2>
             
-            <div className="space-y-4 text-gray-700 font-quicksand">
-              <p className="text-base md:text-lg leading-relaxed">
+            <div className="space-y-4 text-white/95 font-quicksand">
+              <p className="text-base md:text-lg leading-relaxed drop-shadow">
                 Savor the finest culinary experiences on the water. Our expert chefs craft exquisite meals using the freshest local ingredients, bringing you a taste of Tanzania's rich flavors while you sail through paradise.
               </p>
-              <p className="text-base md:text-lg leading-relaxed">
+              <p className="text-base md:text-lg leading-relaxed drop-shadow">
                 From fresh seafood caught daily to traditional dishes prepared with love, every meal is an adventure. Experience dining that matches the luxury of your yacht journey.
               </p>
             </div>

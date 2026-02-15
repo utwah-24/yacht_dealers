@@ -8,10 +8,14 @@ import Team from "@/components/Team";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import AnimatedSection from "@/components/ui/animated-section";
+import backgroundImage from "@/assets/background.jpg";
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
+    <div
+      className="min-h-screen bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: `url(${backgroundImage})` }}
+    >
       <Navigation />
       <Hero />
       <AnimatedSection animation="fadeInUp" delay={0}>

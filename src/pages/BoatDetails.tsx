@@ -8,6 +8,7 @@ import bookingImage1 from "@/assets/booking_image1.jpeg";
 import bookingImage2 from "@/assets/booking_image2.jpeg";
 import bookingImage3 from "@/assets/booking_image3 .jpeg";
 import yachtImage from "@/assets/yatch-image.jpg";
+import backgroundImage from "@/assets/background.jpg";
 
 // Boat data - pricing and other details
 const boatDatabase: Record<string, any> = {
@@ -448,7 +449,7 @@ const BoatDetails = () => {
 
   if (!boat) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <div className="min-h-screen flex items-center justify-center bg-background px-4">
         <div className="text-center max-w-md w-full">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 font-spartan" style={{ fontSize: 'clamp(1.5rem, 6vw, 60px)' }}>Boat Not Found</h1>
           <Button onClick={() => navigate("/")} className="mt-4">
@@ -570,14 +571,14 @@ const BoatDetails = () => {
   }, [boat]);
 
   return (
-    <div className="min-h-screen bg-white overflow-x-hidden">
+    <div className="min-h-screen overflow-x-hidden bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${backgroundImage})` }}>
       {/* Header with Back Button */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <div className="sticky top-0 z-10 border-b border-white/20 bg-black/30 backdrop-blur-md">
         <div className="container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4">
           <Button
             variant="ghost"
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-xs sm:text-sm md:text-base"
+            className="flex items-center gap-2 text-xs sm:text-sm md:text-base text-white hover:text-white hover:bg-white/10"
           >
             <ChevronLeft className="h-3 w-3 sm:h-4 sm:w-4" />
             Back
@@ -585,7 +586,7 @@ const BoatDetails = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8 max-w-full">
+      <div className="container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8 max-w-full relative z-0">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
           {/* Left Side - Main Image */}
           <div className="space-y-3 sm:space-y-4 w-full">
@@ -624,7 +625,7 @@ const BoatDetails = () => {
             {/* Photo Gallery */}
             <div className="space-y-2 w-full">
               <div className="flex items-center justify-between mb-1">
-                <h3 className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-gray-900">
+                <h3 className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-white">
                   PHOTOS FOUND {boat.galleryImages.length}
                 </h3>
               </div>
@@ -660,7 +661,7 @@ const BoatDetails = () => {
                 size="sm"
                 onClick={handleShare}
                 className={[
-                  "flex items-center justify-center gap-0 md:gap-2 text-xs sm:text-sm px-2.5 sm:px-3 py-1.5 sm:py-2 h-8 sm:h-9 md:h-auto w-8 sm:w-9 md:w-auto aspect-square sm:aspect-auto transition-all",
+                  "flex items-center justify-center gap-0 md:gap-2 text-xs sm:text-sm px-2.5 sm:px-3 py-1.5 sm:py-2 h-8 sm:h-9 md:h-auto w-8 sm:w-9 md:w-auto aspect-square sm:aspect-auto transition-all border-white/30 text-gray-900 hover:bg-white/10 hover:text-white",
                   linkCopied ? "border-green-300 bg-green-50 text-green-700 animate-pulse" : "",
                 ].join(" ")}
                 aria-label="Copy link"
@@ -676,14 +677,14 @@ const BoatDetails = () => {
 
             {/* Boat Title */}
             <div className="w-full">
-              <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900 mb-1 sm:mb-2 break-words leading-tight font-quicksand" style={{ fontSize: 'clamp(1.25rem, 5vw, 50px)' }}>
+              <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-white mb-1 sm:mb-2 break-words leading-tight font-quicksand" style={{ fontSize: 'clamp(1.25rem, 5vw, 50px)' }}>
                 {boat.year} {boat.name}
               </h1>
-              <p className="text-sm sm:text-base md:text-lg text-gray-600 break-words">{boat.model}</p>
+              <p className="text-sm sm:text-base md:text-lg text-white/95 break-words">{boat.model}</p>
             </div>
 
             {/* Sections - Horizontal scroll on desktop, vertical on mobile */}
-            <div className="border-t border-gray-200 pt-3 sm:pt-4 md:pt-6 w-full">
+            <div className="border-t border-white/20 pt-3 sm:pt-4 md:pt-6 w-full">
               <div 
                 ref={scrollContainerRef}
                 className="flex flex-col md:flex-row md:overflow-x-auto md:space-x-4 lg:space-x-6 space-y-4 md:space-y-0 pb-4 md:pb-2 scrollbar-hide w-full relative"
@@ -692,39 +693,28 @@ const BoatDetails = () => {
                   msOverflowStyle: 'none',
                 }}
               >
-                {/* Gradient fade indicators */}
-                {canScroll && (
-                  <>
-                    {!isAtStart && (
-                      <div className="hidden md:block absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white to-transparent pointer-events-none z-10 transition-opacity duration-300" />
-                    )}
-                    {!isAtEnd && (
-                      <div className="hidden md:block absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white to-transparent pointer-events-none z-10 transition-opacity duration-300" />
-                    )}
-                  </>
-                )}
                 {/* Price List */}
                 <div className="flex-shrink-0 w-full md:w-72 lg:w-80 space-y-2 sm:space-y-3 md:space-y-4 min-w-0">
-                  <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900">PRICE LIST</h3>
+                  <h3 className="text-sm sm:text-base md:text-lg font-semibold text-white">PRICE LIST</h3>
                   <div className="space-y-2 sm:space-y-3 md:space-y-4">
                     <div>
-                      <h4 className="text-xs sm:text-sm font-semibold text-gray-700 mb-1 sm:mb-1.5 md:mb-2">Dar es Salaam</h4>
+                      <h4 className="text-xs sm:text-sm font-semibold text-white mb-1 sm:mb-1.5 md:mb-2">Dar es Salaam</h4>
                       <div className="space-y-1 sm:space-y-1.5 md:space-y-2">
                         {boat.pricing?.dar?.map((item: any, index: number) => (
-                          <div key={index} className="flex justify-between items-center py-1.5 sm:py-2 border-b border-gray-100 gap-2">
-                            <span className="text-xs sm:text-sm text-gray-600 break-words flex-1 min-w-0">{item.type}</span>
-                            <span className="text-xs sm:text-sm md:text-base font-semibold text-gray-900 whitespace-nowrap flex-shrink-0">{item.price}</span>
+                          <div key={index} className="flex justify-between items-center py-1.5 sm:py-2 border-b border-white/15 gap-2">
+                            <span className="text-xs sm:text-sm text-white/95 break-words flex-1 min-w-0">{item.type}</span>
+                            <span className="text-xs sm:text-sm md:text-base font-semibold text-white whitespace-nowrap flex-shrink-0">{item.price}</span>
                           </div>
                         ))}
                       </div>
                     </div>
                     <div>
-                      <h4 className="text-xs sm:text-sm font-semibold text-gray-700 mb-1 sm:mb-1.5 md:mb-2">Zanzibar</h4>
+                      <h4 className="text-xs sm:text-sm font-semibold text-white mb-1 sm:mb-1.5 md:mb-2">Zanzibar</h4>
                       <div className="space-y-1 sm:space-y-1.5 md:space-y-2">
                         {boat.pricing?.zanzibar?.map((item: any, index: number) => (
-                          <div key={index} className="flex justify-between items-center py-1.5 sm:py-2 border-b border-gray-100 gap-2">
-                            <span className="text-xs sm:text-sm text-gray-600 break-words flex-1 min-w-0">{item.type}</span>
-                            <span className="text-xs sm:text-sm md:text-base font-semibold text-gray-900 whitespace-nowrap flex-shrink-0">{item.price}</span>
+                          <div key={index} className="flex justify-between items-center py-1.5 sm:py-2 border-b border-white/15 gap-2">
+                            <span className="text-xs sm:text-sm text-white/95 break-words flex-1 min-w-0">{item.type}</span>
+                            <span className="text-xs sm:text-sm md:text-base font-semibold text-white whitespace-nowrap flex-shrink-0">{item.price}</span>
                           </div>
                         ))}
                       </div>
@@ -734,12 +724,12 @@ const BoatDetails = () => {
 
                 {/* Destinations */}
                 <div className="flex-shrink-0 w-full md:w-72 lg:w-80 space-y-2 sm:space-y-3 min-w-0">
-                  <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900">DESTINATIONS</h3>
+                  <h3 className="text-sm sm:text-base md:text-lg font-semibold text-white">DESTINATIONS</h3>
                   <div className="flex flex-wrap gap-1.5 sm:gap-2">
                     {boat.destinations?.map((destination: string, index: number) => (
                       <span
                         key={index}
-                        className="inline-flex items-center px-2 sm:px-2.5 md:px-3 py-0.5 sm:py-1 bg-gray-100 text-gray-900 rounded-full text-xs sm:text-sm font-medium"
+                        className="inline-flex items-center px-2 sm:px-2.5 md:px-3 py-0.5 sm:py-1 bg-white/20 text-white rounded-full text-xs sm:text-sm font-medium"
                       >
                         {destination}
                       </span>
@@ -749,12 +739,12 @@ const BoatDetails = () => {
 
                 {/* Services Provided */}
                 <div className="flex-shrink-0 w-full md:w-72 lg:w-80 space-y-2 sm:space-y-3 min-w-0">
-                  <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900">SERVICES PROVIDED</h3>
+                  <h3 className="text-sm sm:text-base md:text-lg font-semibold text-white">SERVICES PROVIDED</h3>
                   <ul className="space-y-1.5 sm:space-y-2">
                     {boat.services?.map((service: string, index: number) => (
                       <li key={index} className="flex items-start gap-1.5 sm:gap-2">
-                        <span className="text-gray-900 mt-0.5 sm:mt-1 text-xs sm:text-sm flex-shrink-0">•</span>
-                        <span className="text-xs sm:text-sm text-gray-600 break-words flex-1">{service}</span>
+                        <span className="text-white mt-0.5 sm:mt-1 text-xs sm:text-sm flex-shrink-0">•</span>
+                        <span className="text-xs sm:text-sm text-white/95 break-words flex-1">{service}</span>
                       </li>
                     ))}
                   </ul>
@@ -763,12 +753,12 @@ const BoatDetails = () => {
                 {/* Additional Services */}
                 {boat.additionalServices && boat.additionalServices.length > 0 && (
                   <div className="flex-shrink-0 w-full md:w-72 lg:w-80 space-y-2 sm:space-y-3 min-w-0">
-                    <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900">ADDITIONAL SERVICES IF AVAILABLE</h3>
+                    <h3 className="text-sm sm:text-base md:text-lg font-semibold text-white">ADDITIONAL SERVICES IF AVAILABLE</h3>
                     <ul className="space-y-1.5 sm:space-y-2">
                       {boat.additionalServices.map((service: string, index: number) => (
                         <li key={index} className="flex items-start gap-1.5 sm:gap-2">
-                          <span className="text-gray-900 mt-0.5 sm:mt-1 text-xs sm:text-sm flex-shrink-0">•</span>
-                          <span className="text-xs sm:text-sm text-gray-600 break-words flex-1">{service}</span>
+                          <span className="text-white mt-0.5 sm:mt-1 text-xs sm:text-sm flex-shrink-0">•</span>
+                          <span className="text-xs sm:text-sm text-white/95 break-words flex-1">{service}</span>
                         </li>
                       ))}
                     </ul>
@@ -780,15 +770,15 @@ const BoatDetails = () => {
               {canScroll && (
                 <div className="mt-4 flex flex-col items-center gap-2">
                   {/* Scroll progress bar */}
-                  <div className="w-full max-w-md h-1 bg-gray-200 rounded-full overflow-hidden">
+                  <div className="w-full max-w-md h-1 bg-white/20 rounded-full overflow-hidden">
                     <div 
-                      className="h-full bg-gray-900 transition-all duration-300 ease-out rounded-full"
+                      className="h-full bg-white transition-all duration-300 ease-out rounded-full"
                       style={{ width: `${scrollProgress}%` }}
                     />
                   </div>
                   
                   {/* Scroll hint text */}
-                  <p className="text-xs text-gray-500 flex items-center gap-1">
+                  <p className="text-xs text-white/90 flex items-center gap-1">
                     <ChevronLeft className="h-3 w-3" />
                     <span>Swipe to see more</span>
                     <ChevronRight className="h-3 w-3" />
@@ -798,9 +788,9 @@ const BoatDetails = () => {
             </div>
 
             {/* Description */}
-            <div className="pt-3 sm:pt-4 border-t border-gray-200 w-full">
-              <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 mb-1.5 sm:mb-2">Description</h3>
-              <p className="text-xs sm:text-sm md:text-base text-gray-600 leading-relaxed break-words">{boat.description}</p>
+            <div className="pt-3 sm:pt-4 border-t border-white/20 w-full">
+              <h3 className="text-sm sm:text-base md:text-lg font-semibold text-white mb-1.5 sm:mb-2">Description</h3>
+              <p className="text-xs sm:text-sm md:text-base text-white/95 leading-relaxed break-words">{boat.description}</p>
               <Button
                 type="button"
                 onClick={handleBookNow}

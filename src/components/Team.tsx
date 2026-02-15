@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Shield, Anchor, Heart, Award, CalendarClock } from "lucide-react";
 import { Link } from "react-router-dom";
 import crewImage from "@/assets/crew.jpg";
+import backgroundImage from "@/assets/background.jpg";
 
 const Team = () => {
   const teamValues = [
@@ -33,13 +34,14 @@ const Team = () => {
   ];
 
   return (
-    <section id="team" className="pt-16 sm:pt-20 md:pt-24 lg:pt-32 pb-20 bg-muted/30">
-      <div className="container mx-auto px-4">
+    <section id="team" className="relative pt-16 sm:pt-20 md:pt-24 lg:pt-32 pb-20 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${backgroundImage})` }}>
+      <div className="absolute inset-0 bg-black/40" aria-hidden />
+      <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground font-quicksand" style={{ fontSize: 'clamp(2rem, 7vw, 71px)' }}>
-            Our <span className="bg-gradient-ocean bg-clip-text text-transparent font-quicksand">Team</span>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white font-quicksand drop-shadow-md" style={{ fontSize: 'clamp(2rem, 7vw, 71px)' }}>
+            Our <span className="text-white font-quicksand">Team</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-white/95 max-w-3xl mx-auto leading-relaxed drop-shadow">
             Meet the passionate professionals who make your yacht charter experience exceptional. 
             Our crew combines years of maritime expertise with genuine hospitality.
           </p>

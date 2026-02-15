@@ -13,6 +13,7 @@ import img10 from '@/assets/gallery/img-10.jpeg';
 import img11 from '@/assets/gallery/img-11.jpeg';
 import img12 from '@/assets/gallery/img-12.jpeg';
 import img13 from '@/assets/gallery/img-13.jpeg';
+import backgroundImage from '@/assets/background.jpg';
 
 const Gallery = () => {
   // All 13 unique images from gallery folder - no duplicates
@@ -106,13 +107,14 @@ const Gallery = () => {
   });
 
   return (
-    <section className="py-20 bg-white">
-      <div className="container mx-auto px-4">
+    <section className="relative py-20 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${backgroundImage})` }}>
+      <div className="absolute inset-0 bg-black/40" aria-hidden />
+      <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-black font-quicksand mb-4" style={{ fontSize: 'clamp(2rem, 6vw, 60px)' }}>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white font-quicksand mb-4 drop-shadow-md" style={{ fontSize: 'clamp(2rem, 6vw, 60px)' }}>
             Gallery
           </h2>
-          <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl md:text-2xl text-white/95 max-w-3xl mx-auto drop-shadow">
             Explore our stunning collection of yacht experiences
           </p>
         </div>

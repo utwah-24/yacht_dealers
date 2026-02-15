@@ -521,7 +521,7 @@ Please contact the customer to provide a quote.
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100/90">
       <div className="min-h-screen flex">
         {/* Left Side - Booking Form */}
         <div className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center">
@@ -1349,7 +1349,7 @@ Please contact the customer to provide a quote.
         {/* Right Side - Image with Creative Overlays */}
         <div className="hidden lg:block lg:w-1/2 relative overflow-hidden">
           {/* Background Gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-blue-100/80 to-blue-50"></div>
           
           {/* Animated Circular Overlays */}
           <div className="absolute top-1/4 right-1/4 w-[600px] h-[600px] bg-gray-200/40 rounded-full blur-3xl animate-pulse-slow"></div>

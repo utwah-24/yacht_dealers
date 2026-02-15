@@ -12,6 +12,7 @@ import {
 import { MapPin, Navigation, Clock, Anchor, Waves, Compass, Route, Sparkles, CheckCircle2 } from "lucide-react";
 import islandDay from "@/assets/Island-day.jpeg";
 import zanzibarImage from "@/assets/Zanzibar.jpeg";
+import backgroundImage from "@/assets/background.jpg";
 
 const Locations = () => {
   const [selectedLocation, setSelectedLocation] = useState<number | null>(null);
@@ -121,14 +122,15 @@ const Locations = () => {
   ];
 
   return (
-    <section id="locations" className="py-20 bg-background">
-      <div className="container mx-auto px-4">
+    <section id="locations" className="relative py-20 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${backgroundImage})` }}>
+      <div className="absolute inset-0 bg-black/40" aria-hidden />
+      <div className="container mx-auto px-4 relative z-10">
         {/* Main Locations */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-black mb-6 text-foreground font-quicksand" style={{ fontSize: 'clamp(2rem, 7vw, 70px)' }}>
-            Charter <span className="bg-gradient-ocean bg-clip-text text-transparent font-quicksand">Packages</span>
+          <h2 className="text-4xl md:text-5xl font-black mb-6 text-white font-quicksand drop-shadow-md" style={{ fontSize: 'clamp(2rem, 7vw, 70px)' }}>
+            Charter <span className="text-white font-quicksand">Packages</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-white/95 max-w-3xl mx-auto leading-relaxed drop-shadow">
             Operating from two stunning locations across Tanzania, we provide easy access to 
             the most beautiful islands and marine destinations in East Africa.
           </p>
