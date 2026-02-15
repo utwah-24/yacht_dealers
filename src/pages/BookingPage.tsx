@@ -22,6 +22,7 @@ import bookingImage1 from "@/assets/booking_image1.jpeg";
 import bookingImage2 from "@/assets/booking_image2.jpeg";
 import bookingImage3 from "@/assets/booking_image3 .jpeg";
 import { getAllBoats } from "@/utils/boats";
+import backgroundImage from "@/assets/background.jpg";
 
 // Charter pricing data
 const charterOptions = [
@@ -342,7 +343,7 @@ const BookingPage = () => {
     } else if (step === 2) {
       // Step 2: validate catalog-related choices
       // For helicopter, destination is auto-set, and food/drinks are not required
-      const fieldsToValidate = selectedCatamaranId === "black-bird-heli" 
+      const fieldsToValidate: (keyof BookingForm)[] = selectedCatamaranId === "black-bird-heli"
         ? ["charter"]
         : ["destination", "charter"];
       
@@ -521,23 +522,23 @@ Please contact the customer to provide a quote.
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100/90">
+    <div className="min-h-screen bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${backgroundImage})` }}>
       <div className="min-h-screen flex">
         {/* Left Side - Booking Form */}
         <div className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center">
           <div className="max-w-2xl mx-auto w-full">
             {/* Title */}
             <div className="mb-6 sm:mb-8">
-              <h1 className="text-4xl font-bold mb-2 font-spartan" style={{ fontSize: 'clamp(2rem, 7vw, 70px)' }}>
-                <span className="text-gray-900">Booking</span>{" "}
-                <span className="text-gray-500">without stress</span>
+              <h1 className="text-4xl font-bold mb-2 font-spartan drop-shadow-md" style={{ fontSize: 'clamp(2rem, 7vw, 70px)' }}>
+                <span className="text-white">Booking</span>{" "}
+                <span className="text-white/90">without stress</span>
               </h1>
               {/* Step Indicator */}
               <div className="flex gap-2 mt-3 sm:mt-4">
-                <div className={`h-2 flex-1 rounded-full transition-all ${step >= 1 ? "bg-gray-900" : "bg-gray-300"}`}></div>
-                <div className={`h-2 flex-1 rounded-full transition-all ${step >= 2 ? "bg-gray-900" : "bg-gray-300"}`}></div>
-                <div className={`h-2 flex-1 rounded-full transition-all ${step >= 3 ? "bg-gray-900" : "bg-gray-300"}`}></div>
-                <div className={`h-2 flex-1 rounded-full transition-all ${step >= 4 ? "bg-gray-900" : "bg-gray-300"}`}></div>
+                <div className={`h-2 flex-1 rounded-full transition-all ${step >= 1 ? "bg-white" : "bg-white/40"}`}></div>
+                <div className={`h-2 flex-1 rounded-full transition-all ${step >= 2 ? "bg-white" : "bg-white/40"}`}></div>
+                <div className={`h-2 flex-1 rounded-full transition-all ${step >= 3 ? "bg-white" : "bg-white/40"}`}></div>
+                <div className={`h-2 flex-1 rounded-full transition-all ${step >= 4 ? "bg-white" : "bg-white/40"}`}></div>
               </div>
             </div>
 
@@ -1347,33 +1348,28 @@ Please contact the customer to provide a quote.
         </div>
 
         {/* Right Side - Image with Creative Overlays */}
-        <div className="hidden lg:block lg:w-1/2 relative overflow-hidden">
-          {/* Background Gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-blue-100/80 to-blue-50"></div>
-          
-          {/* Animated Circular Overlays */}
-          <div className="absolute top-1/4 right-1/4 w-[600px] h-[600px] bg-gray-200/40 rounded-full blur-3xl animate-pulse-slow"></div>
-          <div className="absolute bottom-1/4 left-1/4 w-[500px] h-[500px] bg-gray-200/50 rounded-full blur-3xl animate-pulse-slower"></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gray-100/30 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div className="hidden lg:block lg:w-1/2 relative overflow-hidden bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${backgroundImage})` }}>
+          {/* Dark overlay for readability */}
+          <div className="absolute inset-0 bg-black/40" aria-hidden />
           
           {/* Floating Wave Decorations */}
-          <div className="absolute top-20 right-10 w-32 h-32 text-gray-300/20 animate-float">
+          <div className="absolute top-20 right-10 w-32 h-32 text-white/20 animate-float">
             <Waves className="w-full h-full" />
           </div>
-          <div className="absolute bottom-32 left-16 w-24 h-24 text-gray-300/20 animate-float-delayed">
+          <div className="absolute bottom-32 left-16 w-24 h-24 text-white/20 animate-float-delayed">
             <Waves className="w-full h-full rotate-180" />
           </div>
           
           {/* Floating Anchor Icon */}
-          <div className="absolute top-40 left-20 w-16 h-16 text-gray-400/30 animate-float-slow">
+          <div className="absolute top-40 left-20 w-16 h-16 text-white/30 animate-float-slow">
             <Anchor className="w-full h-full" />
           </div>
           
           {/* Floating Sparkles */}
-          <div className="absolute top-1/3 right-32 w-12 h-12 text-yellow-400/40 animate-float">
+          <div className="absolute top-1/3 right-32 w-12 h-12 text-yellow-400/50 animate-float">
             <Sparkles className="w-full h-full" />
           </div>
-          <div className="absolute bottom-1/3 left-24 w-10 h-10 text-gray-400/40 animate-float-delayed">
+          <div className="absolute bottom-1/3 left-24 w-10 h-10 text-white/30 animate-float-delayed">
             <Sparkles className="w-full h-full" />
           </div>
           
@@ -1410,25 +1406,25 @@ Please contact the customer to provide a quote.
               
               {/* Inspirational Text Overlay */}
               <div className="mt-8 text-center animate-fade-in">
-                <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                <h3 className="text-2xl font-bold text-white mb-2 drop-shadow-md">
                   Sail Into Luxury
                 </h3>
-                <p className="text-gray-600 text-sm">
+                <p className="text-white/95 text-sm drop-shadow">
                   Experience unforgettable moments on pristine waters
                 </p>
               </div>
               
               {/* Decorative Dots */}
               <div className="absolute top-1/4 left-8 flex flex-col gap-4">
-                <div className="w-3 h-3 rounded-full bg-gray-400/40 animate-ping"></div>
-                <div className="w-2 h-2 rounded-full bg-gray-400/40 animate-ping" style={{ animationDelay: '0.5s' }}></div>
-                <div className="w-2.5 h-2.5 rounded-full bg-gray-300/40 animate-ping" style={{ animationDelay: '1s' }}></div>
+                <div className="w-3 h-3 rounded-full bg-white/40 animate-ping"></div>
+                <div className="w-2 h-2 rounded-full bg-white/40 animate-ping" style={{ animationDelay: '0.5s' }}></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-white/30 animate-ping" style={{ animationDelay: '1s' }}></div>
               </div>
               
               <div className="absolute bottom-1/4 right-8 flex flex-col gap-4">
-                <div className="w-2.5 h-2.5 rounded-full bg-gray-400/40 animate-ping" style={{ animationDelay: '1.5s' }}></div>
-                <div className="w-3 h-3 rounded-full bg-gray-400/40 animate-ping" style={{ animationDelay: '2s' }}></div>
-                <div className="w-2 h-2 rounded-full bg-gray-300/40 animate-ping" style={{ animationDelay: '2.5s' }}></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-white/40 animate-ping" style={{ animationDelay: '1.5s' }}></div>
+                <div className="w-3 h-3 rounded-full bg-white/40 animate-ping" style={{ animationDelay: '2s' }}></div>
+                <div className="w-2 h-2 rounded-full bg-white/30 animate-ping" style={{ animationDelay: '2.5s' }}></div>
               </div>
             </div>
           </div>

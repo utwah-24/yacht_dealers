@@ -12,6 +12,7 @@ const Navigation = () => {
     { href: "#fleet", label: "Our Fleet" },
     { href: "#locations", label: "Packages" },
     { href: "#team", label: "Our Team" },
+    { to: "/menu", label: "Our Menu" },
     { href: "#contact", label: "Contact" },
   ];
 
@@ -30,15 +31,25 @@ const Navigation = () => {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-8">
-          {navItems.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className="text-white/95 hover:text-white transition-colors duration-300 font-quicksand font-black"
-            >
-              {item.label}
-            </a>
-          ))}
+          {navItems.map((item) =>
+            "to" in item && item.to ? (
+              <Link
+                key={item.to}
+                to={item.to}
+                className="text-white/95 hover:text-white transition-colors duration-300 font-quicksand font-black"
+              >
+                {item.label}
+              </Link>
+            ) : (
+              <a
+                key={item.href}
+                href={item.href}
+                className="text-white/95 hover:text-white transition-colors duration-300 font-quicksand font-black"
+              >
+                {item.label}
+              </a>
+            )
+          )}
           <Link to="/booking">
             <Button variant="ocean" size="sm" className="font-quicksand">
               Book Now
@@ -61,16 +72,27 @@ const Navigation = () => {
       {isOpen && (
         <div className="md:hidden bg-white/95 backdrop-blur-md border-b border-white/20">
           <div className="container mx-auto px-4 py-4 space-y-4">
-            {navItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className="block text-foreground hover:text-primary transition-colors duration-300 font-quicksand font-black"
-                onClick={() => setIsOpen(false)}
-              >
-                {item.label}
-              </a>
-            ))}
+            {navItems.map((item) =>
+              "to" in item && item.to ? (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className="block text-foreground hover:text-primary transition-colors duration-300 font-quicksand font-black"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className="block text-foreground hover:text-primary transition-colors duration-300 font-quicksand font-black"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {item.label}
+                </a>
+              )
+            )}
             <Link to="/booking" className="w-full">
               <Button variant="ocean" className="w-full font-quicksand" onClick={() => setIsOpen(false)}>
                 Book Now
