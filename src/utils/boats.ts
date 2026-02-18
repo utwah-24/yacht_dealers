@@ -18,8 +18,9 @@ export interface Boat {
 // Helper function to check if a file is a boat image (not interior)
 const isBoatImage = (fileName: string): boolean => {
   const lowerFileName = fileName.toLowerCase();
+  const boatKeywords = ['boat', 'heli', 'front', 'side', 'plan', 'extra'];
   return (
-    (lowerFileName.includes('boat') || lowerFileName.includes('heli')) &&
+    boatKeywords.some(k => lowerFileName.includes(k)) &&
     !lowerFileName.includes('interior')
   );
 };
@@ -93,13 +94,17 @@ export const getAllBoats = (): Boat[] => {
           existingBoat.boatImages.push(imageUrl);
         }
         
-        // Set main image - prefer boat1.png, then boat.png, then others
+        // Set main image - prefer boat1 > boat > front > side > others
         const lowerFileName = fileName.toLowerCase();
         const existingFileName = existingBoat.image.split('/').pop()?.toLowerCase() || '';
         
         if (lowerFileName.includes('boat1')) {
           existingBoat.image = imageUrl;
-        } else if (lowerFileName.includes('boat') && !existingFileName.includes('boat1') && !existingFileName.includes('boat2')) {
+        } else if (lowerFileName.includes('boat') && !existingFileName.includes('boat1')) {
+          existingBoat.image = imageUrl;
+        } else if (lowerFileName.includes('front') && !existingFileName.includes('boat')) {
+          existingBoat.image = imageUrl;
+        } else if (lowerFileName.includes('side') && !existingFileName.includes('boat') && !existingFileName.includes('front')) {
           existingBoat.image = imageUrl;
         }
       }
