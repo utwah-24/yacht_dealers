@@ -32,17 +32,17 @@ const charterOptions = [
       {
         yacht: "20 Max Catamaran",
         options: [
-          { type: "Half Day Charter", price: "$1,100" },
-          { type: "Full Day Charter", price: "$1,500" },
-          { type: "Live Onboard (24 Hours)", price: "$2,000" },
+          { type: "Half Day Charter (6 Hours)", price: "$1,300" },
+          { type: "Full Day Charter (11 Hours)", price: "$1,800" },
+          { type: "Live Onboard (24 Hours)", price: "$2,800" },
         ],
       },
       {
         yacht: "22 Max Catamaran",
         options: [
-          { type: "Half Day Cruise", price: "$1,500" },
-          { type: "Full Day Cruise", price: "$2,000" },
-          { type: "Live Onboard (24 Hours)", price: "$2,600" },
+          { type: "Half Day Charter (6 Hours)", price: "$1,700" },
+          { type: "Full Day Charter (11 Hours)", price: "$2,200" },
+          { type: "Live Onboard (24 Hours)", price: "$3,200" },
         ],
       },
     ],
@@ -283,6 +283,33 @@ const BookingPage = () => {
 
   const yachtPrices = selectedYacht ? getYachtPrices(selectedYacht) : { dar: [], zanzibar: [] };
 
+  // Calculate base charter price from selected option
+  const currentCharterPrice = useMemo(() => {
+    if (!watched.charter || selectedCatamaranId === "black-bird-heli") return 0;
+    const parts = watched.charter.split("|");
+    if (parts.length < 3) return 0;
+    const [location, yacht, charterType] = parts;
+    const option = charterOptions
+      .find((loc) => loc.location === location)
+      ?.packages.find((pkg) => pkg.yacht === yacht)
+      ?.options.find((opt) => opt.type === charterType);
+    if (!option) return 0;
+    return parseInt(option.price.replace(/[$,]/g, ""), 10) || 0;
+  }, [watched.charter, selectedCatamaranId]);
+
+  // Add $200 for food (if any selected) and $200 for DJ
+  const totalPrice = useMemo(() => {
+    if (currentCharterPrice === 0) return null;
+    let total = currentCharterPrice;
+    if (selectedFood.length > 0) total += 200;
+    if (djEnabled) total += 200;
+    return total;
+  }, [currentCharterPrice, selectedFood.length, djEnabled]);
+
+  const formattedTotalPrice = totalPrice !== null
+    ? `$${totalPrice.toLocaleString()}`
+    : null;
+
   const handleYachtSelect = (yacht: string) => {
     setSelectedYacht(yacht);
     setSelectedLocation("");
@@ -498,13 +525,14 @@ ${EMOJI.sailboat} *Selected ${isHelicopter ? "Helicopter Service" : "Charter"}:*
 ${isHelicopter ? charterType : `${location} - ${yacht}`}
 ${isHelicopter ? getHelicopterPrice(charterType) : `${charterType} ${selectedCharterOption ? selectedCharterOption.price : ""}`}
 
-${!isHelicopter ? `${EMOJI.food} *Food Selection:*\n${data.food.join(", ")}\n\n${EMOJI.drink} *Drinks Selection:*\n${data.drinks.join(", ")}\n\n${EMOJI.music} *DJ Service:* ${data.dj ? `Yes ${EMOJI.check}` : "No"}\n` : ""}
+${!isHelicopter ? `${EMOJI.food} *Food Selection:*\n${data.food && data.food.length ? data.food.join(", ") : "None"}\n\n${EMOJI.drink} *Drinks Selection:*\n${data.drinks && data.drinks.length ? data.drinks.join(", ") : "None"}\n\n${EMOJI.music} *DJ Service:* ${data.dj ? `Yes ${EMOJI.check}` : "No"}\n` : ""}
 
 ${showAllergies ? `${EMOJI.warning} *Allergies:*\n${allergies}\n` : ""}
 ${showSpecialOccasion ? `${EMOJI.party} *Special Occasion:*\n${specialOccasion}\n` : ""}
 ${activitiesLine}
 ${otherActivityLine}
 
+${!isHelicopter && formattedTotalPrice ? `\ud83d\udcb0 *Total Price:* ${formattedTotalPrice}${selectedFood.length > 0 ? " (incl. +$200 food)" : ""}${djEnabled ? " (incl. +$200 DJ)" : ""}\n` : ""}
 Please contact the customer to provide a quote.
     `.trim();
 
@@ -966,7 +994,7 @@ Please contact the customer to provide a quote.
                                 <div className="space-y-3">
                                   <Label className="text-gray-700 font-medium flex items-center gap-2">
                                     <Utensils className="h-4 w-4" />
-                                    Food Selection *
+                                    Food Selection
                                   </Label>
                                   <div className="grid grid-cols-2 gap-3">
                                     {foodOptions.map((food) => (
@@ -1001,7 +1029,7 @@ Please contact the customer to provide a quote.
                                 <div className="space-y-3">
                                   <Label className="text-gray-700 font-medium flex items-center gap-2">
                                     <Wine className="h-4 w-4" />
-                                    Drinks Selection *
+                                    Drinks Selection
                                   </Label>
                                   <div className="grid grid-cols-2 gap-3">
                                     {drinkOptions.map((drink) => (
@@ -1300,6 +1328,24 @@ Please contact the customer to provide a quote.
                             Other activity preferences: {watched.otherActivity}
                           </p>
                         )}
+                      </div>
+                    )}
+
+                    {/* Total Price */}
+                    {formattedTotalPrice && (
+                      <div className="rounded-2xl bg-gray-900 p-4 shadow-sm">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <h3 className="text-sm font-semibold text-white">Total Price</h3>
+                            {selectedFood.length > 0 && (
+                              <p className="text-xs text-gray-400 mt-0.5">Includes +$200 food service</p>
+                            )}
+                            {djEnabled && (
+                              <p className="text-xs text-gray-400">Includes +$200 DJ service</p>
+                            )}
+                          </div>
+                          <span className="text-2xl font-bold text-white">{formattedTotalPrice}</span>
+                        </div>
                       </div>
                     )}
 

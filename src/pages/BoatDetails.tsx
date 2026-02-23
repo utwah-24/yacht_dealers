@@ -30,9 +30,9 @@ const boatDatabase: Record<string, any> = {
     capacity: "20 passengers",
     pricing: {
       dar: [
-        { type: "Half Day Charter", price: "$1,100" },
-        { type: "Full Day Charter", price: "$1,500" },
-        { type: "Live Onboard (24 Hours)", price: "$2,000" },
+        { type: "Half Day Charter (6 Hours)", price: "$1,000" },
+        { type: "Full Day Charter (11 Hours)", price: "$1,400" },
+        { type: "Live Onboard (24 Hours)", price: "$2,800" },
       ],
       zanzibar: [
         { type: "Half Day Cruise", price: "$1,400" },
@@ -81,9 +81,9 @@ const boatDatabase: Record<string, any> = {
     capacity: "22 passengers",
     pricing: {
       dar: [
-        { type: "Half Day Charter", price: "$1,100" },
-        { type: "Full Day Charter", price: "$1,500" },
-        { type: "Live Onboard (24 Hours)", price: "$2,000" },
+        { type: "Half Day Charter (6 Hours)", price: "$1,300" },
+        { type: "Full Day Charter (11 Hours)", price: "$1,800" },
+        { type: "Live Onboard (24 Hours)", price: "$2,800" },
       ],
       zanzibar: [
         { type: "Half Day Cruise", price: "$1,400" },
@@ -129,9 +129,9 @@ const boatDatabase: Record<string, any> = {
     capacity: "22 passengers",
     pricing: {
       dar: [
-        { type: "Half Day Charter", price: "$1,100" },
-        { type: "Full Day Charter", price: "$1,500" },
-        { type: "Live Onboard (24 Hours)", price: "$2,000" },
+        { type: "Half Day Charter (6 Hours)", price: "$1,300" },
+        { type: "Full Day Charter (11 Hours)", price: "$1,800" },
+        { type: "Live Onboard (24 Hours)", price: "$2,800" },
       ],
       zanzibar: [
         { type: "Half Day Cruise", price: "$1,400" },
@@ -167,9 +167,9 @@ const boatDatabase: Record<string, any> = {
     capacity: "20 passengers",
     pricing: {
       dar: [
-        { type: "Half Day Charter", price: "$1,100" },
-        { type: "Full Day Charter", price: "$1,500" },
-        { type: "Live Onboard (24 Hours)", price: "$2,000" },
+        { type: "Half Day Charter (6 Hours)", price: "$1,300" },
+        { type: "Full Day Charter (11 Hours)", price: "$1,800" },
+        { type: "Live Onboard (24 Hours)", price: "$2,800" },
       ],
       zanzibar: [
         { type: "Half Day Cruise", price: "$1,400" },
@@ -194,9 +194,9 @@ const boatDatabase: Record<string, any> = {
     capacity: "25 passengers",
     pricing: {
       dar: [
-        { type: "Half Day Charter", price: "$1,500" },
-        { type: "Full Day Charter", price: "$2,000" },
-        { type: "Live Onboard (24 Hours)", price: "$2,600" },
+        { type: "Half Day Charter (6 Hours)", price: "$1,300" },
+        { type: "Full Day Charter (11 Hours)", price: "$1,800" },
+        { type: "Live Onboard (24 Hours)", price: "$2,800" },
       ],
       zanzibar: [
         { type: "Half Day Cruise", price: "$1,800" },
@@ -248,9 +248,9 @@ const boatDatabase: Record<string, any> = {
     capacity: "22 passengers",
     pricing: {
       dar: [
-        { type: "Half Day Charter", price: "$1,200" },
-        { type: "Full Day Charter", price: "$1,600" },
-        { type: "Live Onboard (24 Hours)", price: "$2,200" },
+        { type: "Half Day Charter (6 Hours)", price: "$1,300" },
+        { type: "Full Day Charter (11 Hours)", price: "$1,800" },
+        { type: "Live Onboard (24 Hours)", price: "$2,800" },
       ],
       zanzibar: [
         { type: "Half Day Cruise", price: "$1,500" },
@@ -275,9 +275,9 @@ const boatDatabase: Record<string, any> = {
     capacity: "24 passengers",
     pricing: {
       dar: [
-        { type: "Half Day Charter", price: "$1,300" },
-        { type: "Full Day Charter", price: "$1,700" },
-        { type: "Live Onboard (24 Hours)", price: "$2,300" },
+        { type: "Half Day Charter (6 Hours)", price: "$1,300" },
+        { type: "Full Day Charter (11 Hours)", price: "$1,800" },
+        { type: "Live Onboard (24 Hours)", price: "$2,800" },
       ],
       zanzibar: [
         { type: "Half Day Cruise", price: "$1,600" },
@@ -302,9 +302,9 @@ const boatDatabase: Record<string, any> = {
     capacity: "20 passengers",
     pricing: {
       dar: [
-        { type: "Half Day Charter", price: "$1,100" },
-        { type: "Full Day Charter", price: "$1,500" },
-        { type: "Live Onboard (24 Hours)", price: "$2,000" },
+        { type: "Half Day Charter (6 Hours)", price: "$1,300" },
+        { type: "Full Day Charter (11 Hours)", price: "$1,800" },
+        { type: "Live Onboard (24 Hours)", price: "$2,800" },
       ],
       zanzibar: [
         { type: "Half Day Cruise", price: "$1,400" },
@@ -329,9 +329,9 @@ const boatDatabase: Record<string, any> = {
     capacity: "25 passengers",
     pricing: {
       dar: [
-        { type: "Half Day Charter", price: "$1,500" },
-        { type: "Full Day Charter", price: "$2,000" },
-        { type: "Live Onboard (24 Hours)", price: "$2,600" },
+        { type: "Half Day Charter (6 Hours)", price: "$1,300" },
+        { type: "Full Day Charter (11 Hours)", price: "$1,800" },
+        { type: "Live Onboard (24 Hours)", price: "$2,800" },
       ],
       zanzibar: [
         { type: "Half Day Cruise", price: "$1,800" },
@@ -356,9 +356,9 @@ const boatDatabase: Record<string, any> = {
     capacity: "22 passengers",
     pricing: {
       dar: [
-        { type: "Half Day Charter", price: "$1,100" },
-        { type: "Full Day Charter", price: "$1,500" },
-        { type: "Live Onboard (24 Hours)", price: "$2,000" },
+        { type: "Half Day Charter (6 Hours)", price: "$1,300" },
+        { type: "Full Day Charter (11 Hours)", price: "$1,800" },
+        { type: "Live Onboard (24 Hours)", price: "$2,800" },
       ],
       zanzibar: [
         { type: "Half Day Cruise", price: "$1,400" },
@@ -383,9 +383,9 @@ const boatDatabase: Record<string, any> = {
     capacity: "24 passengers",
     pricing: {
       dar: [
-        { type: "Half Day Charter", price: "$1,300" },
-        { type: "Full Day Charter", price: "$1,700" },
-        { type: "Live Onboard (24 Hours)", price: "$2,300" },
+        { type: "Half Day Charter (6 Hours)", price: "$1,300" },
+        { type: "Full Day Charter (11 Hours)", price: "$1,800" },
+        { type: "Live Onboard (24 Hours)", price: "$2,800" },
       ],
       zanzibar: [
         { type: "Half Day Cruise", price: "$1,600" },
