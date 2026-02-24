@@ -53,17 +53,17 @@ const charterOptions = [
       {
         yacht: "20 Max Catamaran",
         options: [
-          { type: "Half Day Cruise", price: "$1,400" },
-          { type: "Full Day Cruise", price: "$1,800" },
-          { type: "Live Onboard (24 Hours)", price: "$2,200" },
+          { type: "Half Day Cruise(6 Hours)", price: "$1,200" },
+          { type: "Full Day Cruise(11 Hours)", price: "$1,600" },
+          { type: "Live Onboard (24 Hours)", price: "$2,000" },
         ],
       },
       {
         yacht: "22 Max Catamaran",
         options: [
-          { type: "Half Day Cruise", price: "$1,800" },
-          { type: "Full Day Cruise", price: "$2,400" },
-          { type: "Live Onboard (24 Hours)", price: "$2,800" },
+          { type: "Half Day Cruise(6 Hours)", price: "$1,600" },
+          { type: "Full Day Cruise(11 Hours)", price: "$2,200" },
+          { type: "Live Onboard (24 Hours)", price: "$2,600" },
         ],
       },
     ],

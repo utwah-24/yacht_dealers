@@ -35,9 +35,9 @@ const boatDatabase: Record<string, any> = {
         { type: "Live Onboard (24 Hours)", price: "$2,800" },
       ],
       zanzibar: [
-        { type: "Half Day Cruise", price: "$1,400" },
-        { type: "Full Day Cruise", price: "$1,800" },
-        { type: "Live Onboard (24 Hours)", price: "$2,200" },
+        { type: "Half Day Cruise(6 Hours)", price: "$1,200" },
+        { type: "Full Day Cruise(11 Hours)", price: "$1,600" },
+        { type: "Live Onboard (24 Hours)", price: "$2,000" },
       ],
     },
     destinations: [
@@ -134,9 +134,9 @@ const boatDatabase: Record<string, any> = {
         { type: "Live Onboard (24 Hours)", price: "$2,800" },
       ],
       zanzibar: [
-        { type: "Half Day Cruise", price: "$1,400" },
-        { type: "Full Day Cruise", price: "$1,800" },
-        { type: "Live Onboard (24 Hours)", price: "$2,200" },
+        { type: "Half Day Cruise(6 Hours)", price: "$1,200" },
+        { type: "Full Day Cruise(11 Hours)", price: "$1,600" },
+        { type: "Live Onboard (24 Hours)", price: "$2,000" },
       ],
     },
     destinations: [
@@ -172,9 +172,9 @@ const boatDatabase: Record<string, any> = {
         { type: "Live Onboard (24 Hours)", price: "$2,800" },
       ],
       zanzibar: [
-        { type: "Half Day Cruise", price: "$1,400" },
-        { type: "Full Day Cruise", price: "$1,800" },
-        { type: "Live Onboard (24 Hours)", price: "$2,200" },
+        { type: "Half Day Cruise(6 Hours)", price: "$1,200" },
+        { type: "Full Day Cruise(11 Hours)", price: "$1,600" },
+        { type: "Live Onboard (24 Hours)", price: "$2,000" },
       ],
     },
     destinations: ["Bongoyo Island", "Mbudya Island", "Stone Town"],
@@ -199,9 +199,9 @@ const boatDatabase: Record<string, any> = {
         { type: "Live Onboard (24 Hours)", price: "$2,800" },
       ],
       zanzibar: [
-        { type: "Half Day Cruise", price: "$1,800" },
-        { type: "Full Day Cruise", price: "$2,400" },
-        { type: "Live Onboard (24 Hours)", price: "$2,800" },
+        { type: "Half Day Cruise(6 Hours)", price: "$1,200" },
+        { type: "Full Day Cruise(11 Hours)", price: "$1,600" },
+        { type: "Live Onboard (24 Hours)", price: "$2,000" },
       ],
     },
     destinations: ["Stone Town", "Prison Island", "Nakupenda Island"],
@@ -253,9 +253,9 @@ const boatDatabase: Record<string, any> = {
         { type: "Live Onboard (24 Hours)", price: "$2,800" },
       ],
       zanzibar: [
-        { type: "Half Day Cruise", price: "$1,500" },
-        { type: "Full Day Cruise", price: "$1,900" },
-        { type: "Live Onboard (24 Hours)", price: "$2,400" },
+        { type: "Half Day Cruise(6 Hours)", price: "$1,200" },
+        { type: "Full Day Cruise(11 Hours)", price: "$1,600" },
+        { type: "Live Onboard (24 Hours)", price: "$2,000" },
       ],
     },
     destinations: ["Stone Town", "Prison Island", "Nakupenda Island"],
@@ -280,9 +280,9 @@ const boatDatabase: Record<string, any> = {
         { type: "Live Onboard (24 Hours)", price: "$2,800" },
       ],
       zanzibar: [
-        { type: "Half Day Cruise", price: "$1,600" },
-        { type: "Full Day Cruise", price: "$2,000" },
-        { type: "Live Onboard (24 Hours)", price: "$2,500" },
+        { type: "Half Day Cruise(6 Hours)", price: "$1,200" },
+        { type: "Full Day Cruise(11 Hours)", price: "$1,600" },
+        { type: "Live Onboard (24 Hours)", price: "$2,000" },
       ],
     },
     destinations: ["Bongoyo Island", "Mbudya Island", "Stone Town"],
@@ -307,9 +307,9 @@ const boatDatabase: Record<string, any> = {
         { type: "Live Onboard (24 Hours)", price: "$2,800" },
       ],
       zanzibar: [
-        { type: "Half Day Cruise", price: "$1,400" },
-        { type: "Full Day Cruise", price: "$1,800" },
-        { type: "Live Onboard (24 Hours)", price: "$2,200" },
+        { type: "Half Day Cruise(6 Hours)", price: "$1,200" },
+        { type: "Full Day Cruise(11 Hours)", price: "$1,600" },
+        { type: "Live Onboard (24 Hours)", price: "$2,000" },
       ],
     },
     destinations: ["Bongoyo Island", "Mbudya Island"],
@@ -334,9 +334,9 @@ const boatDatabase: Record<string, any> = {
         { type: "Live Onboard (24 Hours)", price: "$2,800" },
       ],
       zanzibar: [
-        { type: "Half Day Cruise", price: "$1,800" },
-        { type: "Full Day Cruise", price: "$2,400" },
-        { type: "Live Onboard (24 Hours)", price: "$2,800" },
+        { type: "Half Day Cruise(6 Hours)", price: "$1,200" },
+        { type: "Full Day Cruise(11 Hours)", price: "$1,600" },
+        { type: "Live Onboard (24 Hours)", price: "$2,000" },
       ],
     },
     destinations: ["Stone Town", "Prison Island", "Nakupenda Island"],
@@ -361,9 +361,9 @@ const boatDatabase: Record<string, any> = {
         { type: "Live Onboard (24 Hours)", price: "$2,800" },
       ],
       zanzibar: [
-        { type: "Half Day Cruise", price: "$1,400" },
-        { type: "Full Day Cruise", price: "$1,800" },
-        { type: "Live Onboard (24 Hours)", price: "$2,200" },
+        { type: "Half Day Cruise(6 Hours)", price: "$1,200" },
+        { type: "Full Day Cruise(11 Hours)", price: "$1,600" },
+        { type: "Live Onboard (24 Hours)", price: "$2,000" },
       ],
     },
     destinations: ["Bongoyo Island", "Mbudya Island", "Stone Town"],
@@ -388,9 +388,9 @@ const boatDatabase: Record<string, any> = {
         { type: "Live Onboard (24 Hours)", price: "$2,800" },
       ],
       zanzibar: [
-        { type: "Half Day Cruise", price: "$1,600" },
-        { type: "Full Day Cruise", price: "$2,000" },
-        { type: "Live Onboard (24 Hours)", price: "$2,500" },
+        { type: "Half Day Cruise(6 Hours)", price: "$1,200" },
+        { type: "Full Day Cruise(11 Hours)", price: "$1,600" },
+        { type: "Live Onboard (24 Hours)", price: "$2,000" },
       ],
     },
     destinations: ["Stone Town", "Prison Island", "Nakupenda Island"],
@@ -695,7 +695,7 @@ const BoatDetails = () => {
               >
                 {/* Price List */}
                 <div className="flex-shrink-0 w-full md:w-72 lg:w-80 space-y-2 sm:space-y-3 md:space-y-4 min-w-0">
-                  <h3 className="text-sm sm:text-base md:text-lg font-semibold text-white">PRICE LIST</h3>
+                  <h3 className="text-sm sm:text-base md:text-lg font-semibold text-white">PRICE LIST {boat.id !== "black-bird-heli" && <span className="text-xs sm:text-sm font-normal text-white/60">(without food/DJ)</span>}</h3>
                   <div className="space-y-2 sm:space-y-3 md:space-y-4">
                     <div>
                       <h4 className="text-xs sm:text-sm font-semibold text-white mb-1 sm:mb-1.5 md:mb-2">Dar es Salaam</h4>
