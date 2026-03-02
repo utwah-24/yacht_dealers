@@ -94,7 +94,7 @@ const Footer = () => {
             
             <div className="flex items-center gap-6">
               <div className="text-sm text-white/60">
-                Payment via Vodacom: <span className="text-white font-medium">5998989</span>
+                Payment via Vodacom: <span className="text-white font-medium">50212457</span>
               </div>
               <div className="flex gap-4">
                 <a 
