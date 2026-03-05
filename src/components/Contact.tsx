@@ -54,8 +54,8 @@ const Contact = () => {
       <div className="absolute inset-0 bg-black/40" aria-hidden />
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white font-quicksand drop-shadow-md" style={{ fontSize: 'clamp(2rem, 7vw, 70px)' }}>
-            Get in <span className="text-white font-quicksand">Touch</span>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white font-soria drop-shadow-md" style={{ fontSize: 'clamp(2rem, 7vw, 85px)' }}>
+            Get in <span className="text-white font-soria">Touch</span>
           </h2>
           <p className="text-xl text-white/95 max-w-3xl mx-auto leading-relaxed drop-shadow">
             Ready to embark on your yacht charter adventure? Contact us today to start planning 

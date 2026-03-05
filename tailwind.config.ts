@@ -22,6 +22,7 @@ export default {
 				'spartan': ['"League Spartan"', 'sans-serif'],
 				'vercetti': ['Vercetti', 'sans-serif'],
 				'quicksand': ['Quicksand', 'sans-serif'],
+				'soria': ['Soria', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',

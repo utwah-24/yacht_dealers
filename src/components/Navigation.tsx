@@ -26,7 +26,7 @@ const Navigation = () => {
             alt="Yacht Dealers Tanzania" 
             className="h-8 w-8 object-contain"
           />
-          <span className="text-xl font-bold text-white font-quicksand">Yachtdealers.tz</span>
+          <span className="text-xl font-semibold text-white font-soria">Yachtdealers.tz</span>
         </div>
 
         {/* Desktop Navigation */}
@@ -36,7 +36,7 @@ const Navigation = () => {
               <Link
                 key={item.to}
                 to={item.to}
-                className="text-white/95 hover:text-white transition-colors duration-300 font-quicksand font-black"
+                className="text-white/95 hover:text-white transition-colors duration-300 font-spartan font-medium text-base"
               >
                 {item.label}
               </Link>
@@ -44,14 +44,14 @@ const Navigation = () => {
               <a
                 key={item.href}
                 href={item.href}
-                className="text-white/95 hover:text-white transition-colors duration-300 font-quicksand font-black"
+                className="text-white/95 hover:text-white transition-colors duration-300 font-spartan font-medium text-base"
               >
                 {item.label}
               </a>
             )
           )}
           <Link to="/booking">
-            <Button variant="ocean" size="sm" className="font-quicksand">
+            <Button variant="ocean" size="sm" className="font-spartan text-base font-medium">
               Book Now
             </Button>
           </Link>

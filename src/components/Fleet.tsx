@@ -21,8 +21,8 @@ const Fleet = () => {
       <div className="absolute inset-0 bg-black/40" aria-hidden />
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-black mb-6 text-white font-quicksand drop-shadow-md" style={{ fontSize: 'clamp(2rem, 7vw, 70px)' }}>
-            Our <span className="text-white font-quicksand">Fleet</span>
+          <h2 className="text-4xl md:text-5xl font-black mb-6 text-white font-soria drop-shadow-md" style={{ fontSize: 'clamp(2rem, 7vw, 85px)' }}>
+            Our <span className="text-white font-soria">Fleet</span>
           </h2>
           <p className="text-white/95 max-w-3xl mx-auto leading-relaxed drop-shadow">
             Discover our premium catamaran fleet, each vessel designed to provide you with an unforgettable yacht experience.
@@ -43,7 +43,7 @@ const Fleet = () => {
                   <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-end p-3">
                     <button 
                       onClick={(e) => handleReadMore(yacht.id, e)}
-                      className="bg-white text-foreground px-4 py-2 rounded-lg font-medium text-sm hover:bg-white/90 transition-colors"
+                      className="bg-white text-foreground px-4 py-2 rounded-lg font-medium text-sm hover:bg-white/90 transition-colors font-spartan"
                     >
                       Read More
                     </button>
@@ -51,7 +51,7 @@ const Fleet = () => {
                 </div>
                 
                 {/* Title */}
-                <h3 className="text-black text-center text-base md:text-lg font-bold font-quicksand bg-white px-3 py-1.5 rounded-md inline-block">
+                <h3 className="text-black text-center text-base md:text-lg font-bold font-spartan bg-white px-3 py-1.5 rounded-md inline-block">
                   {yacht.name}
                 </h3>
               </div>
@@ -63,7 +63,7 @@ const Fleet = () => {
           <div className="text-center mt-8">
             <Button 
               onClick={() => navigate('/all-boats')}
-              className="bg-black text-white hover:bg-black/90 px-8 py-6 text-lg font-semibold rounded-lg"
+              className="bg-black text-white hover:bg-black/90 px-8 py-6 text-lg font-semibold rounded-lg font-spartan"
             >
               See All
             </Button>

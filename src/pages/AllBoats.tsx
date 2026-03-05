@@ -26,7 +26,7 @@ const AllBoats = () => {
             <Button
               variant="ghost"
               onClick={() => navigate(-1)}
-              className="flex items-center gap-2 text-white hover:text-white hover:bg-white/10"
+              className="flex items-center gap-2 text-white hover:text-white hover:bg-white/10 font-spartan"
             >
               <ChevronLeft className="h-4 w-4" />
               Back
@@ -35,10 +35,10 @@ const AllBoats = () => {
 
           {/* Header */}
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-black mb-6 text-white font-quicksand drop-shadow-md" style={{ fontSize: 'clamp(2rem, 7vw, 70px)' }}>
-              Our Complete <span className="text-white font-quicksand">Fleet</span>
+            <h2 className="text-4xl md:text-5xl font-black mb-6 text-white font-soria drop-shadow-md" style={{ fontSize: 'clamp(2rem, 7vw, 70px)' }}>
+              Our Complete <span className="text-white font-soria">Fleet</span>
             </h2>
-            <p className="text-white/95 max-w-3xl mx-auto leading-relaxed drop-shadow">
+            <p className="text-white/95 max-w-3xl mx-auto leading-relaxed drop-shadow font-spartan">
               Explore our entire premium catamaran fleet, each vessel designed to provide you with an unforgettable yacht experience.
             </p>
           </div>
@@ -58,7 +58,7 @@ const AllBoats = () => {
                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-end p-3">
                       <button 
                         onClick={(e) => handleReadMore(yacht.id, e)}
-                        className="bg-white text-foreground px-4 py-2 rounded-lg font-medium text-sm hover:bg-white/90 transition-colors"
+                        className="bg-white text-foreground px-4 py-2 rounded-lg font-medium text-sm hover:bg-white/90 transition-colors font-spartan"
                       >
                         Read More
                       </button>
@@ -66,7 +66,7 @@ const AllBoats = () => {
                   </div>
                   
                   {/* Title */}
-                  <h3 className="text-black text-center text-base md:text-lg font-bold font-quicksand bg-white px-3 py-1.5 rounded-md inline-block">
+                  <h3 className="text-black text-center text-base md:text-lg font-bold font-spartan bg-white px-3 py-1.5 rounded-md inline-block">
                     {yacht.name}
                   </h3>
                 </div>

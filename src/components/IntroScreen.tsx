@@ -23,7 +23,7 @@ const IntroScreen = ({ onComplete }: { onComplete: () => void }) => {
     >
       <div className="absolute inset-0 bg-black/40" aria-hidden />
       <div className="relative z-10 flex flex-col items-center justify-center px-4">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-wide animate-fade-in font-quicksand drop-shadow-md" style={{ fontSize: 'clamp(2rem, 7vw, 70px)' }}>
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-wide animate-fade-in font-soria drop-shadow-md" style={{ fontSize: 'clamp(2rem, 7vw, 70px)' }}>
           YATCH DEALERS TZ
         </h1>
       </div>

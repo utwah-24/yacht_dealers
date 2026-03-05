@@ -111,7 +111,7 @@ const Gallery = () => {
       <div className="absolute inset-0 bg-black/40" aria-hidden />
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white font-quicksand mb-4 drop-shadow-md" style={{ fontSize: 'clamp(2rem, 6vw, 60px)' }}>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white font-soria mb-4 drop-shadow-md" style={{ fontSize: 'clamp(2rem, 6vw, 85px)' }}>
             Gallery
           </h2>
           <p className="text-xl md:text-2xl text-white/95 max-w-3xl mx-auto drop-shadow">

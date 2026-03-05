@@ -12,7 +12,7 @@ const FoodMenu = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
           {/* Left Section - Text Content */}
           <div className="space-y-6">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white font-quicksand drop-shadow-md" style={{ fontSize: 'clamp(2rem, 6vw, 60px)' }}>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white font-soria drop-shadow-md" style={{ fontSize: 'clamp(2rem, 6vw, 85px)' }}>
               Our Food Menu
             </h2>
             

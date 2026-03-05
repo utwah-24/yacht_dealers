@@ -524,9 +524,9 @@ Please contact the customer to provide a quote.
           <div className="max-w-2xl mx-auto w-full">
             {/* Title */}
             <div className="mb-6 sm:mb-8">
-              <h1 className="text-4xl font-bold mb-2 font-spartan drop-shadow-md" style={{ fontSize: 'clamp(2rem, 7vw, 70px)' }}>
-                <span className="text-white">Booking</span>{" "}
-                <span className="text-white/90">without stress</span>
+              <h1 className="text-4xl font-bold mb-2 font-soria drop-shadow-md" style={{ fontSize: 'clamp(2rem, 7vw, 70px)' }}>
+                <span className="text-white font-soria">Booking</span>{" "}
+                <span className="text-white/90 font-soria">without stress</span>
               </h1>
               {/* Step Indicator */}
               <div className="flex gap-2 mt-3 sm:mt-4">

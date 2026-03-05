@@ -25,7 +25,7 @@ const Footer = () => {
           <div className="md:col-span-1">
             <div className="flex items-center space-x-2 mb-6">
               <Anchor className="h-8 w-8 text-white" />
-              <span className="text-2xl font-bold font-quicksand">Yachtdealers.tz</span>
+              <span className="text-2xl font-bold font-soria">Yachtdealers.tz</span>
             </div>
             <p className="text-white/80 mb-6 leading-relaxed">
               Premium yacht charter services in Tanzania. Experience luxury, comfort, and adventure on the pristine waters of Dar es Salaam and Zanzibar.
@@ -33,19 +33,19 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center gap-2 text-white/80">
                 <Phone className="h-4 w-4 text-white" />
-                <span>0617 152 595</span>
+                <span className="font-spartan">0617 152 595</span>
               </div>
               <div className="flex items-center gap-2 text-white/80">
                 <MapPin className="h-4 w-4 text-white" />
-                <span>Dar es Salaam & Zanzibar</span>
+                <span className="font-spartan">Dar es Salaam & Zanzibar</span>
               </div>
             </div>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-xl font-bold mb-6 text-white font-quicksand">Quick Links</h3>
-            <ul className="space-y-3">
+            <h3 className="text-xl font-bold mb-6 text-white font-soria">Quick Links</h3>
+            <ul className="space-y-3 font-spartan">
               {quickLinks.map((link, index) => (
                 <li key={index}>
                   <a 
@@ -61,8 +61,8 @@ const Footer = () => {
 
           {/* Destinations */}
           <div>
-            <h3 className="text-xl font-bold mb-6 text-white font-quicksand">Popular Destinations</h3>
-            <ul className="space-y-3">
+            <h3 className="text-xl font-bold mb-6 text-white font-soria">Popular Destinations</h3>
+            <ul className="space-y-3 font-spartan">
               {destinations.map((destination, index) => (
                 <li key={index} className="text-white/80">
                   {destination}
@@ -73,8 +73,8 @@ const Footer = () => {
 
           {/* Services */}
           <div>
-            <h3 className="text-xl font-bold mb-6 text-white font-quicksand">Charter Services</h3>
-            <ul className="space-y-3 text-white/80">
+            <h3 className="text-xl font-bold mb-6 text-white font-soria">Charter Services</h3>
+            <ul className="space-y-3 font-spartan text-white/80">
               <li>Half Day Charter</li>
               <li>Full Day Charter</li>
               <li>Week Charter</li>
@@ -87,7 +87,7 @@ const Footer = () => {
 
         {/* Bottom Section */}
         <div className="border-t border-white/20 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 font-spartan">
             <div className="text-white/60 text-sm">
               © 2024 Yachtdealers.tz Tanzania. All rights reserved.
             </div>

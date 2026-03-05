@@ -625,7 +625,7 @@ const BoatDetails = () => {
             {/* Photo Gallery */}
             <div className="space-y-2 w-full">
               <div className="flex items-center justify-between mb-1">
-                <h3 className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-white">
+                <h3 className="text-lg font-semibold text-white font-spartan">
                   PHOTOS FOUND {boat.galleryImages.length}
                 </h3>
               </div>
@@ -677,7 +677,7 @@ const BoatDetails = () => {
 
             {/* Boat Title */}
             <div className="w-full">
-              <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-white mb-1 sm:mb-2 break-words leading-tight font-quicksand" style={{ fontSize: 'clamp(1.25rem, 5vw, 50px)' }}>
+              <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-white mb-1 sm:mb-2 break-words leading-tight font-soria" style={{ fontSize: 'clamp(1.25rem, 5vw, 50px)' }}>
                 {boat.year} {boat.name}
               </h1>
               <p className="text-sm sm:text-base md:text-lg text-white/95 break-words">{boat.model}</p>
@@ -695,26 +695,26 @@ const BoatDetails = () => {
               >
                 {/* Price List */}
                 <div className="flex-shrink-0 w-full md:w-72 lg:w-80 space-y-2 sm:space-y-3 md:space-y-4 min-w-0">
-                  <h3 className="text-sm sm:text-base md:text-lg font-semibold text-white">PRICE LIST {boat.id !== "black-bird-heli" && <span className="text-xs sm:text-sm font-normal text-white/60">(without food/DJ)</span>}</h3>
+                  <h3 className="text-xl font-semibold text-white font-spartan">PRICE LIST {boat.id !== "black-bird-heli" && <span className="text-xl font-normal text-white/60">(without food/DJ)</span>}</h3>
                   <div className="space-y-2 sm:space-y-3 md:space-y-4">
                     <div>
-                      <h4 className="text-xs sm:text-sm font-semibold text-white mb-1 sm:mb-1.5 md:mb-2">Dar es Salaam</h4>
+                      <h4 className="text-xl font-semibold text-white mb-1 sm:mb-1.5 md:mb-2 font-spartan">Dar es Salaam</h4>
                       <div className="space-y-1 sm:space-y-1.5 md:space-y-2">
                         {boat.pricing?.dar?.map((item: any, index: number) => (
                           <div key={index} className="flex justify-between items-center py-1.5 sm:py-2 border-b border-white/15 gap-2">
-                            <span className="text-xs sm:text-sm text-white/95 break-words flex-1 min-w-0">{item.type}</span>
-                            <span className="text-xs sm:text-sm md:text-base font-semibold text-white whitespace-nowrap flex-shrink-0">{item.price}</span>
+                            <span className="text-lg text-white/95 break-words flex-1 min-w-0 font-spartan">{item.type}</span>
+                            <span className="text-xl font-semibold text-white whitespace-nowrap flex-shrink-0 font-spartan">{item.price}</span>
                           </div>
                         ))}
                       </div>
                     </div>
                     <div>
-                      <h4 className="text-xs sm:text-sm font-semibold text-white mb-1 sm:mb-1.5 md:mb-2">Zanzibar</h4>
+                      <h4 className="text-xl font-semibold text-white mb-1 sm:mb-1.5 md:mb-2 font-spartan">Zanzibar</h4>
                       <div className="space-y-1 sm:space-y-1.5 md:space-y-2">
                         {boat.pricing?.zanzibar?.map((item: any, index: number) => (
                           <div key={index} className="flex justify-between items-center py-1.5 sm:py-2 border-b border-white/15 gap-2">
-                            <span className="text-xs sm:text-sm text-white/95 break-words flex-1 min-w-0">{item.type}</span>
-                            <span className="text-xs sm:text-sm md:text-base font-semibold text-white whitespace-nowrap flex-shrink-0">{item.price}</span>
+                            <span className="text-lg text-white/95 break-words flex-1 min-w-0 font-spartan">{item.type}</span>
+                            <span className="text-xl font-semibold text-white whitespace-nowrap flex-shrink-0 font-spartan">{item.price}</span>
                           </div>
                         ))}
                       </div>
@@ -724,12 +724,12 @@ const BoatDetails = () => {
 
                 {/* Destinations */}
                 <div className="flex-shrink-0 w-full md:w-72 lg:w-80 space-y-2 sm:space-y-3 min-w-0">
-                  <h3 className="text-sm sm:text-base md:text-lg font-semibold text-white">DESTINATIONS</h3>
-                  <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                  <h3 className="text-xl font-semibold text-white font-spartan">DESTINATIONS</h3>
+                  <div className="flex flex-wrap gap-1.5 sm:gap-2 font-spartan">
                     {boat.destinations?.map((destination: string, index: number) => (
                       <span
                         key={index}
-                        className="inline-flex items-center px-2 sm:px-2.5 md:px-3 py-0.5 sm:py-1 bg-white/20 text-white rounded-full text-xs sm:text-sm font-medium"
+                        className="inline-flex items-center px-2 sm:px-2.5 md:px-3 py-0.5 sm:py-1 bg-white/20 text-white rounded-full text-xl font-medium font-spartan"
                       >
                         {destination}
                       </span>
@@ -739,12 +739,12 @@ const BoatDetails = () => {
 
                 {/* Services Provided */}
                 <div className="flex-shrink-0 w-full md:w-72 lg:w-80 space-y-2 sm:space-y-3 min-w-0">
-                  <h3 className="text-sm sm:text-base md:text-lg font-semibold text-white">SERVICES PROVIDED</h3>
-                  <ul className="space-y-1.5 sm:space-y-2">
+                  <h3 className="text-xl font-semibold text-white font-spartan">SERVICES PROVIDED</h3>
+                  <ul className="space-y-1.5 sm:space-y-2 font-spartan">
                     {boat.services?.map((service: string, index: number) => (
                       <li key={index} className="flex items-start gap-1.5 sm:gap-2">
-                        <span className="text-white mt-0.5 sm:mt-1 text-xs sm:text-sm flex-shrink-0">•</span>
-                        <span className="text-xs sm:text-sm text-white/95 break-words flex-1">{service}</span>
+                        <span className="text-white mt-0.5 sm:mt-1 text-xl flex-shrink-0">•</span>
+                        <span className="text-xl text-white/95 break-words flex-1 font-spartan">{service}</span>
                       </li>
                     ))}
                   </ul>
@@ -753,12 +753,12 @@ const BoatDetails = () => {
                 {/* Additional Services */}
                 {boat.additionalServices && boat.additionalServices.length > 0 && (
                   <div className="flex-shrink-0 w-full md:w-72 lg:w-80 space-y-2 sm:space-y-3 min-w-0">
-                    <h3 className="text-sm sm:text-base md:text-lg font-semibold text-white">ADDITIONAL SERVICES IF AVAILABLE</h3>
-                    <ul className="space-y-1.5 sm:space-y-2">
+                    <h3 className="text-xl font-semibold text-white font-spartan">ADDITIONAL SERVICES IF AVAILABLE</h3>
+                    <ul className="space-y-1.5 sm:space-y-2 font-spartan">
                       {boat.additionalServices.map((service: string, index: number) => (
                         <li key={index} className="flex items-start gap-1.5 sm:gap-2">
-                          <span className="text-white mt-0.5 sm:mt-1 text-xs sm:text-sm flex-shrink-0">•</span>
-                          <span className="text-xs sm:text-sm text-white/95 break-words flex-1">{service}</span>
+                          <span className="text-white mt-0.5 sm:mt-1 text-xl flex-shrink-0">•</span>
+                          <span className="text-xl text-white/95 break-words flex-1 font-spartan">{service}</span>
                         </li>
                       ))}
                     </ul>
@@ -789,7 +789,7 @@ const BoatDetails = () => {
 
             {/* Description */}
             <div className="pt-3 sm:pt-4 border-t border-white/20 w-full">
-              <h3 className="text-sm sm:text-base md:text-lg font-semibold text-white mb-1.5 sm:mb-2">Description</h3>
+              <h3 className="text-xl font-semibold text-white mb-1.5 sm:mb-2 font-spartan">Description</h3>
               <p className="text-xs sm:text-sm md:text-base text-white/95 leading-relaxed break-words">{boat.description}</p>
               <Button
                 type="button"

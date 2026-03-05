@@ -127,8 +127,8 @@ const Locations = () => {
       <div className="container mx-auto px-4 relative z-10">
         {/* Main Locations */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-black mb-6 text-white font-quicksand drop-shadow-md" style={{ fontSize: 'clamp(2rem, 7vw, 70px)' }}>
-            Charter <span className="text-white font-quicksand">Packages</span>
+          <h2 className="text-4xl md:text-5xl font-black mb-6 text-white font-soria drop-shadow-md" style={{ fontSize: 'clamp(2rem, 7vw, 85px)' }}>
+            Charter <span className="text-white font-soria">Packages</span>
           </h2>
           <p className="text-xl text-white/95 max-w-3xl mx-auto leading-relaxed drop-shadow">
             Operating from two stunning locations across Tanzania, we provide easy access to 
@@ -145,7 +145,7 @@ const Locations = () => {
               >
                 <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/50"></div>
                 <div className="absolute top-4 left-4 text-white">
-                  <h3 className="text-2xl font-bold font-quicksand">{location.title}</h3>
+                  <h3 className="text-[40px] font-bold font-soria">{location.title}</h3>
                   <p className="text-white/80 flex items-center gap-1 mt-1">
                     <MapPin className="h-4 w-4" />
                     {location.baseLocation}
@@ -160,21 +160,21 @@ const Locations = () => {
               </CardHeader>
               
               <CardContent>
-                <h4 className="font-semibold mb-4 text-foreground flex items-center gap-2">
+                <h4 className="font-semibold mb-4 text-foreground flex items-center gap-2 font-spartan">
                   <Navigation className="h-5 w-5 text-primary" />
                   Tour Routes
                 </h4>
                 <div className="space-y-3 mb-6">
                   {location.routes.slice(0, 3).map((route, routeIndex) => (
                     <div key={routeIndex} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                      <span className="font-medium text-foreground">{route.name}</span>
-                      <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
+                      <span className="font-medium text-foreground font-spartan text-xl">{route.name}</span>
+                      <span className="text-lg bg-primary/10 text-primary px-2 py-1 rounded-full font-spartan">
                         {route.type}
                       </span>
                     </div>
                   ))}
                   {location.routes.length > 3 && (
-                    <div className="text-center text-sm text-muted-foreground">
+                    <div className="text-center text-sm text-muted-foreground font-spartan">
                       +{location.routes.length - 3} more destinations
                     </div>
                   )}
@@ -184,7 +184,7 @@ const Locations = () => {
                   className="w-full group relative overflow-hidden"
                   onClick={() => setSelectedLocation(index)}
                 >
-                  <span className="relative z-10 flex items-center gap-2">
+                  <span className="relative z-10 flex items-center gap-2 font-spartan">
                     <Route className="h-4 w-4 group-hover:rotate-90 transition-transform duration-500" />
                     View Routes
                   </span>
