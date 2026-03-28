@@ -39,8 +39,8 @@ const Services = () => {
           "25 Max Catamaran": "$1,500"
         },
         zanzibar: {
-          "20 Max Catamaran": "$1,400",
-          "25 Max Catamaran": "$1,800"
+          "20 Max Catamaran": "$1,700",
+          "25 Max Catamaran": "$2,100"
         }
       },
       highlights: ["Best for first-time visitors", "Perfect for families", "Great value for money"]
@@ -69,8 +69,8 @@ const Services = () => {
           "25 Max Catamaran": "$2,000"
         },
         zanzibar: {
-          "20 Max Catamaran": "$1,800",
-          "25 Max Catamaran": "$2,400"
+          "20 Max Catamaran": "$2,100",
+          "25 Max Catamaran": "$2,700"
         }
       },
       highlights: ["Most popular choice", "Complete day experience", "Perfect for special occasions"]
@@ -101,8 +101,8 @@ const Services = () => {
           "25 Max Catamaran": "$2,600/day"
         },
         zanzibar: {
-          "20 Max Catamaran": "$2,200/day",
-          "25 Max Catamaran": "$2,800/day"
+          "20 Max Catamaran": "$2,500/day",
+          "25 Max Catamaran": "$3,100/day"
         }
       },
       highlights: ["Ultimate luxury experience", "Complete privacy", "Fully customizable"]

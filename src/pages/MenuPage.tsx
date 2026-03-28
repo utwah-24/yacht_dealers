@@ -1,5 +1,5 @@
 import Footer from "@/components/Footer";
-import foodImage from "@/assets/food.jpeg";
+const foodImage = "/videos/circle%20.jpeg";
 
 const MenuPage = () => {
   const menuCategories = [

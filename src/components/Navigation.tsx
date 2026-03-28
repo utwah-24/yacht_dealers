@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
-import logoImage from "@/assets/small-logo.jpeg";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,14 +16,14 @@ const Navigation = () => {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/10 backdrop-blur-md border-b border-white/20">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0c1929] backdrop-blur-md border-b border-blue-900/50 shadow-lg">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center space-x-2">
           <img 
-            src={logoImage} 
+            src="/videos/cc.PNG" 
             alt="Yacht Dealers Tanzania" 
-            className="h-8 w-8 object-contain"
+            className="h-10 w-auto object-contain"
           />
           <span className="text-xl font-semibold text-white font-soria">Yachtdealers.tz</span>
         </div>
@@ -70,14 +69,14 @@ const Navigation = () => {
 
       {/* Mobile Navigation */}
       {isOpen && (
-        <div className="md:hidden bg-white/95 backdrop-blur-md border-b border-white/20">
+        <div className="md:hidden bg-[#0c1929] backdrop-blur-md border-b border-blue-900/50">
           <div className="container mx-auto px-4 py-4 space-y-4">
             {navItems.map((item) =>
               "to" in item && item.to ? (
                 <Link
                   key={item.to}
                   to={item.to}
-                  className="block text-foreground hover:text-primary transition-colors duration-300 font-quicksand font-black"
+                  className="block text-white hover:text-blue-200 transition-colors duration-300 font-quicksand font-black"
                   onClick={() => setIsOpen(false)}
                 >
                   {item.label}
@@ -86,7 +85,7 @@ const Navigation = () => {
                 <a
                   key={item.href}
                   href={item.href}
-                  className="block text-foreground hover:text-primary transition-colors duration-300 font-quicksand font-black"
+                  className="block text-white hover:text-blue-200 transition-colors duration-300 font-quicksand font-black"
                   onClick={() => setIsOpen(false)}
                 >
                   {item.label}

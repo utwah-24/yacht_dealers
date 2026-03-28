@@ -118,6 +118,52 @@ const Locations = () => {
       image: zanzibarImage,
       totalDuration: "6-8 hours",
       bestFor: "Full Day & Extended Charters"
+    },
+    {
+      title: "Sunset Cruise",
+      baseLocation: "Dar & Zanzibar",
+      description: "Sail into the golden hour on our romantic sunset cruise. Experience breathtaking views as the sun dips below the horizon, painting the sky in vivid orange and gold.",
+      routes: [
+        { 
+          name: "Slipway / Hotel Verde", 
+          type: "Departure Point",
+          description: "Board from either our Dar es Salaam Slipway Marina or Zanzibar Hotel Verde waterfront. Your sunset adventure begins with welcome drinks and a safety briefing.",
+          duration: "0 min",
+          distance: "0 km",
+          activities: ["Boarding", "Welcome drinks", "Safety briefing"],
+          highlight: "Flexible departure from either location"
+        },
+        { 
+          name: "Open Water Cruising", 
+          type: "Scenic Sail",
+          description: "Glide across calm waters as our professional crew sets the sails. Enjoy the gentle breeze and panoramic ocean views as you cruise toward the perfect sunset vantage point.",
+          duration: "45 min",
+          distance: "8 km",
+          activities: ["Sailing", "Ocean views", "Photography", "Relaxation"],
+          highlight: "Tranquil sailing experience"
+        },
+        { 
+          name: "Sunset Viewing Point", 
+          type: "Golden Hour",
+          description: "Anchor at the ideal spot to witness nature's finest show. Watch the sun descend in a blaze of orange, red, and gold, casting a luminous path across the water.",
+          duration: "60 min",
+          distance: "12 km",
+          activities: ["Sunset viewing", "Romantic atmosphere", "Champagne toast", "Photography"],
+          highlight: "Unforgettable sunset spectacle"
+        },
+        { 
+          name: "Twilight Return", 
+          type: "Evening Sail",
+          description: "Sail back under the deepening twilight sky, with the first stars emerging. A magical end to your cruise before returning to the marina.",
+          duration: "45 min",
+          distance: "8 km",
+          activities: ["Evening sailing", "Stargazing", "Final refreshments"],
+          highlight: "Peaceful twilight return"
+        }
+      ],
+      image: "/videos/SC.jpeg",
+      totalDuration: "2-3 hours",
+      bestFor: "Couples, Romance & Special Occasions"
     }
   ];
 

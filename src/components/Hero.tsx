@@ -58,9 +58,9 @@ const Hero = () => {
           className="text-5xl md:text-7xl font-bold mb-6 leading-tight font-soria"
           style={{ animation: 'heroFadeUp 0.9s ease-out 0.2s both' }}
         >
-          Luxury Yacht
+          Where luxury
           <span className="block bg-gradient-ocean bg-clip-text text-transparent font-soria">
-            Adventures
+            meets the ocean
           </span>
         </h1>
 

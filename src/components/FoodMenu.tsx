@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
-import foodImage from "@/assets/food.jpeg";
+const foodImage = "/videos/food.jpg";
 import backgroundImage from "@/assets/background.jpg";
 
 const FoodMenu = () => {
