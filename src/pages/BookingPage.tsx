@@ -459,21 +459,21 @@ const BookingPage = () => {
     
     // Use unicode escape sequences for emojis to avoid encoding issues (showing as �).
     const EMOJI = {
-      boatRequest: "\u{1F6E5}\u{FE0F}", // 🛥️
-      customer: "\u{1F464}", // 👤
-      pin: "\u{1F4CD}", // 📍
-      calendar: "\u{1F4C5}", // 📅
-      people: "\u{1F465}", // 👥
-      catamaran: "\u{1F6A4}", // 🚤
-      sailboat: "\u{26F5}", // ⛵
-      food: "\u{1F37D}\u{FE0F}", // 🍽️
-      drink: "\u{1F379}", // 🍹
-      music: "\u{1F3B5}", // 🎵
-      warning: "\u{26A0}\u{FE0F}", // ⚠️
-      party: "\u{1F389}", // 🎉
-      target: "\u{1F3AF}", // 🎯
-      note: "\u{1F4DD}", // 📝
-      check: "\u{2713}", // ✓
+      boatRequest: "🛥️",
+      customer: "👤",
+      pin: "📍",
+      calendar: "📅",
+      people: "👥",
+      catamaran: "🚤",
+      sailboat: "⛵",
+      food: "🍽️",
+      drink: "🍹",
+      music: "🎵",
+      warning: "⚠️",
+      party: "🎉",
+      target: "🎯",
+      note: "📝",
+      check: "✓",
     } as const;
     
     const catamaranLine = data.catamaran
@@ -527,8 +527,8 @@ ${showSpecialOccasion ? `${EMOJI.party} *Special Occasion:*\n${specialOccasion}\
 ${activitiesLine}
 ${otherActivityLine}
 
-${jetskiAddon && jetskiAddonPackage ? `\u{1F6A4} *Jetski Add-on:* ${jetskiAddonPackage} — ${jetskiAddonPackage === "Half Day" ? "$900" : "$1,500"}\n` : ""}
-${!isSpecialVehicle && formattedTotalPrice ? `\ud83d\udcb0 *Total Price:* ${formattedTotalPrice}${bringOwnFood ? " (-$200 own food)" : ""}${djEnabled ? " (+$150 DJ)" : ""}${jetskiAddon && jetskiAddonPackage ? ` (+${jetskiAddonPackage === "Half Day" ? "$900" : "$1,500"} jetski)` : ""}\n` : ""}
+${jetskiAddon && jetskiAddonPackage ? `🚤 *Jetski Add-on:* ${jetskiAddonPackage} — ${jetskiAddonPackage === "Half Day" ? "$900" : "$1,500"}\n` : ""}
+${!isSpecialVehicle && formattedTotalPrice ? `💰 *Total Price:* ${formattedTotalPrice}${bringOwnFood ? " (-$200 own food)" : ""}${djEnabled ? " (+$150 DJ)" : ""}${jetskiAddon && jetskiAddonPackage ? ` (+${jetskiAddonPackage === "Half Day" ? "$900" : "$1,500"} jetski)` : ""}\n` : ""}
 Please contact the customer to provide a quote.
     `.trim();
 
