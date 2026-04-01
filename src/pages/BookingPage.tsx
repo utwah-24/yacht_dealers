@@ -142,6 +142,10 @@ const boatMetadata: Record<string, { capacity: string; description: string }> = 
     capacity: "24 passengers",
     description: "Luxury catamaran with premium features.",
   },
+  "jetski": {
+    capacity: "2 passengers",
+    description: "High-performance jet ski for thrilling rides on Tanzania's waters.",
+  },
 };
 
 // Generate catalog from all boats
@@ -169,6 +173,8 @@ const BookingPage = () => {
   const [selectedActivities, setSelectedActivities] = useState<string[]>([]);
   const [djEnabled, setDjEnabled] = useState(false);
   const [bringOwnFood, setBringOwnFood] = useState(false);
+  const [jetskiAddon, setJetskiAddon] = useState(false);
+  const [jetskiAddonPackage, setJetskiAddonPackage] = useState<string>("");
 
   const displayPrice = (price: string) => {
     if (!bringOwnFood) return price;
@@ -282,7 +288,7 @@ const BookingPage = () => {
 
   // Calculate base charter price from selected option
   const currentCharterPrice = useMemo(() => {
-    if (!watched.charter || selectedCatamaranId === "black-bird-heli") return 0;
+    if (!watched.charter || selectedCatamaranId === "black-bird-heli" || selectedCatamaranId === "jetski") return 0;
     const parts = watched.charter.split("|");
     if (parts.length < 3) return 0;
     const [location, yacht, charterType] = parts;
@@ -317,8 +323,9 @@ const BookingPage = () => {
   const handleCharterSelect = (location: string, charterType: string) => {
     setSelectedLocation(location);
     setSelectedCharterType(charterType);
-    // For helicopter services, don't include yacht in the charter value
-    const charterValue = selectedCatamaranId === "black-bird-heli" 
+    // For helicopter/jetski services, don't include yacht in the charter value
+    const isSpecial = selectedCatamaranId === "black-bird-heli" || selectedCatamaranId === "jetski";
+    const charterValue = isSpecial
       ? `${location}|${charterType}`
       : `${location}|${selectedYacht}|${charterType}`;
     setValue("charter", charterValue);
@@ -330,6 +337,10 @@ const BookingPage = () => {
           ? "seacliff-airport"
           : "seacliff";
       setValue("destination", pickupPointValue);
+    }
+    // For jetski, auto-set destination
+    if (selectedCatamaranId === "jetski") {
+      setValue("destination", "coastal-waters");
     }
   };
 
@@ -350,8 +361,9 @@ const BookingPage = () => {
       }
     } else if (step === 2) {
       // Step 2: validate catalog-related choices
-      // For helicopter, destination is auto-set, and food/drinks are not required
-      const fieldsToValidate: (keyof BookingForm)[] = selectedCatamaranId === "black-bird-heli"
+      // For helicopter/jetski, destination is auto-set, and food/drinks are not required
+      const isSpecialVehicle = selectedCatamaranId === "black-bird-heli" || selectedCatamaranId === "jetski";
+      const fieldsToValidate: (keyof BookingForm)[] = isSpecialVehicle
         ? ["charter"]
         : ["destination", "charter"];
       
@@ -359,8 +371,8 @@ const BookingPage = () => {
       const isValid = await trigger(fieldsToValidate);
       
       if (isValid) {
-        // Skip Step 3 (Personal Request) for helicopter bookings
-        if (selectedCatamaranId === "black-bird-heli") {
+        // Skip Step 3 (Personal Request) for helicopter/jetski bookings
+        if (isSpecialVehicle) {
           setStep(4);
         } else {
           setStep(3);
@@ -397,22 +409,34 @@ const BookingPage = () => {
       setSelectedCatamaranId(id);
       setValue("catamaran", found.name);
 
-      // For helicopter, we don't want the user to pick a "Destination" — set a sensible default.
+      // For helicopter/jetski, destination is auto-set
       if (found.id === "black-bird-heli") {
         setValue("destination", "seacliff");
+      } else if (found.id === "jetski") {
+        setValue("destination", "coastal-waters");
       } else {
         setValue("destination", "");
       }
     }
   };
 
+  // Helper function to get jetski price
+  const getJetskiPrice = (charterType: string): string => {
+    const prices: Record<string, string> = {
+      "Half Day": "$900",
+      "Full Day": "$1,500",
+    };
+    return prices[charterType] || "";
+  };
+
   // Helper function to get helicopter price
   const getHelicopterPrice = (charterType: string): string => {
     const prices: Record<string, string> = {
-      "Scenic Flights": "$1,000 (TZS 2,750,000)",
-      "Hour Scenic Flight": "$2,500 (TZS 6,875,000)",
-      "Dar - Zanzibar (One Way)": "$2,700 (TZS 7,425,000)",
-      "Dar-Zanzibar (Two Ways)": "$3,500 (TZS 9,625,000)",
+      "15 Minute Tour": "$555",
+      "30 Minute Tour": "$960",
+      "60 Minute Tour": "$1,770",
+      "Dar to Znz": "$2,200",
+      "Dar to Nungwi": "$2,500",
       "Special Charter": "Price upon Request"
     };
     return prices[charterType] || "";
@@ -422,11 +446,13 @@ const BookingPage = () => {
     // Parse charter selection (format differs for helicopter vs yacht)
     const charterParts = data.charter.split("|");
     const isHelicopter = selectedCatamaranId === "black-bird-heli";
+    const isJetski = selectedCatamaranId === "jetski";
+    const isSpecialVehicle = isHelicopter || isJetski;
     const location = charterParts[0];
-    const yacht = isHelicopter ? "Helicopter" : charterParts[1];
-    const charterType = isHelicopter ? charterParts[1] : charterParts[2];
+    const yacht = isSpecialVehicle ? (isHelicopter ? "Helicopter" : "Jet Ski") : charterParts[1];
+    const charterType = isSpecialVehicle ? charterParts[1] : charterParts[2];
     
-    const selectedCharterOption = isHelicopter ? null : charterOptions
+    const selectedCharterOption = isSpecialVehicle ? null : charterOptions
       .find((loc) => loc.location === location)
       ?.packages.find((pkg) => pkg.yacht === yacht)
       ?.options.find((opt) => opt.type === charterType);
@@ -476,30 +502,33 @@ ${EMOJI.customer} *Customer Details:*
 Name: ${data.name}
 Phone: ${data.phone}
 
-${EMOJI.pin} *${isHelicopter ? "Pickup Point" : "Route"}:*
+${EMOJI.pin} *${isHelicopter ? "Pickup Point" : isJetski ? "Location" : "Route"}:*
 ${isHelicopter 
   ? helicopterPickupPoints.find((d) => d.value === data.destination)?.label || data.destination
-  : selectedDeparture === "cruising"
-    ? "Cruising — i like to cruise"
-    : `${departureOptions.find((d) => d.value === selectedDeparture)?.label || selectedDeparture} → ${Object.values(destinationsByDeparture).flat().find((d) => d.value === data.destination)?.label || data.destination}`}
+  : isJetski
+    ? "Coastal Waters"
+    : selectedDeparture === "cruising"
+      ? "Cruising — i like to cruise"
+      : `${departureOptions.find((d) => d.value === selectedDeparture)?.label || selectedDeparture} → ${Object.values(destinationsByDeparture).flat().find((d) => d.value === data.destination)?.label || data.destination}`}
 
 ${EMOJI.calendar} *Date:* ${data.date}
 ${EMOJI.people} *Passengers:* ${data.passengers}
 
 ${catamaranLine}
 
-${EMOJI.sailboat} *Selected ${isHelicopter ? "Helicopter Service" : "Charter"}:*
-${isHelicopter ? charterType : `${location} - ${yacht}`}
-${isHelicopter ? getHelicopterPrice(charterType) : `${charterType} ${selectedCharterOption ? selectedCharterOption.price : ""}`}
+${EMOJI.sailboat} *Selected ${isHelicopter ? "Helicopter Service" : isJetski ? "Jet Ski Package" : "Charter"}:*
+${isSpecialVehicle ? charterType : `${location} - ${yacht}`}
+${isHelicopter ? getHelicopterPrice(charterType) : isJetski ? getJetskiPrice(charterType) : `${charterType} ${selectedCharterOption ? selectedCharterOption.price : ""}`}
 
-${!isHelicopter ? `${EMOJI.food} *Food & Drinks:* ${bringOwnFood ? "Customer bringing own food (-$200)" : "Included"}\n${data.foodDrinksRequests?.trim() ? `${EMOJI.food} *Special Food & Drinks Requests:*\n${data.foodDrinksRequests.trim()}\n` : ""}\n${EMOJI.music} *DJ Service:* ${data.dj ? `Yes ${EMOJI.check}` : "No"}\n` : ""}
+${!isSpecialVehicle ? `${EMOJI.food} *Food & Drinks:* ${bringOwnFood ? "Customer bringing own food (-$200)" : "Included"}\n${data.foodDrinksRequests?.trim() ? `${EMOJI.food} *Special Food & Drinks Requests:*\n${data.foodDrinksRequests.trim()}\n` : ""}\n${EMOJI.music} *DJ Service:* ${data.dj ? `Yes ${EMOJI.check}` : "No"}\n` : ""}
 
 ${showAllergies ? `${EMOJI.warning} *Allergies:*\n${allergies}\n` : ""}
 ${showSpecialOccasion ? `${EMOJI.party} *Special Occasion:*\n${specialOccasion}\n` : ""}
 ${activitiesLine}
 ${otherActivityLine}
 
-${!isHelicopter && formattedTotalPrice ? `\ud83d\udcb0 *Total Price:* ${formattedTotalPrice}${bringOwnFood ? " (-$200 own food)" : ""}${djEnabled ? " (+$150 DJ)" : ""}\n` : ""}
+${jetskiAddon && jetskiAddonPackage ? `\u{1F6A4} *Jetski Add-on:* ${jetskiAddonPackage} — ${jetskiAddonPackage === "Half Day" ? "$900" : "$1,500"}\n` : ""}
+${!isSpecialVehicle && formattedTotalPrice ? `\ud83d\udcb0 *Total Price:* ${formattedTotalPrice}${bringOwnFood ? " (-$200 own food)" : ""}${djEnabled ? " (+$150 DJ)" : ""}${jetskiAddon && jetskiAddonPackage ? ` (+${jetskiAddonPackage === "Half Day" ? "$900" : "$1,500"} jetski)` : ""}\n` : ""}
 Please contact the customer to provide a quote.
     `.trim();
 
@@ -647,12 +676,14 @@ Please contact the customer to provide a quote.
                   <form className="space-y-4 sm:space-y-6">
                     <div className="space-y-1">
                       <h2 className="text-lg sm:text-xl font-black text-gray-900 font-quicksand">
-                        {selectedCatamaranId === "black-bird-heli" ? "Helicopter" : "Yacht Catalog"}
+                        {selectedCatamaranId === "black-bird-heli" ? "Helicopter" : selectedCatamaranId === "jetski" ? "Jet Ski" : "Yacht Catalog"}
                       </h2>
                       <p className="text-xs sm:text-sm text-gray-500">
                         {selectedCatamaranId === "black-bird-heli" 
                           ? "Choose a helicopter service and configure your experience."
-                          : "Choose a catamaran and configure your experience."}
+                          : selectedCatamaranId === "jetski"
+                            ? "Choose a jet ski package and configure your experience."
+                            : "Choose a catamaran and configure your experience."}
                       </p>
                     </div>
 
@@ -708,7 +739,7 @@ Please contact the customer to provide a quote.
                                   <h3 className="text-lg font-semibold text-gray-900">
                                     {item.name}
                                   </h3>
-                                  {item.id !== "black-bird-heli" && (
+                                  {item.id !== "black-bird-heli" && item.id !== "jetski" && (
                                     <>
                                       <p className="text-sm text-gray-600">{item.description}</p>
                                       <p className="text-sm font-medium text-gray-800">
@@ -719,13 +750,13 @@ Please contact the customer to provide a quote.
                                 </div>
                               </div>
 
-                              {/* Departure & Destination (only for boats, not helicopter) */}
-                              {item.id !== "black-bird-heli" && (
+                              {/* Departure & Destination (only for boats, not helicopter/jetski) */}
+                              {item.id !== "black-bird-heli" && item.id !== "jetski" && (
                                 <div className="rounded-2xl border border-gray-200 bg-white overflow-hidden">
-                                  <div className="flex">
+                                  <div className="flex flex-col sm:flex-row">
                                     {/* Departure side */}
-                                    <div className="flex-1 p-4 space-y-2">
-                                      <Label htmlFor="departure" className="text-[25px] text-gray-700 font-black font-quicksand block">
+                                    <div className="flex-1 p-3 sm:p-4 space-y-2">
+                                      <Label htmlFor="departure" className="text-base sm:text-xl md:text-[25px] text-gray-700 font-black font-quicksand block">
                                         Departure
                                       </Label>
                                       <Select
@@ -736,7 +767,7 @@ Please contact the customer to provide a quote.
                                       >
                                         <SelectTrigger
                                           id="departure"
-                                          className="bg-gray-50 border-gray-200"
+                                          className="bg-gray-50 border-gray-200 text-sm"
                                         >
                                           <SelectValue placeholder="Choose departure" />
                                         </SelectTrigger>
@@ -750,12 +781,12 @@ Please contact the customer to provide a quote.
                                       </Select>
                                     </div>
 
-                                    {/* Divider */}
-                                    <div className="w-px bg-gray-200 self-stretch" />
+                                    {/* Divider — horizontal on mobile, vertical on sm+ */}
+                                    <div className="h-px sm:h-auto sm:w-px bg-gray-200 sm:self-stretch" />
 
                                     {/* Destination side */}
-                                    <div className="flex-1 p-4 space-y-2">
-                                      <Label htmlFor="destination" className="text-[25px] text-gray-700 font-black font-quicksand block">
+                                    <div className="flex-1 p-3 sm:p-4 space-y-2">
+                                      <Label htmlFor="destination" className="text-base sm:text-xl md:text-[25px] text-gray-700 font-black font-quicksand block">
                                         Destination
                                       </Label>
                                       {selectedDeparture === "cruising" ? (
@@ -770,7 +801,7 @@ Please contact the customer to provide a quote.
                                           >
                                             <SelectTrigger
                                               id="destination"
-                                              className={`bg-gray-50 border-gray-200 ${
+                                              className={`bg-gray-50 border-gray-200 text-sm ${
                                                 errors.destination ? "border-red-500" : ""
                                               } disabled:opacity-50`}
                                             >
@@ -802,8 +833,8 @@ Please contact the customer to provide a quote.
                                 </div>
                               )}
 
-                              {/* Food Specifications (not for helicopter) */}
-                              {item.id !== "black-bird-heli" && (
+                              {/* Food Specifications (not for helicopter/jetski) */}
+                              {item.id !== "black-bird-heli" && item.id !== "jetski" && (
                                 <div className="space-y-3">
                                   <Label className="text-base sm:text-xl md:text-[25px] text-gray-700 font-black font-quicksand flex items-center gap-2">
                                     <Utensils className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -858,86 +889,152 @@ Please contact the customer to provide a quote.
                                 </div>
                               )}
 
-                              {/* Helicopter or Yacht Selection */}
-                              {item.id === "black-bird-heli" ? (
+                              {/* Helicopter, Jetski or Yacht Selection */}
+                              {item.id === "jetski" ? (
+                                <div className="space-y-4">
+                                  <Label className="text-gray-700 font-medium">
+                                    Select Jet Ski Package *
+                                  </Label>
+                                  <div className="space-y-3">
+                                    {/* Half Day */}
+                                    <button
+                                      type="button"
+                                      onClick={() => handleCharterSelect("Jet Ski", "Half Day")}
+                                      className={`w-full p-4 rounded-lg text-left border-2 transition-all ${
+                                        selectedCharterType === "Half Day"
+                                          ? "bg-gray-900 text-white border-gray-900"
+                                          : "bg-white text-gray-700 border-gray-200 hover:border-gray-400"
+                                      }`}
+                                    >
+                                      <div className="font-semibold mb-2">Half Day</div>
+                                      <div className="text-lg font-bold mb-2">$900</div>
+                                      <ul className="text-sm space-y-1">
+                                        <li>• UP TO 6 HOURS</li>
+                                        <li>• 2 PASSENGERS MAXIMUM</li>
+                                        <li>• SAFETY EQUIPMENT INCLUDED</li>
+                                      </ul>
+                                    </button>
+                                    {/* Full Day */}
+                                    <button
+                                      type="button"
+                                      onClick={() => handleCharterSelect("Jet Ski", "Full Day")}
+                                      className={`w-full p-4 rounded-lg text-left border-2 transition-all ${
+                                        selectedCharterType === "Full Day"
+                                          ? "bg-gray-900 text-white border-gray-900"
+                                          : "bg-white text-gray-700 border-gray-200 hover:border-gray-400"
+                                      }`}
+                                    >
+                                      <div className="font-semibold mb-2">Full Day</div>
+                                      <div className="text-lg font-bold mb-2">$1,500</div>
+                                      <ul className="text-sm space-y-1">
+                                        <li>• UP TO 11 HOURS</li>
+                                        <li>• 2 PASSENGERS MAXIMUM</li>
+                                        <li>• SAFETY EQUIPMENT INCLUDED</li>
+                                      </ul>
+                                    </button>
+                                  </div>
+                                  {errors.charter && !selectedCharterType && (
+                                    <p className="text-sm text-red-500">
+                                      Please select a jet ski package
+                                    </p>
+                                  )}
+                                </div>
+                              ) : item.id === "black-bird-heli" ? (
                                 <div className="space-y-4">
                                   <Label className="text-gray-700 font-medium">
                                     Select Helicopter Service *
                                   </Label>
                                   <div className="space-y-3">
-                                    {/* Scenic Flights */}
+                                    {/* 15 Minute Tour */}
                                     <button
                                       type="button"
-                                      onClick={() => handleCharterSelect("Helicopter", "Scenic Flights")}
+                                      onClick={() => handleCharterSelect("Helicopter", "15 Minute Tour")}
                                       className={`w-full p-4 rounded-lg text-left border-2 transition-all ${
-                                        selectedCharterType === "Scenic Flights"
+                                        selectedCharterType === "15 Minute Tour"
                                           ? "bg-gray-900 text-white border-gray-900"
                                           : "bg-white text-gray-700 border-gray-200 hover:border-gray-400"
                                       }`}
                                     >
-                                      <div className="font-semibold mb-2">Scenic Flights</div>
-                                      <div className="text-lg font-bold mb-2">$1,000 <span className="text-sm font-normal">(TZS 2,750,000)</span></div>
+                                      <div className="font-semibold mb-2">Dar Tours — 15 Minute Tour</div>
+                                      <div className="text-lg font-bold mb-2">$555</div>
                                       <ul className="text-sm space-y-1">
-                                        <li>• 20 MINUTES FLIGHT</li>
+                                        <li>• 15 MINUTES FLIGHT</li>
                                         <li>• 4 PASSENGERS MAXIMUM</li>
                                         <li>• PICKUP POINT: SEACLIFF</li>
                                       </ul>
                                     </button>
 
-                                    {/* Hour Scenic Flight */}
+                                    {/* 30 Minute Tour */}
                                     <button
                                       type="button"
-                                      onClick={() => handleCharterSelect("Helicopter", "Hour Scenic Flight")}
+                                      onClick={() => handleCharterSelect("Helicopter", "30 Minute Tour")}
                                       className={`w-full p-4 rounded-lg text-left border-2 transition-all ${
-                                        selectedCharterType === "Hour Scenic Flight"
+                                        selectedCharterType === "30 Minute Tour"
                                           ? "bg-gray-900 text-white border-gray-900"
                                           : "bg-white text-gray-700 border-gray-200 hover:border-gray-400"
                                       }`}
                                     >
-                                      <div className="font-semibold mb-2">Hour Scenic Flight</div>
-                                      <div className="text-lg font-bold mb-2">$2,500 <span className="text-sm font-normal">(TZS 6,875,000)</span></div>
+                                      <div className="font-semibold mb-2">Dar Tours — 30 Minute Tour</div>
+                                      <div className="text-lg font-bold mb-2">$960</div>
                                       <ul className="text-sm space-y-1">
-                                        <li>• 1 HOUR CRUISE</li>
-                                        <li>• 4 PASSENGERS</li>
+                                        <li>• 30 MINUTES FLIGHT</li>
+                                        <li>• 4 PASSENGERS MAXIMUM</li>
                                         <li>• PICKUP POINT: SEACLIFF</li>
                                       </ul>
                                     </button>
 
-                                    {/* Dar - Zanzibar (One Way) */}
+                                    {/* 60 Minute Tour */}
                                     <button
                                       type="button"
-                                      onClick={() => handleCharterSelect("Helicopter", "Dar - Zanzibar (One Way)")}
+                                      onClick={() => handleCharterSelect("Helicopter", "60 Minute Tour")}
                                       className={`w-full p-4 rounded-lg text-left border-2 transition-all ${
-                                        selectedCharterType === "Dar - Zanzibar (One Way)"
+                                        selectedCharterType === "60 Minute Tour"
                                           ? "bg-gray-900 text-white border-gray-900"
                                           : "bg-white text-gray-700 border-gray-200 hover:border-gray-400"
                                       }`}
                                     >
-                                      <div className="font-semibold mb-2">Dar - Zanzibar (One Way)</div>
-                                      <div className="text-lg font-bold mb-2">$2,700 <span className="text-sm font-normal">(TZS 7,425,000)</span></div>
+                                      <div className="font-semibold mb-2">Dar Tours — 60 Minute Tour</div>
+                                      <div className="text-lg font-bold mb-2">$1,770</div>
                                       <ul className="text-sm space-y-1">
-                                        <li>• 1 HOUR CRUISE</li>
+                                        <li>• 60 MINUTES FLIGHT</li>
+                                        <li>• 4 PASSENGERS MAXIMUM</li>
+                                        <li>• PICKUP POINT: SEACLIFF</li>
+                                      </ul>
+                                    </button>
+
+                                    {/* Dar to Znz */}
+                                    <button
+                                      type="button"
+                                      onClick={() => handleCharterSelect("Helicopter", "Dar to Znz")}
+                                      className={`w-full p-4 rounded-lg text-left border-2 transition-all ${
+                                        selectedCharterType === "Dar to Znz"
+                                          ? "bg-gray-900 text-white border-gray-900"
+                                          : "bg-white text-gray-700 border-gray-200 hover:border-gray-400"
+                                      }`}
+                                    >
+                                      <div className="font-semibold mb-2">Trips — Dar to Znz</div>
+                                      <div className="text-lg font-bold mb-2">$2,200 <span className="text-sm font-normal">(go and return is x2)</span></div>
+                                      <ul className="text-sm space-y-1">
                                         <li>• ONE WAY</li>
                                         <li>• 4 PASSENGERS</li>
                                         <li>• PICKUP POINT: SEACLIFF/AIRPORT</li>
                                       </ul>
                                     </button>
 
-                                    {/* Dar-Zanzibar (Two Ways) */}
+                                    {/* Dar to Nungwi */}
                                     <button
                                       type="button"
-                                      onClick={() => handleCharterSelect("Helicopter", "Dar-Zanzibar (Two Ways)")}
+                                      onClick={() => handleCharterSelect("Helicopter", "Dar to Nungwi")}
                                       className={`w-full p-4 rounded-lg text-left border-2 transition-all ${
-                                        selectedCharterType === "Dar-Zanzibar (Two Ways)"
+                                        selectedCharterType === "Dar to Nungwi"
                                           ? "bg-gray-900 text-white border-gray-900"
                                           : "bg-white text-gray-700 border-gray-200 hover:border-gray-400"
                                       }`}
                                     >
-                                      <div className="font-semibold mb-2">Dar-Zanzibar (Two Ways)</div>
-                                      <div className="text-lg font-bold mb-2">$3,500 <span className="text-sm font-normal">(TZS 9,625,000)</span></div>
+                                      <div className="font-semibold mb-2">Trips — Dar to Nungwi</div>
+                                      <div className="text-lg font-bold mb-2">$2,500 <span className="text-sm font-normal">(go and return is x2)</span></div>
                                       <ul className="text-sm space-y-1">
-                                        <li>• TWO WAYS</li>
-                                        <li>• WAITING TIME 2 HRS</li>
+                                        <li>• ONE WAY</li>
                                         <li>• 4 PASSENGERS</li>
                                         <li>• PICKUP POINT: SEACLIFF/AIRPORT</li>
                                       </ul>
@@ -1071,8 +1168,8 @@ Please contact the customer to provide a quote.
                               )}
 
 
-                              {/* DJ Option (not for helicopter) */}
-                              {item.id !== "black-bird-heli" && (
+                              {/* DJ Option (not for helicopter/jetski) */}
+                              {item.id !== "black-bird-heli" && item.id !== "jetski" && (
                                 <div className="space-y-2">
                                   <Label className="text-base sm:text-xl md:text-[25px] text-gray-700 font-semibold flex items-center gap-2">
                                     <Music className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -1104,6 +1201,58 @@ Please contact the customer to provide a quote.
                                             setValue("dj", checked);
                                           }}
                                         />
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* Jetski Add-on (not for helicopter or jetski itself) */}
+                              {item.id !== "black-bird-heli" && item.id !== "jetski" && (
+                                <div className="space-y-2">
+                                  <div className="p-4 rounded-lg bg-white border border-gray-200">
+                                    <div className="flex items-center justify-between">
+                                      <div className="flex items-center gap-3">
+                                        <Waves className="h-5 w-5 text-gray-700" />
+                                        <div>
+                                          <Label htmlFor="jetski-addon" className="text-gray-700 font-medium cursor-pointer">
+                                            Add Jetski
+                                          </Label>
+                                          <p className="text-xs text-gray-500">Include a jet ski to your charter</p>
+                                        </div>
+                                      </div>
+                                      <Switch
+                                        id="jetski-addon"
+                                        checked={jetskiAddon}
+                                        onCheckedChange={(checked) => {
+                                          setJetskiAddon(checked);
+                                          if (!checked) setJetskiAddonPackage("");
+                                        }}
+                                      />
+                                    </div>
+
+                                    {/* Package selection — slides in when toggled */}
+                                    <div className={`overflow-hidden transition-all duration-300 ease-in-out ${jetskiAddon ? "max-h-40 opacity-100 mt-4" : "max-h-0 opacity-0"}`}>
+                                      <p className="text-xs text-gray-500 mb-2 font-medium uppercase tracking-wide">Select Jetski Package</p>
+                                      <div className="flex gap-3">
+                                        {[
+                                          { label: "Half Day", price: "$900" },
+                                          { label: "Full Day", price: "$1,500" },
+                                        ].map((pkg) => (
+                                          <button
+                                            key={pkg.label}
+                                            type="button"
+                                            onClick={() => setJetskiAddonPackage(pkg.label)}
+                                            className={`flex-1 py-2 px-3 rounded-lg border-2 text-sm font-medium transition-all ${
+                                              jetskiAddonPackage === pkg.label
+                                                ? "bg-gray-900 text-white border-gray-900"
+                                                : "bg-gray-50 text-gray-700 border-gray-200 hover:border-gray-400"
+                                            }`}
+                                          >
+                                            <div>{pkg.label}</div>
+                                            <div className="font-bold">{pkg.price}</div>
+                                          </button>
+                                        ))}
                                       </div>
                                     </div>
                                   </div>
@@ -1314,6 +1463,8 @@ Please contact the customer to provide a quote.
                             ? helicopterPickupPoints.find((d) => d.value === watched.destination)?.label
                             : "Not selected"}
                         </p>
+                      ) : selectedCatamaranId === "jetski" ? (
+                        <p className="text-sm text-gray-700">Location: Coastal Waters</p>
                       ) : (
                         <>
                           <p className="text-sm text-gray-700">
@@ -1337,8 +1488,18 @@ Please contact the customer to provide a quote.
                       </p>
                     </div>
 
-                    {/* Food & extras (not for helicopter) */}
-                    {selectedCatamaranId !== "black-bird-heli" && (
+                    {/* Jetski Add-on summary */}
+                    {jetskiAddon && jetskiAddonPackage && selectedCatamaranId !== "black-bird-heli" && selectedCatamaranId !== "jetski" && (
+                      <div className="rounded-2xl bg-white p-4 shadow-sm space-y-1">
+                        <h3 className="text-sm font-semibold text-gray-900">Jetski Add-on</h3>
+                        <p className="text-sm text-gray-700">
+                          {jetskiAddonPackage} — {jetskiAddonPackage === "Half Day" ? "$900" : "$1,500"}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Food & extras (not for helicopter/jetski) */}
+                    {selectedCatamaranId !== "black-bird-heli" && selectedCatamaranId !== "jetski" && (
                       <div className="rounded-2xl bg-white p-4 shadow-sm space-y-2">
                         <h3 className="text-sm font-semibold text-gray-900">Services</h3>
                         <p className="text-sm text-gray-700">

@@ -221,14 +221,13 @@ const boatDatabase: Record<string, any> = {
     capacity: "4 passengers",
     pricing: {
       dar: [
-        { type: "30 Minute Tour", price: "$500" },
-        { type: "1 Hour Tour", price: "$900" },
-        { type: "Transfer Service", price: "$1,200" },
+        { type: "15 Minute Tour", price: "$555" },
+        { type: "30 Minute Tour", price: "$960" },
+        { type: "60 Minute Tour", price: "$1,770" },
       ],
       zanzibar: [
-        { type: "30 Minute Tour", price: "$900" },
-        { type: "1 Hour Tour", price: "$1,300" },
-        { type: "Transfer Service", price: "$1,700" },
+        { type: "Dar to Znz", price: "$2,200" },
+        { type: "Dar to Nungwi", price: "$2,500" },
       ],
     },
     destinations: ["Aerial Tours", "Island Transfers"],
@@ -441,6 +440,44 @@ const boatDatabase: Record<string, any> = {
       "Premium champagne",
       "Water sports equipment",
       "Photography service",
+    ],
+  },
+  "jetski": {
+    id: "jetski",
+    name: "JETSKI",
+    year: "2023",
+    model: "Jet Ski",
+    condition: "New",
+    location: "DAR ES SALAAM",
+    status: "IN STOCK",
+    color: "White",
+    description: "High-performance jet ski for thrilling rides on Tanzania's crystal-clear waters. Perfect for adrenaline seekers and water sports enthusiasts.",
+    capacity: "2 passengers",
+    pricing: {
+      dar: [
+        { type: "Half Day", price: "$900" },
+        { type: "Full Day", price: "$1,500" },
+      ],
+      zanzibar: [
+        { type: "Half Day", price: "$900" },
+        { type: "Full Day", price: "$1,500" },
+      ],
+    },
+    destinations: [
+      "Bongoyo Island",
+      "Mbudya Island",
+      "Sinda Island",
+      "Coastal Waters",
+    ],
+    services: [
+      "Professional instructor",
+      "Safety equipment",
+      "Life jackets",
+      "Basic training",
+    ],
+    additionalServices: [
+      "Photography service",
+      "Extended hire",
     ],
   },
 };
@@ -744,7 +781,7 @@ const BoatDetails = () => {
                   <h3 className="text-xl font-semibold text-white font-spartan">PRICE LIST {boat.id !== "black-bird-heli" && <span className="text-xl font-normal text-white/60">(without food/DJ)</span>}</h3>
                   <div className="space-y-2 sm:space-y-3 md:space-y-4">
                     <div>
-                      <h4 className="text-xl font-semibold text-white mb-1 sm:mb-1.5 md:mb-2 font-spartan">Dar es Salaam</h4>
+                      <h4 className="text-xl font-semibold text-white mb-1 sm:mb-1.5 md:mb-2 font-spartan">Dar Tours</h4>
                       <div className="space-y-1 sm:space-y-1.5 md:space-y-2">
                         {boat.pricing?.dar?.map((item: any, index: number) => (
                           <div key={index} className="flex justify-between items-center py-1.5 sm:py-2 border-b border-white/15 gap-2">
@@ -755,7 +792,9 @@ const BoatDetails = () => {
                       </div>
                     </div>
                     <div>
-                      <h4 className="text-xl font-semibold text-white mb-1 sm:mb-1.5 md:mb-2 font-spartan">Zanzibar</h4>
+                      <h4 className="text-xl font-semibold text-white mb-1 sm:mb-1.5 md:mb-2 font-spartan">
+                        {boat.id === "black-bird-heli" ? "Trips (go and return is x2)" : "Zanzibar"}
+                      </h4>
                       <div className="space-y-1 sm:space-y-1.5 md:space-y-2">
                         {boat.pricing?.zanzibar?.map((item: any, index: number) => (
                           <div key={index} className="flex justify-between items-center py-1.5 sm:py-2 border-b border-white/15 gap-2">
