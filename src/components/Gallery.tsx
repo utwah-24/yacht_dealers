@@ -1,16 +1,22 @@
 import React from 'react';
 import Masonry from './Masonry';
 import backgroundImage from '@/assets/background.jpg';
+import newImg1 from '@/assets/new images /IMG_0718.jpg';
+import newImg2 from '@/assets/new images /IMG_0735.jpg';
+import newImg3 from '@/assets/new images /IMG_5965.png';
+import newImg4 from '@/assets/new images /IMG_6323.png';
+import newImg5 from '@/assets/new images /IMG_9568.jpg';
+import newImg6 from '@/assets/new images /IMG_9572.jpg';
 
 // Images from public/videos/GALLERY/ and public/videos/NPM/
 // Note: HEIC (2, 3, 4) excluded - convert to JPG/PNG for browser support
 const galleryImages = [
-  '/videos/GALLERY/2026_03_17_11_13_IMG_4698.JPG',
-  '/videos/GALLERY/2026_03_17_11_13_IMG_4699.JPG',
-  '/videos/GALLERY/2026_03_17_11_13_IMG_4700.JPG',
-  '/videos/GALLERY/2026_03_17_11_13_IMG_4701.JPG',
-  '/videos/GALLERY/2026_03_17_11_19_IMG_4704.WEBP',
-  '/videos/GALLERY/2026_03_17_11_21_IMG_4705.JPG',
+  newImg1,
+  newImg2,
+  newImg3,
+  newImg4,
+  newImg5,
+  newImg6,
   '/videos/GALLERY/2026_03_17_11_24_IMG_4707.JPG',
   '/videos/GALLERY/2026_03_17_11_25_IMG_4708.JPG',
   '/videos/GALLERY/2026_03_17_11_26_IMG_4709.JPG',
