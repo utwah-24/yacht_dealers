@@ -31,13 +31,13 @@ const boatDatabase: Record<string, any> = {
     pricing: {
       dar: [
         { type: "Half Day Charter (6 Hours)", price: "$1,200" },
-        { type: "Full Day Charter (11 Hours)", price: "$1,600" },
-        { type: "Live Onboard (24 Hours)", price: "$3,000" },
+        { type: "Full Day Charter (11 Hours)", price: "$1,700" },
+        { type: "Live Onboard (24 Hours)", price: "$2,500" },
       ],
       zanzibar: [
-        { type: "Half Day Cruise(6 Hours)", price: "$1,700" },
-        { type: "Full Day Cruise(11 Hours)", price: "$2,100" },
-        { type: "Live Onboard (24 Hours)", price: "$2,500" },
+        { type: "Half Day Cruise (6 Hours)", price: "$1,500" },
+        { type: "Full Day Cruise (11 Hours)", price: "$2,000" },
+        { type: "Live Onboard (24 Hours)", price: "$2,800" },
       ],
     },
     destinations: [
@@ -86,9 +86,9 @@ const boatDatabase: Record<string, any> = {
         { type: "Live Onboard (24 Hours)", price: "$3,000" },
       ],
       zanzibar: [
-        { type: "Half Day Cruise", price: "$1,900" },
-        { type: "Full Day Cruise", price: "$2,300" },
-        { type: "Live Onboard (24 Hours)", price: "$2,700" },
+        { type: "Half Day Cruise (6 Hours)", price: "$1,700" },
+        { type: "Full Day Cruise (11 Hours)", price: "$2,200" },
+        { type: "Live Onboard (24 Hours)", price: "$3,200" },
       ],
     },
     destinations: [
@@ -134,9 +134,9 @@ const boatDatabase: Record<string, any> = {
         { type: "Live Onboard (24 Hours)", price: "$3,000" },
       ],
       zanzibar: [
-        { type: "Half Day Cruise(6 Hours)", price: "$1,700" },
-        { type: "Full Day Cruise(11 Hours)", price: "$2,100" },
-        { type: "Live Onboard (24 Hours)", price: "$2,500" },
+        { type: "Half Day Cruise (6 Hours)", price: "$1,700" },
+        { type: "Full Day Cruise (11 Hours)", price: "$2,200" },
+        { type: "Live Onboard (24 Hours)", price: "$3,200" },
       ],
     },
     destinations: [
@@ -164,7 +164,7 @@ const boatDatabase: Record<string, any> = {
     status: "IN STOCK",
     color: "White",
     description: "Premium catamaran with excellent facilities.",
-    capacity: "20 passengers",
+    capacity: "22 passengers",
     pricing: {
       dar: [
         { type: "Half Day Charter (6 Hours)", price: "$1,500" },
@@ -172,9 +172,9 @@ const boatDatabase: Record<string, any> = {
         { type: "Live Onboard (24 Hours)", price: "$3,000" },
       ],
       zanzibar: [
-        { type: "Half Day Cruise(6 Hours)", price: "$1,700" },
-        { type: "Full Day Cruise(11 Hours)", price: "$2,100" },
-        { type: "Live Onboard (24 Hours)", price: "$2,500" },
+        { type: "Half Day Cruise (6 Hours)", price: "$1,700" },
+        { type: "Full Day Cruise (11 Hours)", price: "$2,200" },
+        { type: "Live Onboard (24 Hours)", price: "$3,200" },
       ],
     },
     destinations: ["Bongoyo Island", "Mbudya Island", "Stone Town"],
@@ -191,7 +191,7 @@ const boatDatabase: Record<string, any> = {
     status: "IN STOCK",
     color: "White",
     description: "Luxury catamaran with premium amenities.",
-    capacity: "25 passengers",
+    capacity: "22 passengers",
     pricing: {
       dar: [
         { type: "Half Day Charter (6 Hours)", price: "$1,500" },
@@ -199,9 +199,9 @@ const boatDatabase: Record<string, any> = {
         { type: "Live Onboard (24 Hours)", price: "$3,000" },
       ],
       zanzibar: [
-        { type: "Half Day Cruise(6 Hours)", price: "$1,700" },
-        { type: "Full Day Cruise(11 Hours)", price: "$2,100" },
-        { type: "Live Onboard (24 Hours)", price: "$2,500" },
+        { type: "Half Day Cruise (6 Hours)", price: "$1,700" },
+        { type: "Full Day Cruise (11 Hours)", price: "$2,200" },
+        { type: "Live Onboard (24 Hours)", price: "$3,200" },
       ],
     },
     destinations: ["Stone Town", "Prison Island", "Nakupenda Island"],
@@ -252,9 +252,9 @@ const boatDatabase: Record<string, any> = {
         { type: "Live Onboard (24 Hours)", price: "$3,000" },
       ],
       zanzibar: [
-        { type: "Half Day Cruise(6 Hours)", price: "$1,700" },
-        { type: "Full Day Cruise(11 Hours)", price: "$2,100" },
-        { type: "Live Onboard (24 Hours)", price: "$2,500" },
+        { type: "Half Day Cruise (6 Hours)", price: "$1,700" },
+        { type: "Full Day Cruise (11 Hours)", price: "$2,200" },
+        { type: "Live Onboard (24 Hours)", price: "$3,200" },
       ],
     },
     destinations: ["Stone Town", "Prison Island", "Nakupenda Island"],
@@ -271,7 +271,7 @@ const boatDatabase: Record<string, any> = {
     status: "IN STOCK",
     color: "White",
     description: "Spacious 44-foot catamaran for comfortable cruising.",
-    capacity: "24 passengers",
+    capacity: "22 passengers",
     pricing: {
       dar: [
         { type: "Half Day Charter (6 Hours)", price: "$1,500" },
@@ -279,9 +279,9 @@ const boatDatabase: Record<string, any> = {
         { type: "Live Onboard (24 Hours)", price: "$3,000" },
       ],
       zanzibar: [
-        { type: "Half Day Cruise(6 Hours)", price: "$1,700" },
-        { type: "Full Day Cruise(11 Hours)", price: "$2,100" },
-        { type: "Live Onboard (24 Hours)", price: "$2,500" },
+        { type: "Half Day Cruise (6 Hours)", price: "$1,700" },
+        { type: "Full Day Cruise (11 Hours)", price: "$2,200" },
+        { type: "Live Onboard (24 Hours)", price: "$3,200" },
       ],
     },
     destinations: ["Bongoyo Island", "Mbudya Island", "Stone Town"],
@@ -298,7 +298,7 @@ const boatDatabase: Record<string, any> = {
     status: "IN STOCK",
     color: "White",
     description: "Modern catamaran with excellent facilities.",
-    capacity: "20 passengers",
+    capacity: "22 passengers",
     pricing: {
       dar: [
         { type: "Half Day Charter (6 Hours)", price: "$1,500" },
@@ -306,9 +306,9 @@ const boatDatabase: Record<string, any> = {
         { type: "Live Onboard (24 Hours)", price: "$3,000" },
       ],
       zanzibar: [
-        { type: "Half Day Cruise(6 Hours)", price: "$1,700" },
-        { type: "Full Day Cruise(11 Hours)", price: "$2,100" },
-        { type: "Live Onboard (24 Hours)", price: "$2,500" },
+        { type: "Half Day Cruise (6 Hours)", price: "$1,700" },
+        { type: "Full Day Cruise (11 Hours)", price: "$2,200" },
+        { type: "Live Onboard (24 Hours)", price: "$3,200" },
       ],
     },
     destinations: ["Bongoyo Island", "Mbudya Island"],
@@ -325,17 +325,17 @@ const boatDatabase: Record<string, any> = {
     status: "IN STOCK",
     color: "White",
     description: "Royal catamaran experience in Zanzibar waters.",
-    capacity: "25 passengers",
+    capacity: "38 passengers",
     pricing: {
       dar: [
-        { type: "Half Day Charter (6 Hours)", price: "$1,500" },
-        { type: "Full Day Charter (11 Hours)", price: "$2,000" },
-        { type: "Live Onboard (24 Hours)", price: "$3,000" },
+        { type: "Half Day Charter (6 Hours)", price: "$4,500" },
+        { type: "Full Day Charter (11 Hours)", price: "$5,500" },
+        { type: "Live Onboard (24 Hours)", price: "$8,000" },
       ],
       zanzibar: [
-        { type: "Half Day Cruise(6 Hours)", price: "$1,700" },
-        { type: "Full Day Cruise(11 Hours)", price: "$2,100" },
-        { type: "Live Onboard (24 Hours)", price: "$2,500" },
+        { type: "Half Day Cruise (6 Hours)", price: "$4,000" },
+        { type: "Full Day Cruise (11 Hours)", price: "$5,000" },
+        { type: "Live Onboard (24 Hours)", price: "$7,500" },
       ],
     },
     destinations: ["Stone Town", "Prison Island", "Nakupenda Island"],
@@ -360,9 +360,9 @@ const boatDatabase: Record<string, any> = {
         { type: "Live Onboard (24 Hours)", price: "$3,000" },
       ],
       zanzibar: [
-        { type: "Half Day Cruise(6 Hours)", price: "$1,700" },
-        { type: "Full Day Cruise(11 Hours)", price: "$2,100" },
-        { type: "Live Onboard (24 Hours)", price: "$2,500" },
+        { type: "Half Day Cruise (6 Hours)", price: "$1,700" },
+        { type: "Full Day Cruise (11 Hours)", price: "$2,200" },
+        { type: "Live Onboard (24 Hours)", price: "$3,200" },
       ],
     },
     destinations: ["Bongoyo Island", "Mbudya Island", "Stone Town"],
@@ -379,7 +379,7 @@ const boatDatabase: Record<string, any> = {
     status: "IN STOCK",
     color: "White",
     description: "Luxury catamaran with premium features.",
-    capacity: "24 passengers",
+    capacity: "22 passengers",
     pricing: {
       dar: [
         { type: "Half Day Charter (6 Hours)", price: "$1,500" },
@@ -387,9 +387,9 @@ const boatDatabase: Record<string, any> = {
         { type: "Live Onboard (24 Hours)", price: "$3,000" },
       ],
       zanzibar: [
-        { type: "Half Day Cruise(6 Hours)", price: "$1,700" },
-        { type: "Full Day Cruise(11 Hours)", price: "$2,100" },
-        { type: "Live Onboard (24 Hours)", price: "$2,500" },
+        { type: "Half Day Cruise (6 Hours)", price: "$1,700" },
+        { type: "Full Day Cruise (11 Hours)", price: "$2,200" },
+        { type: "Live Onboard (24 Hours)", price: "$3,200" },
       ],
     },
     destinations: ["Stone Town", "Prison Island", "Nakupenda Island"],
@@ -406,17 +406,17 @@ const boatDatabase: Record<string, any> = {
     status: "IN STOCK",
     color: "White",
     description: "Premium catamaran with excellent facilities, perfect for private cruises and group charters on Tanzania's pristine waters.",
-    capacity: "20 passengers",
+    capacity: "15 passengers",
     pricing: {
       dar: [
-        { type: "Half Day Charter (6 Hours)", price: "$1,500" },
-        { type: "Full Day Charter (11 Hours)", price: "$2,000" },
-        { type: "Live Onboard (24 Hours)", price: "$3,000" },
+        { type: "Half Day Charter (6 Hours)", price: "$1,100" },
+        { type: "Full Day Charter (11 Hours)", price: "$1,600" },
+        { type: "Live Onboard (24 Hours)", price: "$2,200" },
       ],
       zanzibar: [
-        { type: "Half Day Cruise(6 Hours)", price: "$1,700" },
-        { type: "Full Day Cruise(11 Hours)", price: "$2,100" },
-        { type: "Live Onboard (24 Hours)", price: "$2,500" },
+        { type: "Half Day Cruise (6 Hours)", price: "$1,500" },
+        { type: "Full Day Cruise (11 Hours)", price: "$2,000" },
+        { type: "Live Onboard (24 Hours)", price: "$2,800" },
       ],
     },
     destinations: [

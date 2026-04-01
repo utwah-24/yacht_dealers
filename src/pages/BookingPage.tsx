@@ -30,19 +30,93 @@ const charterOptions = [
     location: "Dar Yacht Charter",
     packages: [
       {
-        yacht: "20 Max Catamaran",
+        yacht: "22 Max Catamaran",
         options: [
           { type: "Half Day Charter (6 Hours)", price: "$1,500" },
           { type: "Full Day Charter (11 Hours)", price: "$2,000" },
-          { type: "Live Onboard (24 Hours)", price: "$2,000" },
+          { type: "Live Onboard (24 Hours)", price: "$3,000" },
         ],
       },
+    ],
+  },
+  {
+    location: "Zanzibar Charter",
+    packages: [
       {
         yacht: "22 Max Catamaran",
         options: [
-          { type: "Half Day Charter (6 Hours)", price: "$1,900" },
-          { type: "Full Day Charter (11 Hours)", price: "$2,400" },
-          { type: "Live Onboard (24 Hours)", price: "$2,600" },
+          { type: "Half Day Cruise (6 Hours)", price: "$1,700" },
+          { type: "Full Day Cruise (11 Hours)", price: "$2,200" },
+          { type: "Live Onboard (24 Hours)", price: "$3,200" },
+        ],
+      },
+    ],
+  },
+];
+
+// Sunset cruise pricing (food included; -$200 if own food)
+const sunsetCharterOptions = [
+  {
+    location: "Dar Yacht Charter",
+    packages: [
+      {
+        yacht: "22 Max Catamaran",
+        options: [{ type: "3 Hours", price: "$800" }],
+      },
+    ],
+  },
+  {
+    location: "Zanzibar Charter",
+    packages: [
+      {
+        yacht: "22 Max Catamaran",
+        options: [{ type: "3 Hours", price: "$1,200" }],
+      },
+    ],
+  },
+];
+
+// Queen of Zanzibar exclusive pricing (38 Max Catamaran only)
+const queenOfZanzibarCharterOptions = [
+  {
+    location: "Dar Yacht Charter",
+    packages: [
+      {
+        yacht: "38 Max Catamaran",
+        options: [
+          { type: "Half Day Charter (6 Hours)", price: "$4,500" },
+          { type: "Full Day Charter (11 Hours)", price: "$5,500" },
+          { type: "Live Onboard (24 Hours)", price: "$8,000" },
+        ],
+      },
+    ],
+  },
+  {
+    location: "Zanzibar Charter",
+    packages: [
+      {
+        yacht: "38 Max Catamaran",
+        options: [
+          { type: "Half Day Cruise (6 Hours)", price: "$4,000" },
+          { type: "Full Day Cruise (11 Hours)", price: "$5,000" },
+          { type: "Live Onboard (24 Hours)", price: "$7,500" },
+        ],
+      },
+    ],
+  },
+];
+
+// Misbehaviour Catamaran exclusive pricing (20 Max only)
+const misbehaviourCharterOptions = [
+  {
+    location: "Dar Yacht Charter",
+    packages: [
+      {
+        yacht: "20 Max Catamaran",
+        options: [
+          { type: "Half Day Charter (6 Hours)", price: "$1,200" },
+          { type: "Full Day Charter (11 Hours)", price: "$1,700" },
+          { type: "Live Onboard (24 Hours)", price: "$2,500" },
         ],
       },
     ],
@@ -53,18 +127,84 @@ const charterOptions = [
       {
         yacht: "20 Max Catamaran",
         options: [
-          { type: "Half Day Cruise(6 Hours)", price: "$1,700" },
-          { type: "Full Day Cruise(11 Hours)", price: "$2,100" },
-          { type: "Live Onboard (24 Hours)", price: "$2,500" },
+          { type: "Half Day Cruise (6 Hours)", price: "$1,500" },
+          { type: "Full Day Cruise (11 Hours)", price: "$2,000" },
+          { type: "Live Onboard (24 Hours)", price: "$2,800" },
         ],
       },
+    ],
+  },
+];
+
+// Misbehaviour Catamaran sunset cruise pricing (20 Max only)
+const misbehaviourSunsetCharterOptions = [
+  {
+    location: "Dar Yacht Charter",
+    packages: [
       {
-        yacht: "22 Max Catamaran",
+        yacht: "20 Max Catamaran",
+        options: [{ type: "3 Hours", price: "$800" }],
+      },
+    ],
+  },
+  {
+    location: "Zanzibar Charter",
+    packages: [
+      {
+        yacht: "20 Max Catamaran",
+        options: [{ type: "3 Hours", price: "$1,200" }],
+      },
+    ],
+  },
+];
+
+// Pelagic Catamaran exclusive pricing (15 Max only)
+const pelagicCharterOptions = [
+  {
+    location: "Dar Yacht Charter",
+    packages: [
+      {
+        yacht: "15 Max Catamaran",
         options: [
-          { type: "Half Day Cruise(6 Hours)", price: "$2,100" },
-          { type: "Full Day Cruise(11 Hours)", price: "$2,700" },
-          { type: "Live Onboard (24 Hours)", price: "$3,100" },
+          { type: "Half Day Charter (6 Hours)", price: "$1,100" },
+          { type: "Full Day Charter (11 Hours)", price: "$1,600" },
+          { type: "Live Onboard (24 Hours)", price: "$2,200" },
         ],
+      },
+    ],
+  },
+  {
+    location: "Zanzibar Charter",
+    packages: [
+      {
+        yacht: "15 Max Catamaran",
+        options: [
+          { type: "Half Day Cruise (6 Hours)", price: "$1,500" },
+          { type: "Full Day Cruise (11 Hours)", price: "$2,000" },
+          { type: "Live Onboard (24 Hours)", price: "$2,800" },
+        ],
+      },
+    ],
+  },
+];
+
+// Pelagic Catamaran sunset cruise pricing (15 Max only)
+const pelagicSunsetCharterOptions = [
+  {
+    location: "Dar Yacht Charter",
+    packages: [
+      {
+        yacht: "15 Max Catamaran",
+        options: [{ type: "3 Hours", price: "$800" }],
+      },
+    ],
+  },
+  {
+    location: "Zanzibar Charter",
+    packages: [
+      {
+        yacht: "15 Max Catamaran",
+        options: [{ type: "3 Hours", price: "$1,200" }],
       },
     ],
   },
@@ -90,7 +230,10 @@ type BookingForm = z.infer<typeof bookingSchema>;
 
 const bookingImages = [yachtImage, bookingImage1, bookingImage2, bookingImage3];
 
-const yachtTypes = ["20 Max Catamaran", "22 Max Catamaran"];
+const yachtTypes = ["22 Max Catamaran"];
+const queenOfZanzibarYachtTypes = ["38 Max Catamaran"];
+const misbehaviourYachtTypes = ["20 Max Catamaran"];
+const pelagicYachtTypes = ["15 Max Catamaran"];
 
 // Boat metadata for capacity and description
 const boatMetadata: Record<string, { capacity: string; description: string }> = {
@@ -107,11 +250,11 @@ const boatMetadata: Record<string, { capacity: string; description: string }> = 
     description: "22-passengers, comfortable for full-day trips.",
   },
   "albion-catamaran": {
-    capacity: "20 passengers",
+    capacity: "22 passengers",
     description: "Premium catamaran with excellent facilities.",
   },
   "amani-luxury": {
-    capacity: "25 passengers",
+    capacity: "22 passengers",
     description: "Luxury catamaran with premium amenities.",
   },
   "black-bird-heli": {
@@ -123,15 +266,15 @@ const boatMetadata: Record<string, { capacity: string; description: string }> = 
     description: "Elegant catamaran perfect for special occasions.",
   },
   "helia-44-catamaran": {
-    capacity: "24 passengers",
+    capacity: "22 passengers",
     description: "Spacious 44-foot catamaran for comfortable cruising.",
   },
   "knlyps-catamaran": {
-    capacity: "20 passengers",
+    capacity: "22 passengers",
     description: "Modern catamaran with excellent facilities.",
   },
   "queen-of-zanzibar": {
-    capacity: "25 passengers",
+    capacity: "38 passengers",
     description: "Royal catamaran experience in Zanzibar waters.",
   },
   "seamanta-catamaran": {
@@ -139,12 +282,16 @@ const boatMetadata: Record<string, { capacity: string; description: string }> = 
     description: "Comfortable catamaran for day trips.",
   },
   "vaatea-catamaran": {
-    capacity: "24 passengers",
+    capacity: "22 passengers",
     description: "Luxury catamaran with premium features.",
   },
   "jetski": {
     capacity: "2 passengers",
     description: "High-performance jet ski for thrilling rides on Tanzania's waters.",
+  },
+  "pelagic-catamaran": {
+    capacity: "15 passengers",
+    description: "Premium catamaran with excellent facilities.",
   },
 };
 
@@ -153,7 +300,7 @@ const generateCatamaranCatalog = () => {
   const allBoats = getAllBoats();
   return allBoats.map((boat) => {
     const metadata = boatMetadata[boat.id] || {
-      capacity: "20 passengers",
+      capacity: "22 passengers",
       description: "Premium catamaran for your charter experience.",
     };
     return {
@@ -250,7 +397,7 @@ const BookingPage = () => {
   const departureOptions = [
     { value: "dar-slipway", label: "Dar Slipway" },
     { value: "znz-hotel-verde", label: "Znz Hotel Verde" },
-    { value: "cruising", label: "Cruising" },
+    { value: "cruising", label: "Sunset Cruise" },
   ];
 
   const destinationsByDeparture: Record<string, { value: string; label: string }[]> = {
@@ -274,17 +421,42 @@ const BookingPage = () => {
     { value: "seacliff-airport", label: "SEACLIFF/AIRPORT" },
   ];
 
-  // Get prices for selected yacht
+  // Get prices for selected yacht (boat-specific and sunset cruise use separate pricing)
   const getYachtPrices = (yachtType: string) => {
-    const darPkg = charterOptions[0].packages.find((pkg) => pkg.yacht === yachtType);
-    const zanzibarPkg = charterOptions[1].packages.find((pkg) => pkg.yacht === yachtType);
+    const isQoZ = selectedCatamaranId === "queen-of-zanzibar";
+    const isMisbehaviour = selectedCatamaranId === "misbehaviour-catamaran";
+    const isPelagic = selectedCatamaranId === "pelagic-catamaran";
+    const isSunset = selectedDeparture === "cruising";
+
+    let options;
+    if (isQoZ) {
+      options = queenOfZanzibarCharterOptions;
+    } else if (isMisbehaviour && isSunset) {
+      options = misbehaviourSunsetCharterOptions;
+    } else if (isMisbehaviour) {
+      options = misbehaviourCharterOptions;
+    } else if (isPelagic && isSunset) {
+      options = pelagicSunsetCharterOptions;
+    } else if (isPelagic) {
+      options = pelagicCharterOptions;
+    } else if (isSunset) {
+      options = sunsetCharterOptions;
+    } else {
+      options = charterOptions;
+    }
+
+    const darPkg = options[0].packages.find((pkg) => pkg.yacht === yachtType);
+    const zanzibarPkg = options[1].packages.find((pkg) => pkg.yacht === yachtType);
     return {
       dar: darPkg?.options || [],
       zanzibar: zanzibarPkg?.options || [],
     };
   };
 
-  const yachtPrices = selectedYacht ? getYachtPrices(selectedYacht) : { dar: [], zanzibar: [] };
+  const yachtPrices = useMemo(
+    () => (selectedYacht ? getYachtPrices(selectedYacht) : { dar: [], zanzibar: [] }),
+    [selectedYacht, selectedDeparture, selectedCatamaranId]
+  );
 
   // Calculate base charter price from selected option
   const currentCharterPrice = useMemo(() => {
@@ -508,7 +680,7 @@ ${isHelicopter
   : isJetski
     ? "Coastal Waters"
     : selectedDeparture === "cruising"
-      ? "Cruising — i like to cruise"
+      ? "Sunset Cruise"
       : `${departureOptions.find((d) => d.value === selectedDeparture)?.label || selectedDeparture} → ${Object.values(destinationsByDeparture).flat().find((d) => d.value === data.destination)?.label || data.destination}`}
 
 ${EMOJI.calendar} *Date:* ${data.date}
@@ -763,6 +935,9 @@ Please contact the customer to provide a quote.
                                         onValueChange={(value) => {
                                           setSelectedDeparture(value);
                                           setValue("destination", "");
+                                          setSelectedLocation("");
+                                          setSelectedCharterType("");
+                                          setValue("charter", "");
                                         }}
                                       >
                                         <SelectTrigger
@@ -791,7 +966,7 @@ Please contact the customer to provide a quote.
                                       </Label>
                                       {selectedDeparture === "cruising" ? (
                                         <p className="text-sm text-blue-500 font-medium pt-2">
-                                          Enjoy the ocean waves 🌊
+                                          Sunset Cruise 🌅
                                         </p>
                                       ) : (
                                         <>
@@ -1071,7 +1246,14 @@ Please contact the customer to provide a quote.
                                       Select Yacht *
                                     </Label>
                                     <div className="flex gap-3 flex-wrap">
-                                      {yachtTypes.map((yacht) => (
+                                      {(selectedCatamaranId === "queen-of-zanzibar"
+                                        ? queenOfZanzibarYachtTypes
+                                        : selectedCatamaranId === "misbehaviour-catamaran"
+                                          ? misbehaviourYachtTypes
+                                          : selectedCatamaranId === "pelagic-catamaran"
+                                            ? pelagicYachtTypes
+                                            : yachtTypes
+                                      ).map((yacht) => (
                                         <button
                                           key={yacht}
                                           type="button"
@@ -1094,69 +1276,74 @@ Please contact the customer to provide a quote.
                                         Select Charter Package *
                                       </Label>
 
-                                      {/* Dar Prices */}
-                                      <div className="bg-white rounded-xl p-4 border-2 border-gray-200">
-                                        <h4 className="font-semibold text-gray-900 mb-3">
-                                          Dar Yacht Charter
-                                        </h4>
-                                        <div className="grid grid-cols-3 gap-2">
-                                          {yachtPrices.dar.map((option, index) => (
-                                            <button
-                                              key={index}
-                                              type="button"
-                                              onClick={() =>
-                                                handleCharterSelect("Dar Yacht Charter", option.type)
-                                              }
-                                              className={`p-3 rounded-lg text-sm transition-all ${
-                                                selectedLocation === "Dar Yacht Charter" &&
-                                                  selectedCharterType === option.type
-                                                  ? "bg-gray-900 text-white"
-                                                  : "bg-gray-50 text-gray-700 hover:bg-gray-100"
-                                              }`}
-                                            >
-                                              <div className="font-medium">{option.type}</div>
-                                              <div
-                                                key={`dar-${index}-${String(bringOwnFood)}`}
-                                                className="text-xs mt-1 font-semibold animate-price-flash"
+                                      {/* Dar Prices — only when Dar Slipway or Sunset Cruise selected */}
+                                      {(selectedDeparture === "dar-slipway" || selectedDeparture === "cruising") && (
+                                        <div className="bg-white rounded-xl p-4 border-2 border-gray-200">
+                                          <h4 className="font-semibold text-gray-900 mb-3">
+                                            Dar Yacht Charter
+                                          </h4>
+                                          <div className="grid grid-cols-3 gap-2">
+                                            {yachtPrices.dar.map((option, index) => (
+                                              <button
+                                                key={index}
+                                                type="button"
+                                                onClick={() =>
+                                                  handleCharterSelect("Dar Yacht Charter", option.type)
+                                                }
+                                                className={`p-3 rounded-lg text-sm transition-all ${
+                                                  selectedLocation === "Dar Yacht Charter" &&
+                                                    selectedCharterType === option.type
+                                                    ? "bg-gray-900 text-white"
+                                                    : "bg-gray-50 text-gray-700 hover:bg-gray-100"
+                                                }`}
                                               >
-                                                {displayPrice(option.price)}
-                                              </div>
-                                            </button>
-                                          ))}
+                                                <div className="font-medium">{option.type}</div>
+                                                <div
+                                                  key={`dar-${index}-${String(bringOwnFood)}`}
+                                                  className="text-xs mt-1 font-semibold animate-price-flash"
+                                                >
+                                                  {displayPrice(option.price)}
+                                                </div>
+                                              </button>
+                                            ))}
+                                          </div>
                                         </div>
-                                      </div>
+                                      )}
 
-                                      {/* Zanzibar Prices */}
-                                      <div className="bg-white rounded-xl p-4 border-2 border-gray-200">
-                                        <h4 className="font-semibold text-gray-900 mb-3">
-                                          Zanzibar Charter
-                                        </h4>
-                                        <div className="grid grid-cols-3 gap-2">
-                                          {yachtPrices.zanzibar.map((option, index) => (
-                                            <button
-                                              key={index}
-                                              type="button"
-                                              onClick={() =>
-                                                handleCharterSelect("Zanzibar Charter", option.type)
-                                              }
-                                              className={`p-3 rounded-lg text-sm transition-all ${
-                                                selectedLocation === "Zanzibar Charter" &&
-                                                  selectedCharterType === option.type
-                                                  ? "bg-gray-900 text-white"
-                                                  : "bg-gray-50 text-gray-700 hover:bg-gray-100"
-                                              }`}
-                                            >
-                                              <div className="font-medium">{option.type}</div>
-                                              <div
-                                                key={`zan-${index}-${String(bringOwnFood)}`}
-                                                className="text-xs mt-1 font-semibold animate-price-flash"
+                                      {/* Zanzibar Prices — only when Znz Hotel Verde or Sunset Cruise selected */}
+                                      {(selectedDeparture === "znz-hotel-verde" || selectedDeparture === "cruising") && (
+                                        <div className="bg-white rounded-xl p-4 border-2 border-gray-200">
+                                          <h4 className="font-semibold text-gray-900 mb-3">
+                                            Zanzibar Charter
+                                          </h4>
+                                          <div className="grid grid-cols-3 gap-2">
+                                            {yachtPrices.zanzibar.map((option, index) => (
+                                              <button
+                                                key={index}
+                                                type="button"
+                                                onClick={() =>
+                                                  handleCharterSelect("Zanzibar Charter", option.type)
+                                                }
+                                                className={`p-3 rounded-lg text-sm transition-all ${
+                                                  selectedLocation === "Zanzibar Charter" &&
+                                                    selectedCharterType === option.type
+                                                    ? "bg-gray-900 text-white"
+                                                    : "bg-gray-50 text-gray-700 hover:bg-gray-100"
+                                                }`}
                                               >
-                                                {displayPrice(option.price)}
-                                              </div>
-                                            </button>
-                                          ))}
+                                                <div className="font-medium">{option.type}</div>
+                                                <div
+                                                  key={`zan-${index}-${String(bringOwnFood)}`}
+                                                  className="text-xs mt-1 font-semibold animate-price-flash"
+                                                >
+                                                  {displayPrice(option.price)}
+                                                </div>
+                                              </button>
+                                            ))}
+                                          </div>
                                         </div>
-                                      </div>
+                                      )}
+
                                       {errors.charter && !selectedLocation && (
                                         <p className="text-sm text-red-500">
                                           Please select a charter package
@@ -1477,7 +1664,7 @@ Please contact the customer to provide a quote.
                           <p className="text-sm text-gray-700">
                             Destination:{" "}
                             {selectedDeparture === "cruising"
-                              ? "i like to cruise"
+                              ? "Sunset Cruise"
                               : watched.destination
                                 ? Object.values(destinationsByDeparture).flat().find((d) => d.value === watched.destination)?.label
                                 : "Not selected"}
