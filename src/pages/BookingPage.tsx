@@ -1236,8 +1236,8 @@ Please contact the customer to provide a quote.
                                       <p className="text-xs text-gray-500 mb-2 font-medium uppercase tracking-wide">Select Jetski Package</p>
                                       <div className="flex gap-3">
                                         {[
-                                          { label: "Half Day", price: "$900" },
-                                          { label: "Full Day", price: "$1,500" },
+                                          { label: "Half Day", price: "$900", hours: "6 hrs" },
+                                          { label: "Full Day", price: "$1,500", hours: "10 hrs" },
                                         ].map((pkg) => (
                                           <button
                                             key={pkg.label}
@@ -1251,6 +1251,7 @@ Please contact the customer to provide a quote.
                                           >
                                             <div>{pkg.label}</div>
                                             <div className="font-bold">{pkg.price}</div>
+                                            <div className="text-xs opacity-70">{pkg.hours}</div>
                                           </button>
                                         ))}
                                       </div>
