@@ -18,7 +18,7 @@ export interface Boat {
 // Helper function to check if a file is a boat image (not interior)
 const isBoatImage = (fileName: string): boolean => {
   const lowerFileName = fileName.toLowerCase();
-  const boatKeywords = ['boat', 'heli', 'front', 'side', 'plan', 'extra'];
+  const boatKeywords = ['boat', 'heli', 'front', 'side', 'plan', 'extra', 'back'];
   return (
     boatKeywords.some(k => lowerFileName.includes(k)) &&
     !lowerFileName.includes('interior')
@@ -51,6 +51,7 @@ const getBoatDisplayName = (folderName: string): string => {
     'Knlyps catamaran': 'KNLYPS CATAMARAN',
     'Vaatea catamaran': 'VAATEA CATAMARAN',
     'Albion catamaran': 'ALBION CATAMARAN',
+    'Pelagic catamaran': 'PELAGIC CATAMARAN',
   };
   
   return nameMap[folderName] || folderName.replace(' catamaran', '').replace(' Catamaran', '').toUpperCase();

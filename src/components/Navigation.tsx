@@ -16,14 +16,14 @@ const Navigation = () => {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0c1929] backdrop-blur-md border-b border-blue-900/50 shadow-lg">
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#020810] backdrop-blur-md border-b border-blue-900/50 shadow-lg">
+      <div className="container mx-auto px-4 h-16 flex items-center justify-between bg-[#020810]">
         {/* Logo */}
         <div className="flex items-center space-x-2">
           <img 
             src="/videos/cc.PNG" 
             alt="Yacht Dealers Tanzania" 
-            className="h-10 w-auto object-contain"
+            className="h-10 w-auto object-contain bg-[#020810] rounded"
           />
           <span className="text-xl font-semibold text-white font-soria">Yachtdealers.tz</span>
         </div>
@@ -35,17 +35,19 @@ const Navigation = () => {
               <Link
                 key={item.to}
                 to={item.to}
-                className="text-white/95 hover:text-white transition-colors duration-300 font-spartan font-medium text-base"
+                className="relative text-white/95 hover:text-white transition-colors duration-300 font-spartan font-medium text-base group"
               >
                 {item.label}
+                <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-blue-400 rounded-full transition-all duration-300 group-hover:w-full shadow-[0_0_6px_#60a5fa]" />
               </Link>
             ) : (
               <a
                 key={item.href}
                 href={item.href}
-                className="text-white/95 hover:text-white transition-colors duration-300 font-spartan font-medium text-base"
+                className="relative text-white/95 hover:text-white transition-colors duration-300 font-spartan font-medium text-base group"
               >
                 {item.label}
+                <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-blue-400 rounded-full transition-all duration-300 group-hover:w-full shadow-[0_0_6px_#60a5fa]" />
               </a>
             )
           )}
@@ -69,7 +71,7 @@ const Navigation = () => {
 
       {/* Mobile Navigation */}
       {isOpen && (
-        <div className="md:hidden bg-[#0c1929] backdrop-blur-md border-b border-blue-900/50">
+        <div className="md:hidden bg-[#020810] backdrop-blur-md border-b border-blue-900/50">
           <div className="container mx-auto px-4 py-4 space-y-4">
             {navItems.map((item) =>
               "to" in item && item.to ? (

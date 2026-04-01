@@ -182,56 +182,57 @@ const Locations = () => {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8 mb-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 xl:gap-8 mb-20">
           {locations.map((location, index) => (
             <Card key={index} className="overflow-hidden hover:shadow-luxury transition-all duration-300 hover:-translate-y-1 border-0 bg-card/80 backdrop-blur-sm">
               <div 
-                className="h-64 bg-cover bg-center relative"
+                className="h-40 lg:h-48 xl:h-56 2xl:h-64 bg-cover bg-center relative"
                 style={{ backgroundImage: `url(${location.image})` }}
               >
                 <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/50"></div>
-                <div className="absolute top-4 left-4 text-white">
-                  <h3 className="text-[40px] font-bold font-soria">{location.title}</h3>
-                  <p className="text-white/80 flex items-center gap-1 mt-1">
-                    <MapPin className="h-4 w-4" />
+                <div className="absolute top-3 left-3 xl:top-4 xl:left-4 text-white">
+                  <h3 className="text-2xl xl:text-3xl 2xl:text-4xl font-bold font-soria">{location.title}</h3>
+                  <p className="text-white/80 flex items-center gap-1 mt-0.5 text-sm xl:text-base">
+                    <MapPin className="h-3 w-3 xl:h-4 xl:w-4" />
                     {location.baseLocation}
                   </p>
                 </div>
               </div>
               
-              <CardHeader>
-                <CardDescription className="text-muted-foreground text-base">
+              <CardHeader className="py-3 px-4 xl:py-4 xl:px-5">
+                <CardDescription className="text-muted-foreground text-sm xl:text-base line-clamp-2">
                   {location.description}
                 </CardDescription>
               </CardHeader>
               
-              <CardContent>
-                <h4 className="font-semibold mb-4 text-foreground flex items-center gap-2 font-spartan">
-                  <Navigation className="h-5 w-5 text-primary" />
+              <CardContent className="px-4 pb-4 xl:px-5 xl:pb-5">
+                <h4 className="font-semibold mb-2 xl:mb-3 text-foreground flex items-center gap-2 font-spartan text-sm xl:text-base">
+                  <Navigation className="h-4 w-4 text-primary" />
                   Tour Routes
                 </h4>
-                <div className="space-y-3 mb-6">
+                <div className="space-y-2 mb-4">
                   {location.routes.slice(0, 3).map((route, routeIndex) => (
-                    <div key={routeIndex} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                      <span className="font-medium text-foreground font-spartan text-xl">{route.name}</span>
-                      <span className="text-lg bg-primary/10 text-primary px-2 py-1 rounded-full font-spartan">
+                    <div key={routeIndex} className="flex items-center justify-between p-2 xl:p-3 bg-muted/50 rounded-lg">
+                      <span className="font-medium text-foreground font-spartan text-sm xl:text-base">{route.name}</span>
+                      <span className="text-xs xl:text-sm bg-primary/10 text-primary px-2 py-0.5 rounded-full font-spartan">
                         {route.type}
                       </span>
                     </div>
                   ))}
                   {location.routes.length > 3 && (
-                    <div className="text-center text-sm text-muted-foreground font-spartan">
+                    <div className="text-center text-xs xl:text-sm text-muted-foreground font-spartan">
                       +{location.routes.length - 3} more destinations
                     </div>
                   )}
                 </div>
                 <Button 
                   variant="ocean" 
-                  className="w-full group relative overflow-hidden"
+                  size="sm"
+                  className="w-full xl:h-10 xl:text-base group relative overflow-hidden"
                   onClick={() => setSelectedLocation(index)}
                 >
-                  <span className="relative z-10 flex items-center gap-2 font-spartan">
-                    <Route className="h-4 w-4 group-hover:rotate-90 transition-transform duration-500" />
+                  <span className="relative z-10 flex items-center gap-2 font-spartan text-sm xl:text-base">
+                    <Route className="h-3.5 w-3.5 xl:h-4 xl:w-4 group-hover:rotate-90 transition-transform duration-500" />
                     View Routes
                   </span>
                   <span className="absolute inset-0 bg-gradient-sunset opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>

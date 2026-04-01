@@ -23,12 +23,7 @@ const galleryImages = [
   // NPM folder images
   '/videos/NPM/8%20copy.PNG',
   '/videos/NPM/1.jpeg',
-  '/videos/NPM/5.PNG',
   '/videos/NPM/6.PNG',
-  '/videos/NPM/7.PNG',
-  '/videos/NPM/8.PNG',
-  '/videos/NPM/9.jpeg',
-  '/videos/cc.PNG',
 ];
 
 const heights = [400, 350, 500, 300, 450, 380, 420, 360, 480, 340, 410, 390, 440, 370, 460, 420, 380, 450, 400, 430, 390, 350];

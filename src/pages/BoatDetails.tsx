@@ -397,6 +397,52 @@ const boatDatabase: Record<string, any> = {
     services: ["Professional crew", "Premium snorkeling equipment", "Full meal service"],
     additionalServices: ["Professional DJ service"],
   },
+  "pelagic-catamaran": {
+    id: "pelagic-catamaran",
+    name: "PELAGIC CATAMARAN",
+    year: "2021",
+    model: "296 Center Console",
+    condition: "New",
+    location: "DAR ES SALAAM",
+    status: "IN STOCK",
+    color: "White",
+    description: "Premium catamaran with excellent facilities, perfect for private cruises and group charters on Tanzania's pristine waters.",
+    capacity: "20 passengers",
+    pricing: {
+      dar: [
+        { type: "Half Day Charter (6 Hours)", price: "$1,500" },
+        { type: "Full Day Charter (11 Hours)", price: "$2,000" },
+        { type: "Live Onboard (24 Hours)", price: "$3,000" },
+      ],
+      zanzibar: [
+        { type: "Half Day Cruise(6 Hours)", price: "$1,700" },
+        { type: "Full Day Cruise(11 Hours)", price: "$2,100" },
+        { type: "Live Onboard (24 Hours)", price: "$2,500" },
+      ],
+    },
+    destinations: [
+      "Bongoyo Island",
+      "Mbudya Island",
+      "Sinda Island",
+      "Stone Town",
+      "Prison Island",
+      "Nakupenda Island",
+    ],
+    services: [
+      "Professional crew",
+      "Snorkeling equipment",
+      "Fresh seafood lunch",
+      "Complimentary soft drinks",
+      "Safety equipment",
+      "Beach access",
+    ],
+    additionalServices: [
+      "Professional DJ service",
+      "Premium champagne",
+      "Water sports equipment",
+      "Photography service",
+    ],
+  },
 };
 
 const BoatDetails = () => {
