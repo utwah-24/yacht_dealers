@@ -778,7 +778,7 @@ const BoatDetails = () => {
               >
                 {/* Price List */}
                 <div className="flex-shrink-0 w-full md:w-72 lg:w-80 space-y-2 sm:space-y-3 md:space-y-4 min-w-0">
-                  <h3 className="text-xl font-semibold text-white font-spartan">PRICE LIST {boat.id !== "black-bird-heli" && <span className="text-xl font-normal text-white/60">(without food/DJ)</span>}</h3>
+                  <h3 className="text-xl font-semibold text-white font-spartan">PRICE LIST {boat.id !== "black-bird-heli" && <span className="text-xl font-normal text-white/60">(with food)</span>}</h3>
                   <div className="space-y-2 sm:space-y-3 md:space-y-4">
                     <div>
                       <h4 className="text-xl font-semibold text-white mb-1 sm:mb-1.5 md:mb-2 font-spartan">Dar Tours</h4>

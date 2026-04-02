@@ -17,10 +17,12 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { MessageCircle, Utensils, Wine, Music, Ship, ChevronRight, ChevronLeft, Sparkles, Waves, Anchor } from "lucide-react";
-import yachtImage from "@/assets/yatch-image.jpg";
-import bookingImage1 from "@/assets/booking_image1.jpeg";
-import bookingImage2 from "@/assets/booking_image2.jpeg";
-import bookingImage3 from "@/assets/booking_image3 .jpeg";
+import bookingSlideshow1 from "@/assets/new images /IMG_0718.jpg";
+import bookingSlideshow2 from "@/assets/new images /IMG_0735.jpg";
+import bookingSlideshow3 from "@/assets/new images /IMG_5965.png";
+import bookingSlideshow4 from "@/assets/new images /IMG_6323.png";
+import bookingSlideshow5 from "@/assets/new images /IMG_9568.jpg";
+import bookingSlideshow6 from "@/assets/new images /IMG_9572.jpg";
 import { getAllBoats } from "@/utils/boats";
 import backgroundImage from "@/assets/background.jpg";
 
@@ -228,7 +230,14 @@ const bookingSchema = z.object({
 
 type BookingForm = z.infer<typeof bookingSchema>;
 
-const bookingImages = [yachtImage, bookingImage1, bookingImage2, bookingImage3];
+const bookingImages = [
+  bookingSlideshow1,
+  bookingSlideshow2,
+  bookingSlideshow3,
+  bookingSlideshow4,
+  bookingSlideshow5,
+  bookingSlideshow6,
+];
 
 const yachtTypes = ["22 Max Catamaran"];
 const queenOfZanzibarYachtTypes = ["38 Max Catamaran"];
@@ -328,7 +337,6 @@ const BookingPage = () => {
     const num = parseInt(price.replace(/[$,]/g, ""), 10);
     return `$${(num - 200).toLocaleString()}`;
   };
-  const [selectedYacht, setSelectedYacht] = useState<string>("");
   const [selectedLocation, setSelectedLocation] = useState<string>("");
   const [selectedCharterType, setSelectedCharterType] = useState<string>("");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -415,6 +423,15 @@ const BookingPage = () => {
 
   const destinations = selectedDeparture ? (destinationsByDeparture[selectedDeparture] ?? []) : [];
 
+  const effectiveYachtType = useMemo(() => {
+    if (!selectedCatamaranId) return "";
+    if (selectedCatamaranId === "queen-of-zanzibar") return queenOfZanzibarYachtTypes[0];
+    if (selectedCatamaranId === "misbehaviour-catamaran") return misbehaviourYachtTypes[0];
+    if (selectedCatamaranId === "pelagic-catamaran") return pelagicYachtTypes[0];
+    if (selectedCatamaranId === "black-bird-heli" || selectedCatamaranId === "jetski") return "";
+    return yachtTypes[0];
+  }, [selectedCatamaranId]);
+
   // Helicopter-specific pickup points
   const helicopterPickupPoints = [
     { value: "seacliff", label: "SEACLIFF" },
@@ -454,8 +471,9 @@ const BookingPage = () => {
   };
 
   const yachtPrices = useMemo(
-    () => (selectedYacht ? getYachtPrices(selectedYacht) : { dar: [], zanzibar: [] }),
-    [selectedYacht, selectedDeparture, selectedCatamaranId]
+    () =>
+      effectiveYachtType ? getYachtPrices(effectiveYachtType) : { dar: [], zanzibar: [] },
+    [effectiveYachtType, selectedDeparture, selectedCatamaranId]
   );
 
   // Calculate base charter price from selected option
@@ -485,13 +503,6 @@ const BookingPage = () => {
     ? `$${totalPrice.toLocaleString()}`
     : null;
 
-  const handleYachtSelect = (yacht: string) => {
-    setSelectedYacht(yacht);
-    setSelectedLocation("");
-    setSelectedCharterType("");
-    setValue("charter", "");
-  };
-
   const handleCharterSelect = (location: string, charterType: string) => {
     setSelectedLocation(location);
     setSelectedCharterType(charterType);
@@ -499,7 +510,7 @@ const BookingPage = () => {
     const isSpecial = selectedCatamaranId === "black-bird-heli" || selectedCatamaranId === "jetski";
     const charterValue = isSpecial
       ? `${location}|${charterType}`
-      : `${location}|${selectedYacht}|${charterType}`;
+      : `${location}|${effectiveYachtType}|${charterType}`;
     setValue("charter", charterValue);
 
     // For helicopter, auto-set pickup point (no dropdown).
@@ -580,6 +591,9 @@ const BookingPage = () => {
     if (found) {
       setSelectedCatamaranId(id);
       setValue("catamaran", found.name);
+      setSelectedLocation("");
+      setSelectedCharterType("");
+      setValue("charter", "");
 
       // For helicopter/jetski, destination is auto-set
       if (found.id === "black-bird-heli") {
@@ -1240,38 +1254,8 @@ Please contact the customer to provide a quote.
                                 </div>
                               ) : (
                                 <>
-                                  {/* Yacht Selection & Charter Prices */}
-                                  <div className="space-y-3">
-                                    <Label className="text-base sm:text-xl md:text-[25px] text-gray-700 font-medium">
-                                      Select Yacht *
-                                    </Label>
-                                    <div className="flex gap-3 flex-wrap">
-                                      {(selectedCatamaranId === "queen-of-zanzibar"
-                                        ? queenOfZanzibarYachtTypes
-                                        : selectedCatamaranId === "misbehaviour-catamaran"
-                                          ? misbehaviourYachtTypes
-                                          : selectedCatamaranId === "pelagic-catamaran"
-                                            ? pelagicYachtTypes
-                                            : yachtTypes
-                                      ).map((yacht) => (
-                                        <button
-                                          key={yacht}
-                                          type="button"
-                                          onClick={() => handleYachtSelect(yacht)}
-                                          className={`px-6 py-3 rounded-full text-sm font-medium transition-all ${
-                                            selectedYacht === yacht
-                                              ? "bg-gray-900 text-white"
-                                              : "bg-white text-gray-700 hover:bg-gray-100"
-                                          }`}
-                                        >
-                                          {yacht}
-                                        </button>
-                                      ))}
-                                    </div>
-                                  </div>
-
-                                  {selectedYacht && (
-                                    <div className="space-y-4 animate-fade-in">
+                                  {/* Charter packages (yacht type is fixed per catamaran) */}
+                                  <div className="space-y-4 animate-fade-in">
                                       <Label className="text-base sm:text-xl md:text-[25px] text-gray-700 font-medium">
                                         Select Charter Package *
                                       </Label>
@@ -1349,8 +1333,7 @@ Please contact the customer to provide a quote.
                                           Please select a charter package
                                         </p>
                                       )}
-                                    </div>
-                                  )}
+                                  </div>
                                 </>
                               )}
 
@@ -1694,17 +1677,22 @@ Please contact the customer to provide a quote.
                           Food:{" "}
                           {watched.food && watched.food.length
                             ? watched.food.join(", ")
-                            : "No food selected"}
+                            : "Included & covered by Yacht Dealers"}
                         </p>
                         <p className="text-sm text-gray-700">
                           Drinks:{" "}
                           {watched.drinks && watched.drinks.length
                             ? watched.drinks.join(", ")
-                            : "No drinks selected"}
+                            : "Included & covered by Yacht Dealers"}
                         </p>
                         <p className="text-sm text-gray-700">
                           DJ service: {watched.dj ? "Yes" : "No"}
                         </p>
+                        {watched.foodDrinksRequests?.trim() && (
+                          <p className="text-sm text-gray-700">
+                            Special food & drinks requests: {watched.foodDrinksRequests.trim()}
+                          </p>
+                        )}
                         {(watched.activities && watched.activities.length > 0) && (
                           <p className="text-sm text-gray-700">
                             Preferred activities: {watched.activities.join(", ")}
