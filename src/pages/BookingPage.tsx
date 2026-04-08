@@ -342,6 +342,7 @@ const BookingPage = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedCatamaranId, setSelectedCatamaranId] = useState<string | null>(null);
   const [selectedDeparture, setSelectedDeparture] = useState<string>("");
+  const [departureError, setDepartureError] = useState(false);
   const catamaranCatalog = useMemo(() => generateCatamaranCatalog(), []);
   const preselectedCatamaranId = (routerLocation.state as any)?.preselectedCatamaranId as
     | string
@@ -438,6 +439,26 @@ const BookingPage = () => {
     { value: "seacliff-airport", label: "SEACLIFF/AIRPORT" },
   ];
 
+  const getJetskiPrice = (charterType: string): string => {
+    const prices: Record<string, string> = {
+      "Half Day": "$900",
+      "Full Day": "$1,500",
+    };
+    return prices[charterType] || "";
+  };
+
+  const getHelicopterPrice = (charterType: string): string => {
+    const prices: Record<string, string> = {
+      "15 Minute Tour": "$555",
+      "30 Minute Tour": "$960",
+      "60 Minute Tour": "$1,770",
+      "Dar to Znz": "$2,200",
+      "Dar to Nungwi": "$2,500",
+      "Special Charter": "Price upon Request",
+    };
+    return prices[charterType] || "";
+  };
+
   // Get prices for selected yacht (boat-specific and sunset cruise use separate pricing)
   const getYachtPrices = (yachtType: string) => {
     const isQoZ = selectedCatamaranId === "queen-of-zanzibar";
@@ -476,32 +497,60 @@ const BookingPage = () => {
     [effectiveYachtType, selectedDeparture, selectedCatamaranId]
   );
 
-  // Calculate base charter price from selected option
-  const currentCharterPrice = useMemo(() => {
-    if (!watched.charter || selectedCatamaranId === "black-bird-heli" || selectedCatamaranId === "jetski") return 0;
+  // Base charter / package price (same sources as UI pricing)
+  const baseCharterPrice = useMemo(() => {
+    if (!watched.charter) return 0;
+    if (selectedCatamaranId === "black-bird-heli") {
+      const parts = watched.charter.split("|");
+      if (parts.length < 2) return 0;
+      const charterType = parts[1];
+      const p = getHelicopterPrice(charterType);
+      if (!p || p.includes("Request")) return 0;
+      return parseInt(p.replace(/[$,]/g, ""), 10) || 0;
+    }
+    if (selectedCatamaranId === "jetski") {
+      const parts = watched.charter.split("|");
+      if (parts.length < 2) return 0;
+      const charterType = parts[1];
+      const p = getJetskiPrice(charterType);
+      if (!p) return 0;
+      return parseInt(p.replace(/[$,]/g, ""), 10) || 0;
+    }
     const parts = watched.charter.split("|");
     if (parts.length < 3) return 0;
     const [location, yacht, charterType] = parts;
-    const option = charterOptions
-      .find((loc) => loc.location === location)
-      ?.packages.find((pkg) => pkg.yacht === yacht)
-      ?.options.find((opt) => opt.type === charterType);
-    if (!option) return 0;
-    return parseInt(option.price.replace(/[$,]/g, ""), 10) || 0;
-  }, [watched.charter, selectedCatamaranId]);
+    const { dar, zanzibar } = getYachtPrices(yacht);
+    const opts = location === "Dar Yacht Charter" ? dar : zanzibar;
+    const opt = opts.find((o) => o.type === charterType);
+    if (!opt) return 0;
+    return parseInt(opt.price.replace(/[$,]/g, ""), 10) || 0;
+  }, [watched.charter, selectedCatamaranId, selectedDeparture, effectiveYachtType]);
 
-  // Add $150 for DJ add-on; deduct $200 if customer brings own food
-  const totalPrice = useMemo(() => {
-    if (currentCharterPrice === 0) return null;
-    let total = currentCharterPrice;
+  const jetskiAddonAmount = useMemo(() => {
+    if (!jetskiAddon || !jetskiAddonPackage) return 0;
+    return jetskiAddonPackage === "Half Day" ? 900 : 1500;
+  }, [jetskiAddon, jetskiAddonPackage]);
+
+  // Grand total: charter + own-food / DJ / jetski add-on (yachts); heli & jetski = package only
+  const grandTotalPrice = useMemo(() => {
+    const isSpecial = selectedCatamaranId === "black-bird-heli" || selectedCatamaranId === "jetski";
+    if (isSpecial) {
+      return baseCharterPrice > 0 ? baseCharterPrice : null;
+    }
+    if (baseCharterPrice === 0) return null;
+    let total = baseCharterPrice;
     if (bringOwnFood) total -= 200;
     if (djEnabled) total += 150;
+    total += jetskiAddonAmount;
     return total;
-  }, [currentCharterPrice, bringOwnFood, djEnabled]);
+  }, [baseCharterPrice, selectedCatamaranId, bringOwnFood, djEnabled, jetskiAddonAmount]);
 
-  const formattedTotalPrice = totalPrice !== null
-    ? `$${totalPrice.toLocaleString()}`
-    : null;
+  const formattedGrandTotal =
+    grandTotalPrice !== null ? `$${grandTotalPrice.toLocaleString()}` : null;
+
+  const isHelicopterSpecialCharter =
+    selectedCatamaranId === "black-bird-heli" &&
+    watched.charter?.split("|")[1] === "Special Charter";
 
   const handleCharterSelect = (location: string, charterType: string) => {
     setSelectedLocation(location);
@@ -543,18 +592,23 @@ const BookingPage = () => {
         setStep(2);
       }
     } else if (step === 2) {
-      // Step 2: validate catalog-related choices
-      // For helicopter/jetski, destination is auto-set, and food/drinks are not required
-      const isSpecialVehicle = selectedCatamaranId === "black-bird-heli" || selectedCatamaranId === "jetski";
+      const isSpecialVehicle =
+        selectedCatamaranId === "black-bird-heli" || selectedCatamaranId === "jetski";
+
+      // Departure is required for regular boats (not special vehicles)
+      if (!isSpecialVehicle && !selectedDeparture) {
+        setDepartureError(true);
+        return;
+      }
+      setDepartureError(false);
+
       const fieldsToValidate: (keyof BookingForm)[] = isSpecialVehicle
         ? ["charter"]
         : ["destination", "charter"];
-      
-      // Validate required fields
+
       const isValid = await trigger(fieldsToValidate);
-      
+
       if (isValid) {
-        // Skip Step 3 (Personal Request) for helicopter/jetski bookings
         if (isSpecialVehicle) {
           setStep(4);
         } else {
@@ -569,19 +623,26 @@ const BookingPage = () => {
 
   const handleBack = () => {
     setStep((prev) => {
-      // If on step 2 and a catamaran is selected, stay on step 2 but show the list again.
+      // Step 4 (order summary) → step 3 (personal requests), preserving all input.
+      // For helicopter/jetski there is no step 3, so go to step 2 keeping the catamaran.
+      if (prev === 4) {
+        const isSpecial =
+          selectedCatamaranId === "black-bird-heli" || selectedCatamaranId === "jetski";
+        return isSpecial ? 2 : 3;
+      }
+
+      // Step 3 (personal requests) → step 2, keeping catamaran selected.
+      if (prev === 3) {
+        return 2;
+      }
+
+      // Step 2 with a catamaran chosen → unselect catamaran, stay on step 2 list.
       if (prev === 2 && selectedCatamaranId) {
         setSelectedCatamaranId(null);
         return 2;
       }
 
-      // If on step 3 or beyond, go back to step 2 (catamaran list) and clear selection
-      if (prev >= 3) {
-        setSelectedCatamaranId(null);
-        return 2;
-      }
-
-      // Otherwise, go back one step
+      // Otherwise, go back one step.
       return Math.max(1, prev - 1);
     });
   };
@@ -594,6 +655,7 @@ const BookingPage = () => {
       setSelectedLocation("");
       setSelectedCharterType("");
       setValue("charter", "");
+      setDepartureError(false);
 
       // For helicopter/jetski, destination is auto-set
       if (found.id === "black-bird-heli") {
@@ -606,28 +668,6 @@ const BookingPage = () => {
     }
   };
 
-  // Helper function to get jetski price
-  const getJetskiPrice = (charterType: string): string => {
-    const prices: Record<string, string> = {
-      "Half Day": "$900",
-      "Full Day": "$1,500",
-    };
-    return prices[charterType] || "";
-  };
-
-  // Helper function to get helicopter price
-  const getHelicopterPrice = (charterType: string): string => {
-    const prices: Record<string, string> = {
-      "15 Minute Tour": "$555",
-      "30 Minute Tour": "$960",
-      "60 Minute Tour": "$1,770",
-      "Dar to Znz": "$2,200",
-      "Dar to Nungwi": "$2,500",
-      "Special Charter": "Price upon Request"
-    };
-    return prices[charterType] || "";
-  };
-
   const onSubmit = (data: BookingForm) => {
     // Parse charter selection (format differs for helicopter vs yacht)
     const charterParts = data.charter.split("|");
@@ -638,11 +678,18 @@ const BookingPage = () => {
     const yacht = isSpecialVehicle ? (isHelicopter ? "Helicopter" : "Jet Ski") : charterParts[1];
     const charterType = isSpecialVehicle ? charterParts[1] : charterParts[2];
     
-    const selectedCharterOption = isSpecialVehicle ? null : charterOptions
-      .find((loc) => loc.location === location)
-      ?.packages.find((pkg) => pkg.yacht === yacht)
-      ?.options.find((opt) => opt.type === charterType);
-    
+    const charterPackagePriceLine = (() => {
+      if (isHelicopter) return getHelicopterPrice(charterType);
+      if (isJetski) return getJetskiPrice(charterType);
+      const parts = data.charter.split("|");
+      if (parts.length < 3) return charterType;
+      const [loc, y, ct] = parts;
+      const { dar, zanzibar } = getYachtPrices(y);
+      const opts = loc === "Dar Yacht Charter" ? dar : zanzibar;
+      const opt = opts.find((o) => o.type === ct);
+      return opt ? `${ct} ${opt.price}` : ct;
+    })();
+
     // Use unicode escape sequences for emojis to avoid encoding issues (showing as �).
     const EMOJI = {
       boatRequest: "🛥️",
@@ -704,7 +751,7 @@ ${catamaranLine}
 
 ${EMOJI.sailboat} *Selected ${isHelicopter ? "Helicopter Service" : isJetski ? "Jet Ski Package" : "Charter"}:*
 ${isSpecialVehicle ? charterType : `${location} - ${yacht}`}
-${isHelicopter ? getHelicopterPrice(charterType) : isJetski ? getJetskiPrice(charterType) : `${charterType} ${selectedCharterOption ? selectedCharterOption.price : ""}`}
+${charterPackagePriceLine}
 
 ${!isSpecialVehicle ? `${EMOJI.food} *Food & Drinks:* ${bringOwnFood ? "Customer bringing own food (-$200)" : "Included"}\n${data.foodDrinksRequests?.trim() ? `${EMOJI.food} *Special Food & Drinks Requests:*\n${data.foodDrinksRequests.trim()}\n` : ""}\n${EMOJI.music} *DJ Service:* ${data.dj ? `Yes ${EMOJI.check}` : "No"}\n` : ""}
 
@@ -713,9 +760,9 @@ ${showSpecialOccasion ? `${EMOJI.party} *Special Occasion:*\n${specialOccasion}\
 ${activitiesLine}
 ${otherActivityLine}
 
-${jetskiAddon && jetskiAddonPackage ? `🚤 *Jetski Add-on:* ${jetskiAddonPackage} — ${jetskiAddonPackage === "Half Day" ? "$900" : "$1,500"}\n` : ""}
-${!isSpecialVehicle && formattedTotalPrice ? `💰 *Total Price:* ${formattedTotalPrice}${bringOwnFood ? " (-$200 own food)" : ""}${djEnabled ? " (+$150 DJ)" : ""}${jetskiAddon && jetskiAddonPackage ? ` (+${jetskiAddonPackage === "Half Day" ? "$900" : "$1,500"} jetski)` : ""}\n` : ""}
-Please contact the customer to provide a quote.
+${jetskiAddon && jetskiAddonPackage && !isSpecialVehicle ? `🚤 *Jetski Add-on:* ${jetskiAddonPackage} — ${jetskiAddonPackage === "Half Day" ? "$900" : "$1,500"}\n` : ""}
+${isHelicopter && charterType === "Special Charter" ? `💰 *Grand Total:* Price on request\n` : formattedGrandTotal ? `💰 *Grand Total:* ${formattedGrandTotal}\n` : ""}
+We will confirm your booking shortly.
     `.trim();
 
     // WhatsApp number
@@ -948,6 +995,7 @@ Please contact the customer to provide a quote.
                                       <Select
                                         onValueChange={(value) => {
                                           setSelectedDeparture(value);
+                                          setDepartureError(false);
                                           setValue("destination", "");
                                           setSelectedLocation("");
                                           setSelectedCharterType("");
@@ -956,7 +1004,7 @@ Please contact the customer to provide a quote.
                                       >
                                         <SelectTrigger
                                           id="departure"
-                                          className="bg-gray-50 border-gray-200 text-sm"
+                                          className={`bg-gray-50 text-sm ${departureError ? "border-red-500 border-2" : "border-gray-200"}`}
                                         >
                                           <SelectValue placeholder="Choose departure" />
                                         </SelectTrigger>
@@ -968,6 +1016,9 @@ Please contact the customer to provide a quote.
                                           ))}
                                         </SelectContent>
                                       </Select>
+                                      {departureError && (
+                                        <p className="text-sm text-red-500">Please select a departure</p>
+                                      )}
                                     </div>
 
                                     {/* Divider — horizontal on mobile, vertical on sm+ */}
@@ -1706,20 +1757,42 @@ Please contact the customer to provide a quote.
                       </div>
                     )}
 
-                    {/* Total Price */}
-                    {formattedTotalPrice && (
+                    {/* Grand total */}
+                    {(formattedGrandTotal || isHelicopterSpecialCharter) && (
                       <div className="rounded-2xl bg-gray-900 p-4 shadow-sm">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <h3 className="text-sm font-semibold text-white">Total Price</h3>
-                            {bringOwnFood && (
-                              <p className="text-xs text-green-400 mt-0.5">-$200 own food discount</p>
-                            )}
-                            {djEnabled && (
-                              <p className="text-xs text-gray-400 mt-0.5">+$150 DJ service</p>
-                            )}
-                          </div>
-                          <span className="text-2xl font-bold text-white">{formattedTotalPrice}</span>
+                        <div className="space-y-3">
+                          <h3 className="text-sm font-semibold text-white">Grand total</h3>
+                          {isHelicopterSpecialCharter ? (
+                            <p className="text-lg font-bold text-white">Price on request</p>
+                          ) : (
+                            <>
+                              {selectedCatamaranId !== "black-bird-heli" &&
+                                selectedCatamaranId !== "jetski" &&
+                                baseCharterPrice > 0 && (
+                                  <div className="space-y-1 text-xs text-gray-400">
+                                    <p>Charter subtotal: ${baseCharterPrice.toLocaleString()}</p>
+                                    {bringOwnFood && <p className="text-green-400">−$200 (bringing own food)</p>}
+                                    {djEnabled && <p className="text-gray-300">+$150 (DJ service)</p>}
+                                    {jetskiAddonAmount > 0 && (
+                                      <p className="text-gray-300">
+                                        +${jetskiAddonAmount.toLocaleString()} (jetski add-on)
+                                      </p>
+                                    )}
+                                  </div>
+                                )}
+                              {(selectedCatamaranId === "black-bird-heli" ||
+                                selectedCatamaranId === "jetski") &&
+                                baseCharterPrice > 0 && (
+                                  <p className="text-xs text-gray-400">
+                                    Package: ${baseCharterPrice.toLocaleString()}
+                                  </p>
+                                )}
+                              <div className="flex items-center justify-between pt-2 border-t border-white/15">
+                                <span className="text-sm font-medium text-white/90">Amount due</span>
+                                <span className="text-2xl font-bold text-white">{formattedGrandTotal}</span>
+                              </div>
+                            </>
+                          )}
                         </div>
                       </div>
                     )}
