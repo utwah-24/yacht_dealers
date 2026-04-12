@@ -46,7 +46,7 @@ const Team = () => {
       <div className="container mx-auto px-4 relative z-10 max-w-7xl">
         {/* Header — centered title + copy */}
         <div className="mb-12 md:mb-16 text-center">
-          <h2 className="text-3xl sm:text-4xl md:text-[2.75rem] font-bold text-white tracking-tight font-spartan">
+          <h2 className="text-3xl sm:text-4xl md:text-[2.75rem] font-bold text-white tracking-tight font-soria">
             Our team
           </h2>
           <p className="mt-4 text-base sm:text-lg text-white/85 max-w-xl mx-auto leading-relaxed font-spartan">
