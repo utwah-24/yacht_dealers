@@ -43,7 +43,6 @@ const getBoatDisplayName = (folderName: string): string => {
     'Misbehaviour catamaran': 'MISBEHAVIOUR CATAMARAN',
     'Sunday Kinga': 'SUNDAY KINGA CATAMARAN',
     'Umoja': 'UMOJA CATAMARAN',
-    'Black Bird Heli': 'BLACK BIRD HELI',
     'Sunbird heli': 'SUNBIRD HELI',
     'Queen of Zanzibar': 'QUEEN OF ZANZIBAR',
     'Amani Luxury': 'AMANI LUXURY CATAMARAN',
@@ -201,7 +200,13 @@ export const getAllBoats = (): Boat[] => {
   // Sort boats alphabetically by name
   boats.sort((a, b) => a.name.localeCompare(b.name));
 
-  return boats;
+  const idxAmani = boats.findIndex((b) => b.id === 'amani-luxury');
+  const idxMis = boats.findIndex((b) => b.id === 'misbehaviour-catamaran');
+  if (idxAmani !== -1 && idxMis !== -1) {
+    [boats[idxAmani], boats[idxMis]] = [boats[idxMis], boats[idxAmani]];
+  }
+
+  return boats.filter((b) => b.id !== 'black-bird-heli');
 };
 
 // Get boat by ID

@@ -230,32 +230,6 @@ const boatDatabase: Record<string, any> = {
     services: ["Professional crew", "Premium snorkeling equipment", "Full meal service"],
     additionalServices: ["Professional DJ service", "Premium champagne"],
   },
-  "black-bird-heli": {
-    id: "black-bird-heli",
-    name: "BLACK BIRD HELI",
-    year: "2020",
-    model: "Helicopter",
-    condition: "New",
-    location: "DAR ES SALAAM",
-    status: "IN STOCK",
-    color: "Black",
-    description: "Helicopter service for aerial tours and transfers.",
-    capacity: "4 passengers",
-    pricing: {
-      dar: [
-        { type: "15 Minute Tour", price: "$555" },
-        { type: "30 Minute Tour", price: "$960" },
-        { type: "60 Minute Tour", price: "$1,770" },
-      ],
-      zanzibar: [
-        { type: "Dar to Znz", price: "$2,200" },
-        { type: "Dar to Nungwi", price: "$2,500" },
-      ],
-    },
-    destinations: ["Aerial Tours", "Island Transfers"],
-    services: ["Professional pilot", "Safety equipment", "Scenic routes"],
-    additionalServices: [],
-  },
   "sunbird-heli": {
     id: "sunbird-heli",
     name: "SUNBIRD HELI",
@@ -828,7 +802,7 @@ const BoatDetails = () => {
               >
                 {/* Price List */}
                 <div className="flex-shrink-0 w-full md:w-72 lg:w-80 space-y-2 sm:space-y-3 md:space-y-4 min-w-0">
-                  <h3 className="text-xl font-semibold text-white font-spartan">PRICE LIST {boat.id !== "black-bird-heli" && boat.id !== "sunbird-heli" && <span className="text-xl font-normal text-white/60">(with food)</span>}</h3>
+                  <h3 className="text-xl font-semibold text-white font-spartan">PRICE LIST {boat.id !== "sunbird-heli" && <span className="text-xl font-normal text-white/60">(with food)</span>}</h3>
                   <div className="space-y-2 sm:space-y-3 md:space-y-4">
                     <div>
                       <h4 className="text-xl font-semibold text-white mb-1 sm:mb-1.5 md:mb-2 font-spartan">
@@ -845,11 +819,7 @@ const BoatDetails = () => {
                     </div>
                     <div>
                       <h4 className="text-xl font-semibold text-white mb-1 sm:mb-1.5 md:mb-2 font-spartan">
-                        {boat.id === "sunbird-heli"
-                          ? "Transfer Charter"
-                          : boat.id === "black-bird-heli"
-                            ? "Trips (go and return is x2)"
-                            : "Zanzibar"}
+                        {boat.id === "sunbird-heli" ? "Transfer Charter" : "Zanzibar"}
                       </h4>
                       {boat.id === "sunbird-heli" && (
                         <p className="text-sm text-white/75 mb-2 sm:mb-3 font-spartan leading-snug">
