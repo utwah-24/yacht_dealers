@@ -2,7 +2,8 @@
 // Using Vite's import.meta.glob to dynamically import all boat images
 
 // Match all images in Catamarans folder
-const allImages = import.meta.glob('/src/assets/Catamarans/**/*.{png,jpeg,jpg}', {
+// Note: .heic is excluded — most browsers cannot display HEIC in <img>. Use JPG/PNG for web.
+const allImages = import.meta.glob('/src/assets/Catamarans/**/*.{png,jpeg,jpg,webp}', {
   eager: true,
   import: 'default',
 }) as Record<string, string>;
@@ -43,6 +44,7 @@ const getBoatDisplayName = (folderName: string): string => {
     'Sunday Kinga': 'SUNDAY KINGA CATAMARAN',
     'Umoja': 'UMOJA CATAMARAN',
     'Black Bird Heli': 'BLACK BIRD HELI',
+    'Sunbird heli': 'SUNBIRD HELI',
     'Queen of Zanzibar': 'QUEEN OF ZANZIBAR',
     'Amani Luxury': 'AMANI LUXURY CATAMARAN',
     'Helia 44 Catamaran': 'HELIA 44 CATAMARAN',

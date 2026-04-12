@@ -10,6 +10,28 @@ import bookingImage3 from "@/assets/booking_image3 .jpeg";
 import yachtImage from "@/assets/yatch-image.jpg";
 import backgroundImage from "@/assets/background.jpg";
 
+/** Tap-to-call on phones when the price cell is a phone label (e.g. Sunbird customize). */
+function PricingPriceValue({ price }: { price: string }) {
+  const digitsOnly = price.replace(/\D/g, "");
+  const isTel =
+    digitsOnly.length >= 9 &&
+    (/^call\s/i.test(price.trim()) || /\+255/.test(price));
+  const baseClass =
+    "text-xl font-semibold text-white whitespace-nowrap flex-shrink-0 font-spartan";
+  if (!isTel) {
+    return <span className={baseClass}>{price}</span>;
+  }
+  return (
+    <a
+      href={`tel:+${digitsOnly}`}
+      className={`${baseClass} underline-offset-4 hover:underline decoration-white/60`}
+      aria-label={`Call ${price.replace(/^call\s*/i, "").trim()}`}
+    >
+      {price}
+    </a>
+  );
+}
+
 // Boat data - pricing and other details (food & drinks included in all yacht prices)
 const boatDatabase: Record<string, any> = {
   "misbehaviour-catamaran": {
@@ -232,6 +254,34 @@ const boatDatabase: Record<string, any> = {
     },
     destinations: ["Aerial Tours", "Island Transfers"],
     services: ["Professional pilot", "Safety equipment", "Scenic routes"],
+    additionalServices: [],
+  },
+  "sunbird-heli": {
+    id: "sunbird-heli",
+    name: "SUNBIRD HELI",
+    year: "2020",
+    model: "Helicopter",
+    condition: "New",
+    location: "DAR ES SALAAM",
+    status: "IN STOCK",
+    color: "White",
+    description: "Exclusive scenic flights and transfer charters. @flysunbird",
+    capacity: "4 passengers",
+    pricing: {
+      dar: [
+        { type: "15 Minutes", price: "$600" },
+        { type: "30 Minutes", price: "$1,100" },
+        { type: "1 Hour", price: "$1,950" },
+      ],
+      zanzibar: [
+        { type: "Dar — Zanzibar", price: "$2,400" },
+        { type: "Dar — Kilimanjaro", price: "$9,600" },
+        { type: "Dar — Dodoma", price: "$8,400" },
+        { type: "Customize pick up & destination", price: "Call +255 741 426 886" },
+      ],
+    },
+    destinations: ["Aerial Tours", "Island Transfers", "Cross-country charters"],
+    services: ["Professional pilot", "Safety equipment", "Scenic routes", "Transfer charters (2 waiting hrs incl.; +$400/hr extra)"],
     additionalServices: [],
   },
   "butterfly-catamaran": {
@@ -778,28 +828,39 @@ const BoatDetails = () => {
               >
                 {/* Price List */}
                 <div className="flex-shrink-0 w-full md:w-72 lg:w-80 space-y-2 sm:space-y-3 md:space-y-4 min-w-0">
-                  <h3 className="text-xl font-semibold text-white font-spartan">PRICE LIST {boat.id !== "black-bird-heli" && <span className="text-xl font-normal text-white/60">(with food)</span>}</h3>
+                  <h3 className="text-xl font-semibold text-white font-spartan">PRICE LIST {boat.id !== "black-bird-heli" && boat.id !== "sunbird-heli" && <span className="text-xl font-normal text-white/60">(with food)</span>}</h3>
                   <div className="space-y-2 sm:space-y-3 md:space-y-4">
                     <div>
-                      <h4 className="text-xl font-semibold text-white mb-1 sm:mb-1.5 md:mb-2 font-spartan">Dar Tours</h4>
+                      <h4 className="text-xl font-semibold text-white mb-1 sm:mb-1.5 md:mb-2 font-spartan">
+                        {boat.id === "sunbird-heli" ? "Exclusive flight" : "Dar Tours"}
+                      </h4>
                       <div className="space-y-1 sm:space-y-1.5 md:space-y-2">
                         {boat.pricing?.dar?.map((item: any, index: number) => (
                           <div key={index} className="flex justify-between items-center py-1.5 sm:py-2 border-b border-white/15 gap-2">
                             <span className="text-lg text-white/95 break-words flex-1 min-w-0 font-spartan">{item.type}</span>
-                            <span className="text-xl font-semibold text-white whitespace-nowrap flex-shrink-0 font-spartan">{item.price}</span>
+                            <PricingPriceValue price={item.price} />
                           </div>
                         ))}
                       </div>
                     </div>
                     <div>
                       <h4 className="text-xl font-semibold text-white mb-1 sm:mb-1.5 md:mb-2 font-spartan">
-                        {boat.id === "black-bird-heli" ? "Trips (go and return is x2)" : "Zanzibar"}
+                        {boat.id === "sunbird-heli"
+                          ? "Transfer Charter"
+                          : boat.id === "black-bird-heli"
+                            ? "Trips (go and return is x2)"
+                            : "Zanzibar"}
                       </h4>
+                      {boat.id === "sunbird-heli" && (
+                        <p className="text-sm text-white/75 mb-2 sm:mb-3 font-spartan leading-snug">
+                          Go & return, 2 waiting hours included. $400 for each additional hour.
+                        </p>
+                      )}
                       <div className="space-y-1 sm:space-y-1.5 md:space-y-2">
                         {boat.pricing?.zanzibar?.map((item: any, index: number) => (
                           <div key={index} className="flex justify-between items-center py-1.5 sm:py-2 border-b border-white/15 gap-2">
                             <span className="text-lg text-white/95 break-words flex-1 min-w-0 font-spartan">{item.type}</span>
-                            <span className="text-xl font-semibold text-white whitespace-nowrap flex-shrink-0 font-spartan">{item.price}</span>
+                            <PricingPriceValue price={item.price} />
                           </div>
                         ))}
                       </div>
