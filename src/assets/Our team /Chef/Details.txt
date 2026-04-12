@@ -1,3 +1,6 @@
 Name: Nathan Ainea
 
 Title: Private chef
+
+Description
+ "Behind every unforgettable yacht experience is a private chef who turns moments into masterpieces. From the gentle rhythm of the ocean to the elegance on every plate, our chef doesn't just cook - he crafts memories. Every dish is prepared with passion, precision, and a touch of luxury, making your journey not just a cruise, but a taste of perfection at sea."

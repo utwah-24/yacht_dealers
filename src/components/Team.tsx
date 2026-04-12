@@ -1,39 +1,6 @@
+import { Link } from "react-router-dom";
 import backgroundImage from "@/assets/background.jpg";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import ceoPic from "@/assets/Our team /Company CEO/Pic.jpeg";
-import chefPic from "@/assets/Our team /Chef/pic.jpeg";
-import accountantPic from "@/assets/Our team /Accountant/pic.jpeg";
-import videographerPic from "@/assets/Our team /Videographer/pic.jpeg";
-
-/** Order: Company CEO first, then Chef, Accountant, Videographer — synced with Details.txt in each folder */
-const teamMembers = [
-  {
-    image: ceoPic,
-    name: "TONYEVERIST BENEDICT OLELAPUT",
-    title: "COMPANY CEO",
-  },
-  {
-    image: chefPic,
-    name: "Nathan Ainea",
-    title: "Private chef",
-  },
-  {
-    image: accountantPic,
-    name: "JACOB CRISTOPHER ONYANGO",
-    title: "ACCOUNTANT",
-  },
-  {
-    image: videographerPic,
-    name: "DIRECTOR ZOSA",
-    title: "PROFETIONAL VIDEOGRAPHER AND CONTENT CREATOR",
-  },
-];
+import { teamMembers } from "@/data/teamMembers";
 
 const Team = () => {
   return (
@@ -56,9 +23,9 @@ const Team = () => {
         </div>
 
         {/* Team grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 md:gap-8">
           {teamMembers.map((member) => (
-            <article key={member.name} className="text-left">
+            <article key={member.id} className="text-left">
               <div className="overflow-hidden rounded-xl bg-white/5 aspect-[3/4]">
                 <img
                   src={member.image}
@@ -77,23 +44,12 @@ const Team = () => {
         </div>
 
         <div className="mt-8 md:mt-10 flex justify-center">
-          <Dialog>
-            <DialogTrigger asChild>
-              <button
-                type="button"
-                className="inline-flex items-center justify-center rounded-full border border-white/35 bg-white/10 px-7 py-2.5 text-sm font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/20 font-spartan"
-              >
-                Read more
-              </button>
-            </DialogTrigger>
-            <DialogContent className="font-spartan sm:rounded-xl">
-              <DialogHeader>
-                <DialogTitle className="text-center sm:text-center text-xl font-spartan">
-                  In the works
-                </DialogTitle>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
+          <Link
+            to="/team"
+            className="inline-flex items-center justify-center rounded-full border border-white/35 bg-white/10 px-7 py-2.5 text-sm font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/20 font-spartan"
+          >
+            Read more
+          </Link>
         </div>
       </div>
     </section>
