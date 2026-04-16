@@ -1,12 +1,12 @@
 import React from 'react';
 import Masonry from './Masonry';
 import backgroundImage from '@/assets/background.jpg';
-import newImg1 from '@/assets/new images /IMG_0718.jpg';
-import newImg2 from '@/assets/new images /IMG_0735.jpg';
-import newImg3 from '@/assets/new images /IMG_5965.png';
-import newImg4 from '@/assets/new images /IMG_6323.png';
-import newImg5 from '@/assets/new images /IMG_9568.jpg';
-import newImg6 from '@/assets/new images /IMG_9572.jpg';
+import newImg1 from '@/assets/new images/IMG_0718.jpg';
+import newImg2 from '@/assets/new images/IMG_0735.jpg';
+import newImg3 from '@/assets/new images/IMG_5965.png';
+import newImg4 from '@/assets/new images/IMG_6323.png';
+import newImg5 from '@/assets/new images/IMG_9568.jpg';
+import newImg6 from '@/assets/new images/IMG_9572.jpg';
 
 // Images from public/videos/GALLERY/ and public/videos/NPM/
 // Note: HEIC (2, 3, 4) excluded - convert to JPG/PNG for browser support

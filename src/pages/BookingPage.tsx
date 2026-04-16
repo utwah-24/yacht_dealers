@@ -17,12 +17,12 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { MessageCircle, Utensils, Wine, Music, Ship, ChevronRight, ChevronLeft, Sparkles, Waves, Anchor } from "lucide-react";
-import bookingSlideshow1 from "@/assets/new images /IMG_0718.jpg";
-import bookingSlideshow2 from "@/assets/new images /IMG_0735.jpg";
-import bookingSlideshow3 from "@/assets/new images /IMG_5965.png";
-import bookingSlideshow4 from "@/assets/new images /IMG_6323.png";
-import bookingSlideshow5 from "@/assets/new images /IMG_9568.jpg";
-import bookingSlideshow6 from "@/assets/new images /IMG_9572.jpg";
+import bookingSlideshow1 from "@/assets/new images/IMG_0718.jpg";
+import bookingSlideshow2 from "@/assets/new images/IMG_0735.jpg";
+import bookingSlideshow3 from "@/assets/new images/IMG_5965.png";
+import bookingSlideshow4 from "@/assets/new images/IMG_6323.png";
+import bookingSlideshow5 from "@/assets/new images/IMG_9568.jpg";
+import bookingSlideshow6 from "@/assets/new images/IMG_9572.jpg";
 import { getAllBoats } from "@/utils/boats";
 import backgroundImage from "@/assets/background.jpg";
 
@@ -295,6 +295,8 @@ const bookingSchema = z.object({
   catamaran: z.string().optional(),
   allergies: z.string().optional(),
   specialOccasion: z.string().optional(),
+  marineTicketNonTanzanian: z.boolean(),
+  marineTicketTanzanian: z.boolean(),
 });
 
 type BookingForm = z.infer<typeof bookingSchema>;
@@ -417,6 +419,8 @@ const BookingPage = () => {
   const [selectedCatamaranId, setSelectedCatamaranId] = useState<string | null>(null);
   const [selectedDeparture, setSelectedDeparture] = useState<string>("");
   const [departureError, setDepartureError] = useState(false);
+  const [marineTicketNonTanzanian, setMarineTicketNonTanzanian] = useState(false);
+  const [marineTicketTanzanian, setMarineTicketTanzanian] = useState(false);
   const catamaranCatalog = useMemo(() => generateCatamaranCatalog(), []);
   const preselectedCatamaranId = (routerLocation.state as any)?.preselectedCatamaranId as
     | string
@@ -449,6 +453,8 @@ const BookingPage = () => {
       catamaran: "",
       allergies: "",
       specialOccasion: "",
+      marineTicketNonTanzanian: false,
+      marineTicketTanzanian: false,
     },
   });
 
@@ -529,6 +535,24 @@ const BookingPage = () => {
     if (!isConstatineBoat(selectedCatamaranId)) return base;
     return base.filter((d) => d.value !== "fungu-ya-sini");
   }, [selectedDeparture, selectedCatamaranId]);
+
+  const islandDestinationValues = useMemo(
+    () => new Set(["bongoyo", "mbudya", "fungu-ya-sini", "prison-island", "nakupenda"]),
+    []
+  );
+
+  const isIslandDestinationSelected = useMemo(
+    () => !!watched.destination && islandDestinationValues.has(watched.destination),
+    [watched.destination, islandDestinationValues]
+  );
+
+  useEffect(() => {
+    if (isIslandDestinationSelected) return;
+    setMarineTicketNonTanzanian(false);
+    setMarineTicketTanzanian(false);
+    setValue("marineTicketNonTanzanian", false);
+    setValue("marineTicketTanzanian", false);
+  }, [isIslandDestinationSelected, setValue]);
 
   const effectiveYachtType = useMemo(() => {
     if (!selectedCatamaranId) return "";
@@ -875,7 +899,7 @@ ${EMOJI.sailboat} *Selected ${isHelicopter ? "Helicopter Service" : isJetski ? "
 ${isSpecialVehicle ? charterType : `${location} - ${yacht}`}
 ${charterPackagePriceLine}
 
-${!isSpecialVehicle ? `${EMOJI.food} *Food & Drinks:* ${bringOwnFood ? "Customer bringing own food (-$200)" : "Included"}\n${data.foodDrinksRequests?.trim() ? `${EMOJI.food} *Special Food & Drinks Requests:*\n${data.foodDrinksRequests.trim()}\n` : ""}\n${EMOJI.music} *DJ Service:* ${data.dj ? `Yes ${EMOJI.check}` : "No"}\n` : ""}
+${!isSpecialVehicle ? `${EMOJI.food} *Food & Drinks:* ${bringOwnFood ? "Customer bringing own food (-$200)" : "Included"}\n${data.foodDrinksRequests?.trim() ? `${EMOJI.food} *Special Food & Drinks Requests:*\n${data.foodDrinksRequests.trim()}\n` : ""}\n${EMOJI.music} *DJ Service:* ${data.dj ? `Yes ${EMOJI.check}` : "No"}\n${isIslandDestinationSelected ? `🎟️ *Marine Ticket (Non-Tanzanian):* ${data.marineTicketNonTanzanian ? `Yes ${EMOJI.check} (TZS 45,000)` : "No"}\n🎟️ *Marine Ticket (Tanzanian):* ${data.marineTicketTanzanian ? `Yes ${EMOJI.check} (TZS 11,800)` : "No"}\n` : ""}` : ""}
 
 ${showAllergies ? `${EMOJI.warning} *Allergies:*\n${allergies}\n` : ""}
 ${showSpecialOccasion ? `${EMOJI.party} *Special Occasion:*\n${specialOccasion}\n` : ""}
@@ -1548,37 +1572,100 @@ We will confirm your booking shortly.
                                     Additional cost
                                   </Label>
                                   <div className="p-4 rounded-lg bg-white border border-gray-200">
-                                    <div className="flex items-center justify-between">
-                                      <div className="flex items-center gap-3">
-                                        <Music className="h-5 w-5 text-gray-700" />
-                                        <div>
-                                          <Label
-                                            htmlFor="dj"
-                                            className="text-gray-700 font-medium cursor-pointer"
-                                          >
-                                            Professional DJ Service
-                                          </Label>
-                                          <p className="text-xs text-gray-500">
-                                            Add music entertainment
-                                          </p>
+                                    <div className="space-y-4">
+                                      <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-3">
+                                          <Music className="h-5 w-5 text-gray-700" />
+                                          <div>
+                                            <Label
+                                              htmlFor="dj"
+                                              className="text-gray-700 font-medium cursor-pointer"
+                                            >
+                                              Professional DJ Service
+                                            </Label>
+                                            <p className="text-xs text-gray-500">
+                                              Add music entertainment
+                                            </p>
+                                          </div>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                          <span className="text-sm font-semibold text-gray-700">+$150</span>
+                                          <Switch
+                                            id="dj"
+                                            checked={djEnabled}
+                                            onCheckedChange={(checked) => {
+                                              setDjEnabled(checked);
+                                              setValue("dj", checked);
+                                            }}
+                                          />
                                         </div>
                                       </div>
-                                      <div className="flex items-center gap-3">
-                                        <span className="text-sm font-semibold text-gray-700">+$150</span>
-                                        <Switch
-                                          id="dj"
-                                          checked={djEnabled}
-                                          onCheckedChange={(checked) => {
-                                            setDjEnabled(checked);
-                                            setValue("dj", checked);
-                                          }}
-                                        />
-                                      </div>
+
+                                      {isIslandDestinationSelected && (
+                                        <>
+                                          <div className="h-px bg-gray-200" />
+                                          <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-3">
+                                              <Anchor className="h-5 w-5 text-gray-700" />
+                                              <div>
+                                                <Label
+                                                  htmlFor="marine-ticket-non-tanzanian"
+                                                  className="text-gray-700 font-medium cursor-pointer"
+                                                >
+                                                  Marine Ticket (Non-Tanzanian)
+                                                </Label>
+                                                <p className="text-xs text-gray-500">
+                                                  Apply for island destinations only
+                                                </p>
+                                              </div>
+                                            </div>
+                                            <div className="flex items-center gap-3">
+                                              <span className="text-sm font-semibold text-gray-700">TZS 45,000</span>
+                                              <Switch
+                                                id="marine-ticket-non-tanzanian"
+                                                checked={marineTicketNonTanzanian}
+                                                onCheckedChange={(checked) => {
+                                                  setMarineTicketNonTanzanian(checked);
+                                                  setValue("marineTicketNonTanzanian", checked);
+                                                }}
+                                              />
+                                            </div>
+                                          </div>
+
+                                          <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-3">
+                                              <Anchor className="h-5 w-5 text-gray-700" />
+                                              <div>
+                                                <Label
+                                                  htmlFor="marine-ticket-tanzanian"
+                                                  className="text-gray-700 font-medium cursor-pointer"
+                                                >
+                                                  Marine Ticket (Tanzanian)
+                                                </Label>
+                                                <p className="text-xs text-gray-500">
+                                                  Apply for island destinations only
+                                                </p>
+                                              </div>
+                                            </div>
+                                            <div className="flex items-center gap-3">
+                                              <span className="text-sm font-semibold text-gray-700">TZS 11,800</span>
+                                              <Switch
+                                                id="marine-ticket-tanzanian"
+                                                checked={marineTicketTanzanian}
+                                                onCheckedChange={(checked) => {
+                                                  setMarineTicketTanzanian(checked);
+                                                  setValue("marineTicketTanzanian", checked);
+                                                }}
+                                              />
+                                            </div>
+                                          </div>
+                                        </>
+                                      )}
                                     </div>
                                   </div>
                                 </div>
                               )}
-
+ 
                               {/* Jetski Add-on (not for helicopter or jetski) */}
                               {!isHelicopterBoat(item.id) && item.id !== "jetski" && (
                                 <div className="space-y-2">
@@ -1893,6 +1980,18 @@ We will confirm your booking shortly.
                         <p className="text-sm text-gray-700">
                           DJ service: {watched.dj ? "Yes" : "No"}
                         </p>
+                        {isIslandDestinationSelected && (
+                          <>
+                            <p className="text-sm text-gray-700">
+                              Marine ticket (Non-Tanzanian):{" "}
+                              {watched.marineTicketNonTanzanian ? "Yes (TZS 45,000)" : "No"}
+                            </p>
+                            <p className="text-sm text-gray-700">
+                              Marine ticket (Tanzanian):{" "}
+                              {watched.marineTicketTanzanian ? "Yes (TZS 11,800)" : "No"}
+                            </p>
+                          </>
+                        )}
                         {watched.foodDrinksRequests?.trim() && (
                           <p className="text-sm text-gray-700">
                             Special food & drinks requests: {watched.foodDrinksRequests.trim()}

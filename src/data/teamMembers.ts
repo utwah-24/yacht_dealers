@@ -1,8 +1,8 @@
-import ceoPic from "@/assets/Our team /Company CEO/Pic.jpeg";
-import chefPic from "@/assets/Our team /Chef/pic.jpeg";
-import accountantPic from "@/assets/Our team /Accountant/pic.jpeg";
-import videographerPic from "@/assets/Our team /Videographer/pic.jpeg";
-import djPic from "@/assets/Our team /Dj/pic.jpeg";
+import ceoPic from "@/assets/Our team/Company CEO/Pic.jpeg";
+import chefPic from "@/assets/Our team/Chef/pic.jpeg";
+import accountantPic from "@/assets/Our team/Accountant/pic.jpeg";
+import videographerPic from "@/assets/Our team/Videographer/pic.jpeg";
+import djPic from "@/assets/Our team/Dj/pic.jpeg";
 
 export interface TeamMember {
   id: string;
@@ -12,7 +12,7 @@ export interface TeamMember {
   description: string;
 }
 
-/** Synced with Details.txt / details.txt in each `Our team /…` folder */
+/** Synced with Details.txt / details.txt in each `Our team/…` folder */
 export const teamMembers: TeamMember[] = [
   {
     id: "ceo",
