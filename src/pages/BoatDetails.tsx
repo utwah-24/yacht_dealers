@@ -466,6 +466,34 @@ const boatDatabase: Record<string, any> = {
       "Photography service",
     ],
   },
+  "constatine-luxury-boat": {
+    id: "constatine-luxury-boat",
+    name: "CONSTATINE LUXURY BOAT",
+    year: "2024",
+    model: "Luxury catamaran (Dar)",
+    condition: "New",
+    location: "DAR ES SALAAM",
+    status: "IN STOCK",
+    color: "White",
+    description:
+      "Max capacity 8 guests. USD pricing (approx. equivalent to 1.1m / 1.3m / 350k TSh at prevailing rates). Marine tickets included on island trips.",
+    capacity: "8 passengers",
+    pricing: {
+      dar: [
+        { type: "1 trip — Bongoyo (incl. marine tickets)", price: "$430" },
+        { type: "1 trip — Mbudya (incl. marine tickets)", price: "$510" },
+        { type: "1 hour boat cruise", price: "$140" },
+      ],
+    },
+    destinations: ["Bongoyo Island", "Mbudya Island"],
+    services: [
+      "Marine tickets included (per rate card)",
+      "Professional crew",
+      "Safety equipment",
+      "Up to 8 guests",
+    ],
+    additionalServices: ["Professional DJ service (on request)", "Photography service"],
+  },
   "jetski": {
     id: "jetski",
     name: "JETSKI",
@@ -802,7 +830,12 @@ const BoatDetails = () => {
               >
                 {/* Price List */}
                 <div className="flex-shrink-0 w-full md:w-72 lg:w-80 space-y-2 sm:space-y-3 md:space-y-4 min-w-0">
-                  <h3 className="text-xl font-semibold text-white font-spartan">PRICE LIST {boat.id !== "sunbird-heli" && <span className="text-xl font-normal text-white/60">(with food)</span>}</h3>
+                  <h3 className="text-xl font-semibold text-white font-spartan">
+                    PRICE LIST{" "}
+                    {boat.id !== "sunbird-heli" && (
+                      <span className="text-xl font-normal text-white/60">(with food)</span>
+                    )}
+                  </h3>
                   <div className="space-y-2 sm:space-y-3 md:space-y-4">
                     <div>
                       <h4 className="text-xl font-semibold text-white mb-1 sm:mb-1.5 md:mb-2 font-spartan">
@@ -817,24 +850,32 @@ const BoatDetails = () => {
                         ))}
                       </div>
                     </div>
-                    <div>
-                      <h4 className="text-xl font-semibold text-white mb-1 sm:mb-1.5 md:mb-2 font-spartan">
-                        {boat.id === "sunbird-heli" ? "Transfer Charter" : "Zanzibar"}
-                      </h4>
-                      {boat.id === "sunbird-heli" && (
-                        <p className="text-sm text-white/75 mb-2 sm:mb-3 font-spartan leading-snug">
-                          Go & return, 2 waiting hours included. $400 for each additional hour.
-                        </p>
-                      )}
-                      <div className="space-y-1 sm:space-y-1.5 md:space-y-2">
-                        {boat.pricing?.zanzibar?.map((item: any, index: number) => (
-                          <div key={index} className="flex justify-between items-center py-1.5 sm:py-2 border-b border-white/15 gap-2">
-                            <span className="text-lg text-white/95 break-words flex-1 min-w-0 font-spartan">{item.type}</span>
-                            <PricingPriceValue price={item.price} />
-                          </div>
-                        ))}
+                    {(boat.id === "sunbird-heli" ||
+                      (boat.pricing?.zanzibar && boat.pricing.zanzibar.length > 0)) && (
+                      <div>
+                        <h4 className="text-xl font-semibold text-white mb-1 sm:mb-1.5 md:mb-2 font-spartan">
+                          {boat.id === "sunbird-heli" ? "Transfer Charter" : "Zanzibar"}
+                        </h4>
+                        {boat.id === "sunbird-heli" && (
+                          <p className="text-sm text-white/75 mb-2 sm:mb-3 font-spartan leading-snug">
+                            Go & return, 2 waiting hours included. $400 for each additional hour.
+                          </p>
+                        )}
+                        <div className="space-y-1 sm:space-y-1.5 md:space-y-2">
+                          {boat.pricing?.zanzibar?.map((item: any, index: number) => (
+                            <div
+                              key={index}
+                              className="flex justify-between items-center py-1.5 sm:py-2 border-b border-white/15 gap-2"
+                            >
+                              <span className="text-lg text-white/95 break-words flex-1 min-w-0 font-spartan">
+                                {item.type}
+                              </span>
+                              <PricingPriceValue price={item.price} />
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
 

@@ -236,6 +236,51 @@ const pelagicSunsetCharterOptions = [
   },
 ];
 
+// CONSTATINE LUXURY BOAT — USD (~equiv. 1.1m / 1.3m / 350k TSh); Dar-only
+const constatineYachtTypes = ["8 Max Catamaran"] as const;
+
+/** Dar-only — this vessel does not offer Zanzibar Hotel departures. */
+const constatineCharterOptions = [
+  {
+    location: "Dar Yacht Charter",
+    packages: [
+      {
+        yacht: "8 Max Catamaran",
+        options: [
+          { type: "1 trip — Bongoyo (incl. marine tickets)", price: "$430" },
+          { type: "1 trip — Mbudya (incl. marine tickets)", price: "$510" },
+          { type: "1 hour boat cruise", price: "$140" },
+        ],
+      },
+    ],
+  },
+];
+
+function isConstatineBoat(id: string | null | undefined): boolean {
+  return id === "constatine-luxury-boat";
+}
+
+/** CONSTATINE: one price per Dar destination; sunset = 1h cruise only. */
+function filterConstatineDarPackages(
+  departure: string,
+  destination: string | undefined,
+  darOptions: { type: string; price: string }[],
+): { type: string; price: string }[] {
+  if (departure === "cruising") {
+    return darOptions.filter((o) => o.type.toLowerCase().includes("1 hour"));
+  }
+  if (departure !== "dar-slipway" || !destination) {
+    return [];
+  }
+  if (destination === "bongoyo") {
+    return darOptions.filter((o) => /bongoyo/i.test(o.type));
+  }
+  if (destination === "mbudya") {
+    return darOptions.filter((o) => /mbudya/i.test(o.type));
+  }
+  return [];
+}
+
 const bookingSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   phone: z.string().min(10, "Please enter a valid phone number"),
@@ -326,6 +371,11 @@ const boatMetadata: Record<string, { capacity: string; description: string }> = 
     capacity: "15 passengers",
     description: "Premium catamaran with excellent facilities.",
   },
+  "constatine-luxury-boat": {
+    capacity: "8 passengers",
+    description:
+      "Max 8 guests; Dar Slipway departures only. $430 / $510 / $140 USD (approx. prior TSh rates). Marine tickets included on island trips.",
+  },
 };
 
 // Generate catalog from all boats
@@ -415,6 +465,27 @@ const BookingPage = () => {
     setValue("catamaran", found.name);
   }, [preselectedCatamaranId, selectedCatamaranId, catamaranCatalog, setValue]);
 
+  // CONSTATINE only departs Dar — clear Zanzibar Hotel selection if user switches to this boat.
+  useEffect(() => {
+    if (!isConstatineBoat(selectedCatamaranId)) return;
+    if (selectedDeparture !== "znz-hotel-verde") return;
+    setSelectedDeparture("");
+    setValue("destination", "");
+    setSelectedLocation("");
+    setSelectedCharterType("");
+    setValue("charter", "");
+  }, [selectedCatamaranId, selectedDeparture, setValue]);
+
+  // CONSTATINE does not offer Fungu ya Sini — clear if it was left in form state.
+  useEffect(() => {
+    if (!isConstatineBoat(selectedCatamaranId)) return;
+    if (watched.destination !== "fungu-ya-sini") return;
+    setValue("destination", "");
+    setSelectedLocation("");
+    setSelectedCharterType("");
+    setValue("charter", "");
+  }, [selectedCatamaranId, watched.destination, setValue]);
+
   const activityOptions = [
     "Sunbathing and relaxation",
     "Water sports (e.g., snorkeling, diving, paddleboarding)",
@@ -433,6 +504,13 @@ const BookingPage = () => {
     { value: "cruising", label: "Sunset Cruise" },
   ];
 
+  const departureOptionsForBoat = useMemo(() => {
+    if (isConstatineBoat(selectedCatamaranId)) {
+      return departureOptions.filter((d) => d.value !== "znz-hotel-verde");
+    }
+    return departureOptions;
+  }, [selectedCatamaranId]);
+
   const destinationsByDeparture: Record<string, { value: string; label: string }[]> = {
     "dar-slipway": [
       { value: "bongoyo", label: "Bongoyo" },
@@ -446,13 +524,18 @@ const BookingPage = () => {
     ],
   };
 
-  const destinations = selectedDeparture ? (destinationsByDeparture[selectedDeparture] ?? []) : [];
+  const destinations = useMemo(() => {
+    const base = selectedDeparture ? (destinationsByDeparture[selectedDeparture] ?? []) : [];
+    if (!isConstatineBoat(selectedCatamaranId)) return base;
+    return base.filter((d) => d.value !== "fungu-ya-sini");
+  }, [selectedDeparture, selectedCatamaranId]);
 
   const effectiveYachtType = useMemo(() => {
     if (!selectedCatamaranId) return "";
     if (selectedCatamaranId === "queen-of-zanzibar") return queenOfZanzibarYachtTypes[0];
     if (selectedCatamaranId === "misbehaviour-catamaran") return misbehaviourYachtTypes[0];
     if (selectedCatamaranId === "pelagic-catamaran") return pelagicYachtTypes[0];
+    if (selectedCatamaranId === "constatine-luxury-boat") return constatineYachtTypes[0];
     if (isHelicopterBoat(selectedCatamaranId) || selectedCatamaranId === "jetski") return "";
     return yachtTypes[0];
   }, [selectedCatamaranId]);
@@ -479,7 +562,9 @@ const BookingPage = () => {
     const isSunset = selectedDeparture === "cruising";
 
     let options;
-    if (isQoZ) {
+    if (selectedCatamaranId === "constatine-luxury-boat") {
+      options = constatineCharterOptions;
+    } else if (isQoZ) {
       options = queenOfZanzibarCharterOptions;
     } else if (isMisbehaviour && isSunset) {
       options = misbehaviourSunsetCharterOptions;
@@ -495,8 +580,8 @@ const BookingPage = () => {
       options = charterOptions;
     }
 
-    const darPkg = options[0].packages.find((pkg) => pkg.yacht === yachtType);
-    const zanzibarPkg = options[1].packages.find((pkg) => pkg.yacht === yachtType);
+    const darPkg = options[0]?.packages?.find((pkg) => pkg.yacht === yachtType);
+    const zanzibarPkg = options[1]?.packages?.find((pkg) => pkg.yacht === yachtType);
     return {
       dar: darPkg?.options || [],
       zanzibar: zanzibarPkg?.options || [],
@@ -508,6 +593,25 @@ const BookingPage = () => {
       effectiveYachtType ? getYachtPrices(effectiveYachtType) : { dar: [], zanzibar: [] },
     [effectiveYachtType, selectedDeparture, selectedCatamaranId]
   );
+
+  const darCharterPackagesForUi = useMemo(() => {
+    if (!isConstatineBoat(selectedCatamaranId)) {
+      return yachtPrices.dar;
+    }
+    return filterConstatineDarPackages(
+      selectedDeparture,
+      watched.destination,
+      yachtPrices.dar,
+    );
+  }, [
+    selectedCatamaranId,
+    selectedDeparture,
+    watched.destination,
+    yachtPrices.dar,
+  ]);
+
+  const constatineDarSectionTitle =
+    selectedDeparture === "cruising" ? "Sunset cruise" : "Dar Yacht Charter";
 
   // Base charter / package price (same sources as UI pricing)
   const baseCharterPrice = useMemo(() => {
@@ -1027,7 +1131,7 @@ We will confirm your booking shortly.
                                           <SelectValue placeholder="Choose departure" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                          {departureOptions.map((dep) => (
+                                          {departureOptionsForBoat.map((dep) => (
                                             <SelectItem key={dep.value} value={dep.value}>
                                               {dep.label}
                                             </SelectItem>
@@ -1055,7 +1159,14 @@ We will confirm your booking shortly.
                                         <>
                                           <Select
                                             disabled={!selectedDeparture}
-                                            onValueChange={(value) => setValue("destination", value)}
+                                            onValueChange={(value) => {
+                                              setValue("destination", value);
+                                              if (isConstatineBoat(selectedCatamaranId)) {
+                                                setSelectedLocation("");
+                                                setSelectedCharterType("");
+                                                setValue("charter", "");
+                                              }
+                                            }}
                                           >
                                             <SelectTrigger
                                               id="destination"
@@ -1329,39 +1440,64 @@ We will confirm your booking shortly.
                                       {/* Dar Prices — only when Dar Slipway or Sunset Cruise selected */}
                                       {(selectedDeparture === "dar-slipway" || selectedDeparture === "cruising") && (
                                         <div className="bg-white rounded-xl p-4 border-2 border-gray-200">
-                                          <h4 className="font-semibold text-gray-900 mb-3">
-                                            Dar Yacht Charter
+                                          <h4 className="font-semibold text-gray-900 mb-1">
+                                            {isConstatineBoat(selectedCatamaranId)
+                                              ? constatineDarSectionTitle
+                                              : "Dar Yacht Charter"}
                                           </h4>
-                                          <div className="grid grid-cols-3 gap-2">
-                                            {yachtPrices.dar.map((option, index) => (
-                                              <button
-                                                key={index}
-                                                type="button"
-                                                onClick={() =>
-                                                  handleCharterSelect("Dar Yacht Charter", option.type)
-                                                }
-                                                className={`p-3 rounded-lg text-sm transition-all ${
-                                                  selectedLocation === "Dar Yacht Charter" &&
-                                                    selectedCharterType === option.type
-                                                    ? "bg-gray-900 text-white"
-                                                    : "bg-gray-50 text-gray-700 hover:bg-gray-100"
-                                                }`}
-                                              >
-                                                <div className="font-medium">{option.type}</div>
-                                                <div
-                                                  key={`dar-${index}-${String(bringOwnFood)}`}
-                                                  className="text-xs mt-1 font-semibold animate-price-flash"
+                                          {isConstatineBoat(selectedCatamaranId) &&
+                                            selectedDeparture === "cruising" && (
+                                              <p className="text-sm text-gray-600 mb-3">
+                                                1 hour boat cruise — package price below
+                                              </p>
+                                            )}
+                                          {isConstatineBoat(selectedCatamaranId) &&
+                                            selectedDeparture === "dar-slipway" &&
+                                            !watched.destination && (
+                                              <p className="text-sm text-gray-500 mb-3">
+                                                Select a destination to see the exact price for that trip.
+                                              </p>
+                                            )}
+                                          {darCharterPackagesForUi.length > 0 && (
+                                            <div
+                                              className={
+                                                isConstatineBoat(selectedCatamaranId) &&
+                                                darCharterPackagesForUi.length <= 1
+                                                  ? "grid grid-cols-1 gap-2 max-w-sm"
+                                                  : "grid grid-cols-3 gap-2"
+                                              }
+                                            >
+                                              {darCharterPackagesForUi.map((option, index) => (
+                                                <button
+                                                  key={`${option.type}-${index}`}
+                                                  type="button"
+                                                  onClick={() =>
+                                                    handleCharterSelect("Dar Yacht Charter", option.type)
+                                                  }
+                                                  className={`p-3 rounded-lg text-sm transition-all ${
+                                                    selectedLocation === "Dar Yacht Charter" &&
+                                                      selectedCharterType === option.type
+                                                      ? "bg-gray-900 text-white"
+                                                      : "bg-gray-50 text-gray-700 hover:bg-gray-100"
+                                                  }`}
                                                 >
-                                                  {displayPrice(option.price)}
-                                                </div>
-                                              </button>
-                                            ))}
-                                          </div>
+                                                  <div className="font-medium">{option.type}</div>
+                                                  <div
+                                                    key={`dar-${index}-${String(bringOwnFood)}`}
+                                                    className="text-xs mt-1 font-semibold animate-price-flash"
+                                                  >
+                                                    {displayPrice(option.price)}
+                                                  </div>
+                                                </button>
+                                              ))}
+                                            </div>
+                                          )}
                                         </div>
                                       )}
 
-                                      {/* Zanzibar Prices — only when Znz Hotel Verde or Sunset Cruise selected */}
-                                      {(selectedDeparture === "znz-hotel-verde" || selectedDeparture === "cruising") && (
+                                      {/* Zanzibar Prices — only when Znz Hotel Verde or Sunset Cruise selected (not CONSTATINE — Dar only) */}
+                                      {(selectedDeparture === "znz-hotel-verde" || selectedDeparture === "cruising") &&
+                                        !isConstatineBoat(selectedCatamaranId) && (
                                         <div className="bg-white rounded-xl p-4 border-2 border-gray-200">
                                           <h4 className="font-semibold text-gray-900 mb-3">
                                             Zanzibar Charter
@@ -1443,7 +1579,7 @@ We will confirm your booking shortly.
                                 </div>
                               )}
 
-                              {/* Jetski Add-on (not for helicopter or jetski itself) */}
+                              {/* Jetski Add-on (not for helicopter or jetski) */}
                               {!isHelicopterBoat(item.id) && item.id !== "jetski" && (
                                 <div className="space-y-2">
                                   <div className="p-4 rounded-lg bg-white border border-gray-200">
@@ -1726,7 +1862,10 @@ We will confirm your booking shortly.
                     </div>
 
                     {/* Jetski Add-on summary */}
-                    {jetskiAddon && jetskiAddonPackage && !isHelicopterBoat(selectedCatamaranId) && selectedCatamaranId !== "jetski" && (
+                    {jetskiAddon &&
+                      jetskiAddonPackage &&
+                      !isHelicopterBoat(selectedCatamaranId) &&
+                      selectedCatamaranId !== "jetski" && (
                       <div className="rounded-2xl bg-white p-4 shadow-sm space-y-1">
                         <h3 className="text-sm font-semibold text-gray-900">Jetski Add-on</h3>
                         <p className="text-sm text-gray-700">
@@ -1786,7 +1925,9 @@ We will confirm your booking shortly.
                                 baseCharterPrice > 0 && (
                                   <div className="space-y-1 text-xs text-gray-400">
                                     <p>Charter subtotal: ${baseCharterPrice.toLocaleString()}</p>
-                                    {bringOwnFood && <p className="text-green-400">−$200 (bringing own food)</p>}
+                                    {bringOwnFood && (
+                                      <p className="text-green-400">−$200 (bringing own food)</p>
+                                    )}
                                     {djEnabled && <p className="text-gray-300">+$150 (DJ service)</p>}
                                     {jetskiAddonAmount > 0 && (
                                       <p className="text-gray-300">

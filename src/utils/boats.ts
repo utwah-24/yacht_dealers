@@ -53,6 +53,7 @@ const getBoatDisplayName = (folderName: string): string => {
     'Vaatea catamaran': 'VAATEA CATAMARAN',
     'Albion catamaran': 'ALBION CATAMARAN',
     'Pelagic catamaran': 'PELAGIC CATAMARAN',
+    'CONSTATINE LUXURY BOAT': 'CONSTATINE LUXURY BOAT',
     'JETSKI': 'JETSKI',
   };
   
