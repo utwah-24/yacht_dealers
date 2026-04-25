@@ -899,7 +899,7 @@ ${EMOJI.sailboat} *Selected ${isHelicopter ? "Helicopter Service" : isJetski ? "
 ${isSpecialVehicle ? charterType : `${location} - ${yacht}`}
 ${charterPackagePriceLine}
 
-${!isSpecialVehicle ? `${EMOJI.food} *Food & Drinks:* ${bringOwnFood ? "Customer bringing own food (-$200)" : "Included"}\n${data.foodDrinksRequests?.trim() ? `${EMOJI.food} *Special Food & Drinks Requests:*\n${data.foodDrinksRequests.trim()}\n` : ""}\n${EMOJI.music} *DJ Service:* ${data.dj ? `Yes ${EMOJI.check}` : "No"}\n${isIslandDestinationSelected ? `🎟️ *Marine Ticket (Non-Tanzanian):* ${data.marineTicketNonTanzanian ? `Yes ${EMOJI.check} (TZS 45,000)` : "No"}\n🎟️ *Marine Ticket (Tanzanian):* ${data.marineTicketTanzanian ? `Yes ${EMOJI.check} (TZS 11,800)` : "No"}\n` : ""}` : ""}
+${!isSpecialVehicle ? `${EMOJI.food} *Food & Drinks:* ${bringOwnFood ? "Customer bringing own food (-$200)" : "Included"}\n${data.foodDrinksRequests?.trim() ? `${EMOJI.food} *Special Food & Drinks Requests:*\n${data.foodDrinksRequests.trim()}\n` : ""}\n${EMOJI.music} *DJ Service:* ${data.dj ? `Yes ${EMOJI.check}` : "No"}\n${isIslandDestinationSelected ? `🎟️ *Marine Ticket (Non-Tanzanian):* ${data.marineTicketNonTanzanian ? `Yes ${EMOJI.check} — ${parseInt(data.passengers) || 1} passenger${(parseInt(data.passengers) || 1) > 1 ? "s" : ""} × TZS 45,000 = TZS ${(45000 * (parseInt(data.passengers) || 1)).toLocaleString()}` : "No"}\n🎟️ *Marine Ticket (Tanzanian):* ${data.marineTicketTanzanian ? `Yes ${EMOJI.check} — ${parseInt(data.passengers) || 1} passenger${(parseInt(data.passengers) || 1) > 1 ? "s" : ""} × TZS 11,800 = TZS ${(11800 * (parseInt(data.passengers) || 1)).toLocaleString()}` : "No"}\n` : ""}` : ""}
 
 ${showAllergies ? `${EMOJI.warning} *Allergies:*\n${allergies}\n` : ""}
 ${showSpecialOccasion ? `${EMOJI.party} *Special Occasion:*\n${specialOccasion}\n` : ""}
@@ -907,7 +907,19 @@ ${activitiesLine}
 ${otherActivityLine}
 
 ${jetskiAddon && jetskiAddonPackage && !isSpecialVehicle ? `🚤 *Jetski Add-on:* ${jetskiAddonPackage} — ${jetskiAddonPackage === "Half Day" ? "$900" : "$1,500"}\n` : ""}
-${isHelicopter && isHelicopterQuoteOnRequest(selectedCatamaranId, charterType) ? `💰 *Grand Total:* Price on request\n` : formattedGrandTotal ? `💰 *Grand Total:* ${formattedGrandTotal}\n` : ""}
+${(() => {
+  const pax = parseInt(data.passengers) || 1;
+  const marineTZS =
+    (isIslandDestinationSelected && data.marineTicketNonTanzanian ? 45000 * pax : 0) +
+    (isIslandDestinationSelected && data.marineTicketTanzanian ? 11800 * pax : 0);
+  if (isHelicopter && isHelicopterQuoteOnRequest(selectedCatamaranId, charterType)) {
+    return `💰 *Grand Total:* Price on request${marineTZS > 0 ? ` + TZS ${marineTZS.toLocaleString()} (marine ticket)` : ""}\n`;
+  }
+  if (formattedGrandTotal) {
+    return `💰 *Grand Total:* ${formattedGrandTotal}${marineTZS > 0 ? ` + TZS ${marineTZS.toLocaleString()} (marine ticket)` : ""}\n`;
+  }
+  return "";
+})()}
 We will confirm your booking shortly.
     `.trim();
 
@@ -1620,7 +1632,10 @@ We will confirm your booking shortly.
                                               </div>
                                             </div>
                                             <div className="flex items-center gap-3">
-                                              <span className="text-sm font-semibold text-gray-700">TZS 45,000</span>
+                                              <div className="text-right">
+                                                <span className="text-sm font-semibold text-gray-700">TZS {(45000 * (parseInt(watched.passengers) || 1)).toLocaleString()}</span>
+                                                <p className="text-xs text-gray-500">{parseInt(watched.passengers) || 1} passenger{(parseInt(watched.passengers) || 1) > 1 ? "s" : ""} × TZS 45,000</p>
+                                              </div>
                                               <Switch
                                                 id="marine-ticket-non-tanzanian"
                                                 checked={marineTicketNonTanzanian}
@@ -1648,7 +1663,10 @@ We will confirm your booking shortly.
                                               </div>
                                             </div>
                                             <div className="flex items-center gap-3">
-                                              <span className="text-sm font-semibold text-gray-700">TZS 11,800</span>
+                                              <div className="text-right">
+                                                <span className="text-sm font-semibold text-gray-700">TZS {(11800 * (parseInt(watched.passengers) || 1)).toLocaleString()}</span>
+                                                <p className="text-xs text-gray-500">{parseInt(watched.passengers) || 1} passenger{(parseInt(watched.passengers) || 1) > 1 ? "s" : ""} × TZS 11,800</p>
+                                              </div>
                                               <Switch
                                                 id="marine-ticket-tanzanian"
                                                 checked={marineTicketTanzanian}
@@ -1984,11 +2002,15 @@ We will confirm your booking shortly.
                           <>
                             <p className="text-sm text-gray-700">
                               Marine ticket (Non-Tanzanian):{" "}
-                              {watched.marineTicketNonTanzanian ? "Yes (TZS 45,000)" : "No"}
+                              {watched.marineTicketNonTanzanian
+                                ? `${parseInt(watched.passengers) || 1} passenger${(parseInt(watched.passengers) || 1) > 1 ? "s" : ""} × TZS 45,000 = TZS ${(45000 * (parseInt(watched.passengers) || 1)).toLocaleString()}`
+                                : "No"}
                             </p>
                             <p className="text-sm text-gray-700">
                               Marine ticket (Tanzanian):{" "}
-                              {watched.marineTicketTanzanian ? "Yes (TZS 11,800)" : "No"}
+                              {watched.marineTicketTanzanian
+                                ? `${parseInt(watched.passengers) || 1} passenger${(parseInt(watched.passengers) || 1) > 1 ? "s" : ""} × TZS 11,800 = TZS ${(11800 * (parseInt(watched.passengers) || 1)).toLocaleString()}`
+                                : "No"}
                             </p>
                           </>
                         )}
@@ -2033,6 +2055,16 @@ We will confirm your booking shortly.
                                         +${jetskiAddonAmount.toLocaleString()} (jetski add-on)
                                       </p>
                                     )}
+                                    {isIslandDestinationSelected && watched.marineTicketNonTanzanian && (
+                                      <p className="text-gray-300">
+                                        +TZS {(45000 * (parseInt(watched.passengers) || 1)).toLocaleString()} ({parseInt(watched.passengers) || 1} passenger{(parseInt(watched.passengers) || 1) > 1 ? "s" : ""} × TZS 45,000 marine ticket)
+                                      </p>
+                                    )}
+                                    {isIslandDestinationSelected && watched.marineTicketTanzanian && (
+                                      <p className="text-gray-300">
+                                        +TZS {(11800 * (parseInt(watched.passengers) || 1)).toLocaleString()} ({parseInt(watched.passengers) || 1} passenger{(parseInt(watched.passengers) || 1) > 1 ? "s" : ""} × TZS 11,800 marine ticket)
+                                      </p>
+                                    )}
                                   </div>
                                 )}
                               {(isHelicopterBoat(selectedCatamaranId) ||
@@ -2044,7 +2076,22 @@ We will confirm your booking shortly.
                                 )}
                               <div className="flex items-center justify-between pt-2 border-t border-white/15">
                                 <span className="text-sm font-medium text-white/90">Amount due</span>
-                                <span className="text-2xl font-bold text-white">{formattedGrandTotal}</span>
+                                <div className="text-right">
+                                  {(() => {
+                                    const pax = parseInt(watched.passengers) || 1;
+                                    const marineTZS =
+                                      (isIslandDestinationSelected && watched.marineTicketNonTanzanian ? 45000 * pax : 0) +
+                                      (isIslandDestinationSelected && watched.marineTicketTanzanian ? 11800 * pax : 0);
+                                    return marineTZS > 0 ? (
+                                      <>
+                                        <span className="text-2xl font-bold text-white">{formattedGrandTotal}</span>
+                                        <span className="text-lg font-bold text-gray-300"> + TZS {marineTZS.toLocaleString()}</span>
+                                      </>
+                                    ) : (
+                                      <span className="text-2xl font-bold text-white">{formattedGrandTotal}</span>
+                                    );
+                                  })()}
+                                </div>
                               </div>
                             </>
                           )}
