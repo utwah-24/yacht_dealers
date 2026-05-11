@@ -27,28 +27,33 @@ const Hero = () => {
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Video */}
       <div className="absolute inset-0 overflow-hidden" style={{ width: '100%', height: '100%' }}>
-        {/* Desktop video */}
-        <video
-          key="desktop"
-          autoPlay
-          loop
-          muted
-          playsInline
-          style={{ ...videoStyle, opacity: isMobile ? 0 : 1 }}
-        >
-          <source src="/videos/hero_vid.mp4" type="video/mp4" />
-        </video>
-        {/* Mobile video */}
-        <video
-          key="mobile"
-          autoPlay
-          loop
-          muted
-          playsInline
-          style={{ ...videoStyle, opacity: isMobile ? 1 : 0 }}
-        >
-          <source src="/videos/hero_vid_phone.mp4" type="video/mp4" />
-        </video>
+        {isMobile ? (
+          <video
+            key="mobile"
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            poster="/videos/hero_vid_phone_poster.jpg"
+            style={videoStyle}
+          >
+            <source src="/videos/hero_vid_phone_compressed.mp4" type="video/mp4" />
+          </video>
+        ) : (
+          <video
+            key="desktop"
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            poster="/videos/hero_vid_poster.jpg"
+            style={videoStyle}
+          >
+            <source src="/videos/hero_vid_compressed.mp4" type="video/mp4" />
+          </video>
+        )}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/55 to-black/65"></div>
       </div>
 
