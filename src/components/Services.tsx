@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { convertPrice } from "@/utils/currency";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -241,7 +242,7 @@ const Services = () => {
                               <div key={yacht} className="flex items-center justify-between p-3 bg-background/50 rounded-lg">
                                 <span className="text-sm text-muted-foreground">{yacht}</span>
                                 <span className="text-lg font-bold bg-gradient-ocean bg-clip-text text-transparent">
-                                  {price}
+                                  {convertPrice(price)}
                                 </span>
                               </div>
                             ))}
@@ -254,7 +255,7 @@ const Services = () => {
                               <div key={yacht} className="flex items-center justify-between p-3 bg-background/50 rounded-lg">
                                 <span className="text-sm text-muted-foreground">{yacht}</span>
                                 <span className="text-lg font-bold bg-gradient-sunset bg-clip-text text-transparent">
-                                  {price}
+                                  {convertPrice(price)}
                                 </span>
                               </div>
                             ))}

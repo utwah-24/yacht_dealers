@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check } from "lucide-react";
+import { convertPrice } from "@/utils/currency";
 
 const Pricing = () => {
   const pricingData = [
@@ -94,7 +95,7 @@ const Pricing = () => {
                               </span>
                             </div>
                             <span className="text-2xl font-bold bg-gradient-ocean bg-clip-text text-transparent">
-                              {option.price}
+                              {convertPrice(option.price)}
                             </span>
                           </div>
                         ))}

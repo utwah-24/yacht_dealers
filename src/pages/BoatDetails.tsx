@@ -1,4 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
+import { convertPrice } from "@/utils/currency";
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Share2, ChevronLeft, ChevronRight, Link2, Check } from "lucide-react";
@@ -19,7 +20,7 @@ function PricingPriceValue({ price }: { price: string }) {
   const baseClass =
     "text-xl font-semibold text-white whitespace-nowrap flex-shrink-0 font-spartan";
   if (!isTel) {
-    return <span className={baseClass}>{price}</span>;
+    return <span className={baseClass}>{convertPrice(price)}</span>;
   }
   return (
     <a
@@ -476,7 +477,7 @@ const boatDatabase: Record<string, any> = {
     status: "IN STOCK",
     color: "White",
     description:
-      "Max capacity 8 guests. USD pricing (approx. equivalent to 1.1m / 1.3m / 350k TSh at prevailing rates). Marine tickets included on island trips.",
+      "Max capacity 8 guests. Pricing: TShs 1,118,000 / TShs 1,326,000 / TShs 364,000. Marine tickets included on island trips.",
     capacity: "8 passengers",
     pricing: {
       dar: [
@@ -858,7 +859,7 @@ const BoatDetails = () => {
                         </h4>
                         {boat.id === "sunbird-heli" && (
                           <p className="text-sm text-white/75 mb-2 sm:mb-3 font-spartan leading-snug">
-                            Go & return, 2 waiting hours included. $400 for each additional hour.
+                            Go & return, 2 waiting hours included. TShs 1,040,000 for each additional hour.
                           </p>
                         )}
                         <div className="space-y-1 sm:space-y-1.5 md:space-y-2">

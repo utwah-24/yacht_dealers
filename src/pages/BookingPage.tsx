@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { convertPrice, usdToTShs } from "@/utils/currency";
 import { useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -376,7 +377,7 @@ const boatMetadata: Record<string, { capacity: string; description: string }> = 
   "constatine-luxury-boat": {
     capacity: "8 passengers",
     description:
-      "Max 8 guests; Dar Slipway departures only. $430 / $510 / $140 USD (approx. prior TSh rates). Marine tickets included on island trips.",
+      "Max 8 guests; Dar Slipway departures only. TShs 1,118,000 / TShs 1,326,000 / TShs 364,000. Marine tickets included on island trips.",
   },
 };
 
@@ -409,9 +410,9 @@ const BookingPage = () => {
   const [jetskiAddonPackage, setJetskiAddonPackage] = useState<string>("");
 
   const displayPrice = (price: string) => {
-    if (!bringOwnFood) return price;
     const num = parseInt(price.replace(/[$,]/g, ""), 10);
-    return `$${(num - 200).toLocaleString()}`;
+    const adjusted = bringOwnFood ? num - 200 : num;
+    return usdToTShs(adjusted);
   };
   const [selectedLocation, setSelectedLocation] = useState<string>("");
   const [selectedCharterType, setSelectedCharterType] = useState<string>("");
@@ -686,7 +687,7 @@ const BookingPage = () => {
   }, [baseCharterPrice, selectedCatamaranId, bringOwnFood, djEnabled, jetskiAddonAmount]);
 
   const formattedGrandTotal =
-    grandTotalPrice !== null ? `$${grandTotalPrice.toLocaleString()}` : null;
+    grandTotalPrice !== null ? usdToTShs(grandTotalPrice) : null;
 
   const isHelicopterSpecialCharter =
     isHelicopterBoat(selectedCatamaranId) &&
@@ -719,6 +720,10 @@ const BookingPage = () => {
     // For jetski, auto-set destination
     if (selectedCatamaranId === "jetski") {
       setValue("destination", "coastal-waters");
+    }
+    // Reset bring-own-food if switching to Constantine 1-hour cruise (option not applicable)
+    if (isConstatineBoat(selectedCatamaranId) && charterType === "1 hour boat cruise") {
+      setBringOwnFood(false);
     }
   };
 
@@ -899,14 +904,14 @@ ${EMOJI.sailboat} *Selected ${isHelicopter ? "Helicopter Service" : isJetski ? "
 ${isSpecialVehicle ? charterType : `${location} - ${yacht}`}
 ${charterPackagePriceLine}
 
-${!isSpecialVehicle ? `${EMOJI.food} *Food & Drinks:* ${bringOwnFood ? "Customer bringing own food (-$200)" : "Included"}\n${data.foodDrinksRequests?.trim() ? `${EMOJI.food} *Special Food & Drinks Requests:*\n${data.foodDrinksRequests.trim()}\n` : ""}\n${EMOJI.music} *DJ Service:* ${data.dj ? `Yes ${EMOJI.check}` : "No"}\n${isIslandDestinationSelected ? `🎟️ *Marine Ticket (Non-Tanzanian):* ${data.marineTicketNonTanzanian ? `Yes ${EMOJI.check} — ${parseInt(data.passengers) || 1} passenger${(parseInt(data.passengers) || 1) > 1 ? "s" : ""} × TZS 45,000 = TZS ${(45000 * (parseInt(data.passengers) || 1)).toLocaleString()}` : "No"}\n🎟️ *Marine Ticket (Tanzanian):* ${data.marineTicketTanzanian ? `Yes ${EMOJI.check} — ${parseInt(data.passengers) || 1} passenger${(parseInt(data.passengers) || 1) > 1 ? "s" : ""} × TZS 11,800 = TZS ${(11800 * (parseInt(data.passengers) || 1)).toLocaleString()}` : "No"}\n` : ""}` : ""}
+${!isSpecialVehicle ? `${EMOJI.food} *Food & Drinks:* ${bringOwnFood ? "Customer bringing own food (-TShs 520,000)" : "Included"}\n${data.foodDrinksRequests?.trim() ? `${EMOJI.food} *Special Food & Drinks Requests:*\n${data.foodDrinksRequests.trim()}\n` : ""}\n${EMOJI.music} *DJ Service:* ${data.dj ? `Yes ${EMOJI.check}` : "No"}\n${isIslandDestinationSelected ? `🎟️ *Marine Ticket (Non-Tanzanian):* ${data.marineTicketNonTanzanian ? `Yes ${EMOJI.check} — ${parseInt(data.passengers) || 1} passenger${(parseInt(data.passengers) || 1) > 1 ? "s" : ""} × TZS 45,000 = TZS ${(45000 * (parseInt(data.passengers) || 1)).toLocaleString()}` : "No"}\n🎟️ *Marine Ticket (Tanzanian):* ${data.marineTicketTanzanian ? `Yes ${EMOJI.check} — ${parseInt(data.passengers) || 1} passenger${(parseInt(data.passengers) || 1) > 1 ? "s" : ""} × TZS 11,800 = TZS ${(11800 * (parseInt(data.passengers) || 1)).toLocaleString()}` : "No"}\n` : ""}` : ""}
 
 ${showAllergies ? `${EMOJI.warning} *Allergies:*\n${allergies}\n` : ""}
 ${showSpecialOccasion ? `${EMOJI.party} *Special Occasion:*\n${specialOccasion}\n` : ""}
 ${activitiesLine}
 ${otherActivityLine}
 
-${jetskiAddon && jetskiAddonPackage && !isSpecialVehicle ? `🚤 *Jetski Add-on:* ${jetskiAddonPackage} — ${jetskiAddonPackage === "Half Day" ? "$900" : "$1,500"}\n` : ""}
+${jetskiAddon && jetskiAddonPackage && !isSpecialVehicle ? `🚤 *Jetski Add-on:* ${jetskiAddonPackage} — ${jetskiAddonPackage === "Half Day" ? "TShs 2,340,000" : "TShs 3,900,000"}\n` : ""}
 ${(() => {
   const pax = parseInt(data.passengers) || 1;
   const marineTZS =
@@ -1158,6 +1163,9 @@ We will confirm your booking shortly.
                                           setSelectedLocation("");
                                           setSelectedCharterType("");
                                           setValue("charter", "");
+                                          if (isConstatineBoat(item.id) && value === "cruising") {
+                                            setBringOwnFood(false);
+                                          }
                                         }}
                                       >
                                         <SelectTrigger
@@ -1245,20 +1253,22 @@ We will confirm your booking shortly.
                                     <Utensils className="h-4 w-4 sm:h-5 sm:w-5" />
                                     Food specifications
                                   </Label>
-                                  <div className="flex items-center gap-3 p-3 rounded-lg bg-white border border-gray-200">
-                                    <Checkbox
-                                      id="bringOwnFood"
-                                      checked={bringOwnFood}
-                                      onCheckedChange={(checked) => setBringOwnFood(checked === true)}
-                                    />
-                                    <Label
-                                      htmlFor="bringOwnFood"
-                                      className="text-sm text-gray-700 cursor-pointer flex-1"
-                                    >
-                                      I will bring my own food
-                                      <span className="ml-1 text-xs text-green-600 font-medium">(-$200)</span>
-                                    </Label>
-                                  </div>
+                                  {!(isConstatineBoat(item.id) && (selectedCharterType === "1 hour boat cruise" || selectedDeparture === "cruising")) && (
+                                    <div className="flex items-center gap-3 p-3 rounded-lg bg-white border border-gray-200">
+                                      <Checkbox
+                                        id="bringOwnFood"
+                                        checked={bringOwnFood}
+                                        onCheckedChange={(checked) => setBringOwnFood(checked === true)}
+                                      />
+                                      <Label
+                                        htmlFor="bringOwnFood"
+                                        className="text-sm text-gray-700 cursor-pointer flex-1"
+                                      >
+                                        I will bring my own food
+                                        <span className="ml-1 text-xs text-green-600 font-medium">(-TShs 520,000)</span>
+                                      </Label>
+                                    </div>
+                                  )}
                                   <div
                                     className={`overflow-hidden transition-all duration-400 ease-in-out ${
                                       bringOwnFood
@@ -1312,7 +1322,7 @@ We will confirm your booking shortly.
                                       }`}
                                     >
                                       <div className="font-semibold mb-2">Half Day</div>
-                                      <div className="text-lg font-bold mb-2">$900</div>
+                                      <div className="text-lg font-bold mb-2">TShs 2,340,000</div>
                                       <ul className="text-sm space-y-1">
                                         <li>• UP TO 6 HOURS</li>
                                         <li>• 2 PASSENGERS MAXIMUM</li>
@@ -1330,7 +1340,7 @@ We will confirm your booking shortly.
                                       }`}
                                     >
                                       <div className="font-semibold mb-2">Full Day</div>
-                                      <div className="text-lg font-bold mb-2">$1,500</div>
+                                      <div className="text-lg font-bold mb-2">TShs 3,900,000</div>
                                       <ul className="text-sm space-y-1">
                                         <li>• UP TO 11 HOURS</li>
                                         <li>• 2 PASSENGERS MAXIMUM</li>
@@ -1362,7 +1372,7 @@ We will confirm your booking shortly.
                                           }`}
                                         >
                                           <div className="font-semibold mb-2">15 Minutes</div>
-                                          <div className="text-lg font-bold mb-2">$600</div>
+                                          <div className="text-lg font-bold mb-2">TShs 1,560,000</div>
                                           <ul className="text-sm space-y-1 opacity-90">
                                             <li>• Scenic flight</li>
                                             <li>• PICKUP: SEACLIFF</li>
@@ -1378,7 +1388,7 @@ We will confirm your booking shortly.
                                           }`}
                                         >
                                           <div className="font-semibold mb-2">30 Minutes</div>
-                                          <div className="text-lg font-bold mb-2">$1,100</div>
+                                          <div className="text-lg font-bold mb-2">TShs 2,860,000</div>
                                           <ul className="text-sm space-y-1 opacity-90">
                                             <li>• Scenic flight</li>
                                             <li>• PICKUP: SEACLIFF</li>
@@ -1394,7 +1404,7 @@ We will confirm your booking shortly.
                                           }`}
                                         >
                                           <div className="font-semibold mb-2">1 Hour</div>
-                                          <div className="text-lg font-bold mb-2">$1,950</div>
+                                          <div className="text-lg font-bold mb-2">TShs 5,070,000</div>
                                           <ul className="text-sm space-y-1 opacity-90">
                                             <li>• Scenic flight</li>
                                             <li>• PICKUP: SEACLIFF</li>
@@ -1405,7 +1415,7 @@ We will confirm your booking shortly.
                                     <div>
                                       <p className="text-sm font-semibold text-gray-900 mb-1">Transfer Charter</p>
                                       <p className="text-xs text-gray-600 mb-3">
-                                        Go & return, 2 waiting hours included. $400 for each additional hour.
+                                        Go & return, 2 waiting hours included. TShs 1,040,000 for each additional hour.
                                       </p>
                                       <div className="space-y-3">
                                         <button
@@ -1418,7 +1428,7 @@ We will confirm your booking shortly.
                                           }`}
                                         >
                                           <div className="font-semibold mb-2">Dar — Zanzibar</div>
-                                          <div className="text-lg font-bold mb-2">$2,400</div>
+                                          <div className="text-lg font-bold mb-2">TShs 6,240,000</div>
                                         </button>
                                         <button
                                           type="button"
@@ -1430,7 +1440,7 @@ We will confirm your booking shortly.
                                           }`}
                                         >
                                           <div className="font-semibold mb-2">Dar — Kilimanjaro</div>
-                                          <div className="text-lg font-bold mb-2">$9,600</div>
+                                          <div className="text-lg font-bold mb-2">TShs 24,960,000</div>
                                         </button>
                                         <button
                                           type="button"
@@ -1442,7 +1452,7 @@ We will confirm your booking shortly.
                                           }`}
                                         >
                                           <div className="font-semibold mb-2">Dar — Dodoma</div>
-                                          <div className="text-lg font-bold mb-2">$8,400</div>
+                                          <div className="text-lg font-bold mb-2">TShs 21,840,000</div>
                                         </button>
                                         <button
                                           type="button"
@@ -1601,7 +1611,7 @@ We will confirm your booking shortly.
                                           </div>
                                         </div>
                                         <div className="flex items-center gap-3">
-                                          <span className="text-sm font-semibold text-gray-700">+$150</span>
+                                          <span className="text-sm font-semibold text-gray-700">+TShs 390,000</span>
                                           <Switch
                                             id="dj"
                                             checked={djEnabled}
@@ -1727,7 +1737,7 @@ We will confirm your booking shortly.
                                             }`}
                                           >
                                             <div>{pkg.label}</div>
-                                            <div className="font-bold">{pkg.price}</div>
+                                            <div className="font-bold">{convertPrice(pkg.price)}</div>
                                             <div className="text-xs opacity-70">{pkg.hours}</div>
                                           </button>
                                         ))}
@@ -1974,7 +1984,7 @@ We will confirm your booking shortly.
                       <div className="rounded-2xl bg-white p-4 shadow-sm space-y-1">
                         <h3 className="text-sm font-semibold text-gray-900">Jetski Add-on</h3>
                         <p className="text-sm text-gray-700">
-                          {jetskiAddonPackage} — {jetskiAddonPackage === "Half Day" ? "$900" : "$1,500"}
+                          {jetskiAddonPackage} — {jetskiAddonPackage === "Half Day" ? "TShs 2,340,000" : "TShs 3,900,000"}
                         </p>
                       </div>
                     )}
@@ -2045,14 +2055,14 @@ We will confirm your booking shortly.
                                 selectedCatamaranId !== "jetski" &&
                                 baseCharterPrice > 0 && (
                                   <div className="space-y-1 text-xs text-gray-400">
-                                    <p>Charter subtotal: ${baseCharterPrice.toLocaleString()}</p>
+                                    <p>Charter subtotal: {usdToTShs(baseCharterPrice)}</p>
                                     {bringOwnFood && (
-                                      <p className="text-green-400">−$200 (bringing own food)</p>
+                                      <p className="text-green-400">−TShs 520,000 (bringing own food)</p>
                                     )}
-                                    {djEnabled && <p className="text-gray-300">+$150 (DJ service)</p>}
+                                    {djEnabled && <p className="text-gray-300">+TShs 390,000 (DJ service)</p>}
                                     {jetskiAddonAmount > 0 && (
                                       <p className="text-gray-300">
-                                        +${jetskiAddonAmount.toLocaleString()} (jetski add-on)
+                                        +{usdToTShs(jetskiAddonAmount)} (jetski add-on)
                                       </p>
                                     )}
                                     {isIslandDestinationSelected && watched.marineTicketNonTanzanian && (
@@ -2071,7 +2081,7 @@ We will confirm your booking shortly.
                                 selectedCatamaranId === "jetski") &&
                                 baseCharterPrice > 0 && (
                                   <p className="text-xs text-gray-400">
-                                    Package: ${baseCharterPrice.toLocaleString()}
+                                    Package: {usdToTShs(baseCharterPrice)}
                                   </p>
                                 )}
                               <div className="flex items-center justify-between pt-2 border-t border-white/15">

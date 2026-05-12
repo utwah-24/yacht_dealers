@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { convertPrice } from "@/utils/currency";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -132,7 +133,7 @@ const Booking = () => {
         pkg.options.forEach((option) => {
           options.push({
             value: `${location.location}|${pkg.yacht}|${option.type}`,
-            label: `${location.location} - ${pkg.yacht} - ${option.type} (${option.price})`,
+            label: `${location.location} - ${pkg.yacht} - ${option.type} (${convertPrice(option.price)})`,
           });
         });
       });
@@ -179,7 +180,7 @@ ${destinations.find((d) => d.value === data.destination)?.label}
 
 ⛵ *Selected Charter:*
 ${location} - ${yacht}
-${charterType} ${selectedCharterOption ? selectedCharterOption.price : ""}
+${charterType} ${selectedCharterOption ? convertPrice(selectedCharterOption.price) : ""}
 
 🍽️ *Food Selection:*
 ${data.food.join(", ")}
