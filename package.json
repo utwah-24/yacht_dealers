@@ -4,7 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "predev": "node scripts/sync-boat-og-images.mjs",
     "dev": "vite",
+    "prebuild": "node scripts/sync-boat-og-images.mjs",
     "build": "vite build",
     "postbuild": "node scripts/postbuild.mjs",
     "build:dev": "vite build --mode development",

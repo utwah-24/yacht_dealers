@@ -1,6 +1,14 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { convertPrice } from "@/utils/currency";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
+import { useDocumentMeta } from "@/hooks/useDocumentMeta";
+import {
+  getBoatOgImagePath,
+  getBoatShareDescription,
+  getBoatShareTitle,
+  getBoatShareUrl,
+  toAbsoluteUrl,
+} from "@/utils/boatShare";
 import { Button } from "@/components/ui/button";
 import { Share2, ChevronLeft, ChevronRight, Link2, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -583,6 +591,24 @@ const BoatDetails = () => {
     console.log('Final gallery images:', boat.galleryImages.length, boat.galleryImages);
   }
 
+  const shareMeta = useMemo(() => {
+    if (!id || !boatDetails || !boatImages) return null;
+    const origin = typeof window !== "undefined" ? window.location.origin : "";
+    const galleryImage = boatImages.boatImages?.[0] ?? boatImages.image;
+    const ogImagePath = getBoatOgImagePath(id);
+    const image =
+      toAbsoluteUrl(ogImagePath, origin) ||
+      (galleryImage ? toAbsoluteUrl(galleryImage, origin) : "");
+    return {
+      title: getBoatShareTitle(boatDetails.name),
+      description: getBoatShareDescription(boatDetails.name, boatDetails.description),
+      image,
+      url: getBoatShareUrl(id, origin),
+    };
+  }, [id, boatDetails, boatImages]);
+
+  useDocumentMeta(shareMeta);
+
   if (!boat) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background px-4">
@@ -597,20 +623,23 @@ const BoatDetails = () => {
   }
 
   const handleShare = () => {
-    const currentUrl = window.location.href;
+    const shareUrl = getBoatShareUrl(boat.id, window.location.origin);
     const showCopiedFeedback = () => {
       setLinkCopied(true);
-      toast({ title: "Link copied", description: "The boat link is in your clipboard." });
+      toast({
+        title: "Link copied",
+        description: `Share preview will show ${boat.name} and its photo.`,
+      });
       window.setTimeout(() => setLinkCopied(false), 2000);
     };
 
     navigator.clipboard
-      .writeText(currentUrl)
+      .writeText(shareUrl)
       .then(showCopiedFeedback)
       .catch(() => {
       // Fallback for older browsers
       const textArea = document.createElement("textarea");
-      textArea.value = currentUrl;
+      textArea.value = shareUrl;
       document.body.appendChild(textArea);
       textArea.select();
       document.execCommand("copy");

@@ -10,6 +10,10 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+
+# Generated at build/dev by scripts/sync-boat-og-images.mjs
+public/og/*.jpg
+public/og/manifest.json
 *.local
 
 # Editor directories and files
